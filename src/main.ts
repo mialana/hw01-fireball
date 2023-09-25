@@ -1,7 +1,7 @@
-import {vec2, vec3} from 'gl-matrix';
-// import * as Stats from 'stats-js';
-// import * as DAT from 'dat-gui';
-import Square from './geometry/Square';
+import {vec3, vec4,mat4} from 'gl-matrix';
+const Stats = require('stats-js');
+import * as DAT from 'dat.gui';
+import Icosphere from './geometry/Icosphere';
 import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
@@ -12,41 +12,70 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 const controls = {
   tesselations: 5,
   'Load Scene': loadScene, // A function pointer, essentially
+  primaryColor:[219, 85, 21,1],
+  secondaryColor:[30, 61, 105,1],
+  highAmp: 0.5,
+  lowAmp: 1.0,
 };
 
-let square: Square;
-let time: number = 0;
+let icosphere: Icosphere;
+let prevTesselations: number = 5;
+let color: vec4;
+let color2: vec4;
 
 function loadScene() {
-  square = new Square(vec3.fromValues(0, 0, 0));
-  square.create();
-  // time = 0;
+  icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
+  icosphere.create();
+}
+
+function loadGUI(){
+    const gui = new DAT.GUI();
+    gui.add(controls, 'tesselations', 0, 8).step(1);
+    color = vec4.fromValues(0.86,0.33,0.08,1);
+    gui.addColor(controls,"primaryColor").name("primary color").onChange((value)=>{
+      color = vec4.fromValues(value[0]/255.0,value[1]/255.0,value[2]/255.0,1);
+    });
+    color2 = vec4.fromValues(30/255.,61/255.,105/255.,1);
+    gui.addColor(controls,"secondaryColor").name("secondary color").onChange((value)=>{
+      color2 = vec4.fromValues(value[0]/255.0,value[1]/255.0,value[2]/255.0,1);
+    });
+    gui.add(controls,"highAmp",0.0,1.0).name("high amp");
+    gui.add(controls,"lowAmp",0.0,1.0).name("low amp");
+
+    var resetSliders = function (name:string,val:any) {
+      for (var i = 0; i < gui.__controllers.length; i++) {
+          if (gui.__controllers[i].property==name){
+             gui.__controllers[i].setValue(val);
+          }   
+      }
+    };
+
+    var obj = {
+      reset: function() {
+        controls.tesselations = 5;
+        color = vec4.fromValues(219/255., 85/255., 21/255.,1);
+        color2 = vec4.fromValues(30/255., 61/255., 105/255.,1);
+        controls.highAmp = 0.5;
+        controls.lowAmp = 1.0;
+        resetSliders("tesselations",5);
+        resetSliders("primaryColor",[219, 85, 21,1]);
+        resetSliders("secondaryColor",[30, 61, 105,1]);
+        resetSliders("highAmp",.5);
+        resetSliders("lowAmp",1.0);
+      }
+    };
+
+    gui.add(obj, "reset").name("reset");
 }
 
 function main() {
-  window.addEventListener('keypress', function (e) {
-    // console.log(e.key);
-    switch(e.key) {
-      // Use this if you wish
-    }
-  }, false);
-
-  window.addEventListener('keyup', function (e) {
-    switch(e.key) {
-      // Use this if you wish
-    }
-  }, false);
-
   // Initial display for framerate
-  // const stats = Stats();
-  // stats.setMode(0);
-  // stats.domElement.style.position = 'absolute';
-  // stats.domElement.style.left = '0px';
-  // stats.domElement.style.top = '0px';
-  // document.body.appendChild(stats.domElement);
-
-  // Add controls to the gui
-  // const gui = new DAT.GUI();
+  const stats = Stats();
+  stats.setMode(0);
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0px';
+  stats.domElement.style.top = '0px';
+  document.body.appendChild(stats.domElement);
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -60,34 +89,55 @@ function main() {
 
   // Initial call to load scene
   loadScene();
-
-  const camera = new Camera(vec3.fromValues(0, 0, -10), vec3.fromValues(0, 0, 0));
-
+  loadGUI();
+  
+  const camera = new Camera(vec3.fromValues(0, 0, 5), vec3.fromValues(0, 0, 0));
   const renderer = new OpenGLRenderer(canvas);
-  renderer.setClearColor(164.0 / 255.0, 233.0 / 255.0, 1.0, 1);
+  renderer.setClearColor(0.2, 0.2, 0.2, 1);
   gl.enable(gl.DEPTH_TEST);
 
-  const flat = new ShaderProgram([
-    new Shader(gl.VERTEX_SHADER, require('./shaders/flat-vert.glsl')),
-    new Shader(gl.FRAGMENT_SHADER, require('./shaders/flat-frag.glsl')),
+  const lambert = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
 
-  function processKeyPresses() {
-    // Use this if you wish
-  }
+  lambert.addUnif("u_time");
+  lambert.addUnif("u_Color2");
+  lambert.addUnif("u_lowAmp");
+  lambert.addUnif("u_highAmp");
+
 
   // This function will be called every frame
   function tick() {
     camera.update();
-    // stats.begin();
+    stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
-    processKeyPresses();
-    renderer.render(camera, flat, [
-      square,
-    ], time);
-    time++;
-    // stats.end();
+    //update inputs
+    if(controls.tesselations != prevTesselations)
+    {
+      prevTesselations = controls.tesselations;
+      icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
+      icosphere.create();
+    }
+    lambert.setGeometryColor(color);
+    let time = Date.now()%2000000/1000.0;
+    lambert.setUnifFloat("u_time",time);
+    lambert.setUnifVec4("u_Color2",color2);
+    lambert.setUnifFloat("u_highAmp",controls.highAmp);
+    lambert.setUnifFloat("u_lowAmp",controls.lowAmp);
+
+    let model = mat4.create();
+    mat4.identity(model);
+
+    lambert.setModelMatrix(model);
+
+
+    gl.depthMask(true);
+    renderer.render(camera, lambert, [
+      icosphere,
+    ]);
+    stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame
     requestAnimationFrame(tick);
@@ -97,13 +147,11 @@ function main() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.setAspectRatio(window.innerWidth / window.innerHeight);
     camera.updateProjectionMatrix();
-    flat.setDimensions(window.innerWidth, window.innerHeight);
   }, false);
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.setAspectRatio(window.innerWidth / window.innerHeight);
   camera.updateProjectionMatrix();
-  flat.setDimensions(window.innerWidth, window.innerHeight);
 
   // Start the render loop
   tick();
