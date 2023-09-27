@@ -1,2 +1,10834 @@
-(()=>{var t={4478:(t,e,n)=>{"use strict";t.exports=function(t,e){t=t||document.body;var n=[.01,1/0];"distanceLimits"in(e=e||{})&&(n[0]=e.distanceLimits[0],n[1]=e.distanceLimits[1]),"zoomMin"in e&&(n[0]=e.zoomMin),"zoomMax"in e&&(n[1]=e.zoomMax);var l=o({center:e.center||[0,0,0],up:e.up||[0,1,0],eye:e.eye||[0,0,10],mode:e.mode||"orbit",distanceLimits:n}),c=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],d=0,h=t.clientWidth,f=t.clientHeight,p={view:l,element:t,delay:e.delay||16,rotateSpeed:e.rotateSpeed||1,zoomSpeed:e.zoomSpeed||1,translateSpeed:e.translateSpeed||1,flipX:!!e.flipX,flipY:!!e.flipY,modes:l.modes,tick:function(){var e=i(),n=this.delay;l.idle(e-n),l.flush(e-(100+2*n));var o=e-2*n;l.recalcMatrix(o);for(var r=!0,s=l.computedMatrix,a=0;a<16;++a)r=r&&c[a]===s[a],c[a]=s[a];var u=t.clientWidth===h&&t.clientHeight===f;return h=t.clientWidth,f=t.clientHeight,r?!u:(d=Math.exp(l.computedRadius[0]),!0)},lookAt:function(t,e,n){l.lookAt(l.lastT(),t,e,n)},rotate:function(t,e,n){l.rotate(l.lastT(),t,e,n)},pan:function(t,e,n){l.pan(l.lastT(),t,e,n)},translate:function(t,e,n){l.translate(l.lastT(),t,e,n)}};Object.defineProperties(p,{matrix:{get:function(){return l.computedMatrix},set:function(t){return l.setMatrix(l.lastT(),t),l.computedMatrix},enumerable:!0},mode:{get:function(){return l.getMode()},set:function(t){return l.setMode(t),l.getMode()},enumerable:!0},center:{get:function(){return l.computedCenter},set:function(t){return l.lookAt(l.lastT(),t),l.computedCenter},enumerable:!0},eye:{get:function(){return l.computedEye},set:function(t){return l.lookAt(l.lastT(),null,t),l.computedEye},enumerable:!0},up:{get:function(){return l.computedUp},set:function(t){return l.lookAt(l.lastT(),null,null,t),l.computedUp},enumerable:!0},distance:{get:function(){return d},set:function(t){return l.setDistance(l.lastT(),t),t},enumerable:!0},distanceLimits:{get:function(){return l.getDistanceLimits(n)},set:function(t){return l.setDistanceLimits(t),t},enumerable:!0}}),t.addEventListener("contextmenu",(function(t){return t.preventDefault(),!1}));var _=0,m=0,v={shift:!1,control:!1,alt:!1,meta:!1};function g(e,n,o,r){var s=1/t.clientHeight,a=s*(n-_),u=s*(o-m),c=p.flipX?1:-1,h=p.flipY?1:-1,f=Math.PI*p.rotateSpeed,g=i();if(1&e)r.shift?l.rotate(g,0,0,-a*f):l.rotate(g,c*f*a,-h*f*u,0);else if(2&e)l.pan(g,-p.translateSpeed*a*d,p.translateSpeed*u*d,0);else if(4&e){var b=p.zoomSpeed*u/window.innerHeight*(g-l.lastT())*50;l.pan(g,0,0,d*(Math.exp(b)-1))}_=n,m=o,v=r}return r(t,g),t.addEventListener("touchstart",(function(e){var n=a(e.changedTouches[0],t);g(0,n[0],n[1],v),g(1,n[0],n[1],v),e.preventDefault()}),!!u&&{passive:!1}),t.addEventListener("touchmove",(function(e){var n=a(e.changedTouches[0],t);g(1,n[0],n[1],v),e.preventDefault()}),!!u&&{passive:!1}),t.addEventListener("touchend",(function(e){a(e.changedTouches[0],t),g(0,_,m,v),e.preventDefault()}),!!u&&{passive:!1}),s(t,(function(t,e,n){var o=p.flipX?1:-1,r=p.flipY?1:-1,s=i();if(Math.abs(t)>Math.abs(e))l.rotate(s,0,0,-t*o*Math.PI*p.rotateSpeed/window.innerWidth);else{var a=p.zoomSpeed*r*e/window.innerHeight*(s-l.lastT())/100;l.pan(s,0,0,d*(Math.exp(a)-1))}}),!0),p};var i=n(698),o=n(3991),r=n(685),s=n(2232),a=n(675),u=n(6795)},3991:(t,e,n)=>{"use strict";t.exports=function(t){var e=(t=t||{}).eye||[0,0,1],n=t.center||[0,0,0],a=t.up||[0,1,0],u=t.distanceLimits||[0,1/0],l=t.mode||"turntable",c=i(),d=o(),h=r();return c.setDistanceLimits(u[0],u[1]),c.lookAt(0,e,n,a),d.setDistanceLimits(u[0],u[1]),d.lookAt(0,e,n,a),h.setDistanceLimits(u[0],u[1]),h.lookAt(0,e,n,a),new s({turntable:c,orbit:d,matrix:h},l)};var i=n(8786),o=n(809),r=n(7622);function s(t,e){this._controllerNames=Object.keys(t),this._controllerList=this._controllerNames.map((function(e){return t[e]})),this._mode=e,this._active=t[e],this._active||(this._mode="turntable",this._active=t.turntable),this.modes=this._controllerNames,this.computedMatrix=this._active.computedMatrix,this.computedEye=this._active.computedEye,this.computedUp=this._active.computedUp,this.computedCenter=this._active.computedCenter,this.computedRadius=this._active.computedRadius}var a=s.prototype;a.flush=function(t){for(var e=this._controllerList,n=0;n<e.length;++n)e[n].flush(t)},a.idle=function(t){for(var e=this._controllerList,n=0;n<e.length;++n)e[n].idle(t)},a.lookAt=function(t,e,n,i){for(var o=this._controllerList,r=0;r<o.length;++r)o[r].lookAt(t,e,n,i)},a.rotate=function(t,e,n,i){for(var o=this._controllerList,r=0;r<o.length;++r)o[r].rotate(t,e,n,i)},a.pan=function(t,e,n,i){for(var o=this._controllerList,r=0;r<o.length;++r)o[r].pan(t,e,n,i)},a.translate=function(t,e,n,i){for(var o=this._controllerList,r=0;r<o.length;++r)o[r].translate(t,e,n,i)},a.setMatrix=function(t,e){for(var n=this._controllerList,i=0;i<n.length;++i)n[i].setMatrix(t,e)},a.setDistanceLimits=function(t,e){for(var n=this._controllerList,i=0;i<n.length;++i)n[i].setDistanceLimits(t,e)},a.setDistance=function(t,e){for(var n=this._controllerList,i=0;i<n.length;++i)n[i].setDistance(t,e)},a.recalcMatrix=function(t){this._active.recalcMatrix(t)},a.getDistance=function(t){return this._active.getDistance(t)},a.getDistanceLimits=function(t){return this._active.getDistanceLimits(t)},a.lastT=function(){return this._active.lastT()},a.setMode=function(t){if(t!==this._mode){var e=this._controllerNames.indexOf(t);if(!(e<0)){var n=this._active,i=this._controllerList[e],o=Math.max(n.lastT(),i.lastT());n.recalcMatrix(o),i.setMatrix(o,n.computedMatrix),this._active=i,this._mode=t,this.computedMatrix=this._active.computedMatrix,this.computedEye=this._active.computedEye,this.computedUp=this._active.computedUp,this.computedCenter=this._active.computedCenter,this.computedRadius=this._active.computedRadius}}},a.getMode=function(){return this._mode}},3076:t=>{"use strict";function e(t,e,n,i,o){for(var r=o+1;i<=o;){var s=i+o>>>1,a=t[s];(void 0!==n?n(a,e):a-e)>=0?(r=s,o=s-1):i=s+1}return r}function n(t,e,n,i,o){for(var r=o+1;i<=o;){var s=i+o>>>1,a=t[s];(void 0!==n?n(a,e):a-e)>0?(r=s,o=s-1):i=s+1}return r}function i(t,e,n,i,o){for(var r=i-1;i<=o;){var s=i+o>>>1,a=t[s];(void 0!==n?n(a,e):a-e)<0?(r=s,i=s+1):o=s-1}return r}function o(t,e,n,i,o){for(var r=i-1;i<=o;){var s=i+o>>>1,a=t[s];(void 0!==n?n(a,e):a-e)<=0?(r=s,i=s+1):o=s-1}return r}function r(t,e,n,i,o){for(;i<=o;){var r=i+o>>>1,s=t[r],a=void 0!==n?n(s,e):s-e;if(0===a)return r;a<=0?i=r+1:o=r-1}return-1}function s(t,e,n,i,o,r){return"function"==typeof n?r(t,e,n,void 0===i?0:0|i,void 0===o?t.length-1:0|o):r(t,e,void 0,void 0===n?0:0|n,void 0===i?t.length-1:0|i)}t.exports={ge:function(t,n,i,o,r){return s(t,n,i,o,r,e)},gt:function(t,e,i,o,r){return s(t,e,i,o,r,n)},lt:function(t,e,n,o,r){return s(t,e,n,o,r,i)},le:function(t,e,n,i,r){return s(t,e,n,i,r,o)},eq:function(t,e,n,i,o){return s(t,e,n,i,o,r)}}},617:t=>{"use strict";t.exports=function(t,e,n,i,o,r){var s=o-1,a=o*o,u=s*s,l=(1+2*o)*u,c=o*u,d=a*(3-2*o),h=a*s;if(t.length){r||(r=new Array(t.length));for(var f=t.length-1;f>=0;--f)r[f]=l*t[f]+c*e[f]+d*n[f]+h*i[f];return r}return l*t+c*e+d*n+h*i},t.exports.derivative=function(t,e,n,i,o,r){var s=6*o*o-6*o,a=3*o*o-4*o+1,u=-6*o*o+6*o,l=3*o*o-2*o;if(t.length){r||(r=new Array(t.length));for(var c=t.length-1;c>=0;--c)r[c]=s*t[c]+a*e[c]+u*n[c]+l*i[c];return r}return s*t+a*e+u*n[c]+l*i}},4173:(t,e,n)=>{"use strict";t.exports=function(t,e,n){switch(arguments.length){case 0:return new s([0],[0],0);case 1:return"number"==typeof t?new s(i=u(t),i,0):new s(t,u(t.length),0);case 2:if("number"==typeof e){var i=u(t.length);return new s(t,i,+e)}n=0;case 3:if(t.length!==e.length)throw new Error("state and velocity lengths must match");return new s(t,e,n)}};var i=n(617),o=n(3076);function r(t,e,n){return Math.min(e,Math.max(t,n))}function s(t,e,n){this.dimension=t.length,this.bounds=[new Array(this.dimension),new Array(this.dimension)];for(var i=0;i<this.dimension;++i)this.bounds[0][i]=-1/0,this.bounds[1][i]=1/0;this._state=t.slice().reverse(),this._velocity=e.slice().reverse(),this._time=[n],this._scratch=[t.slice(),t.slice(),t.slice(),t.slice(),t.slice()]}var a=s.prototype;function u(t){for(var e=new Array(t),n=0;n<t;++n)e[n]=0;return e}a.flush=function(t){var e=o.gt(this._time,t)-1;e<=0||(this._time.splice(0,e),this._state.splice(0,e*this.dimension),this._velocity.splice(0,e*this.dimension))},a.curve=function(t){var e=this._time,n=e.length,s=o.le(e,t),a=this._scratch[0],u=this._state,l=this._velocity,c=this.dimension,d=this.bounds;if(s<0)for(var h=c-1,f=0;f<c;++f,--h)a[f]=u[h];else if(s>=n-1){h=u.length-1;var p=t-e[n-1];for(f=0;f<c;++f,--h)a[f]=u[h]+p*l[h]}else{h=c*(s+1)-1;var _=e[s],m=e[s+1]-_||1,v=this._scratch[1],g=this._scratch[2],b=this._scratch[3],y=this._scratch[4],x=!0;for(f=0;f<c;++f,--h)v[f]=u[h],b[f]=l[h]*m,g[f]=u[h+c],y[f]=l[h+c]*m,x=x&&v[f]===g[f]&&b[f]===y[f]&&0===b[f];if(x)for(f=0;f<c;++f)a[f]=v[f];else i(v,b,g,y,(t-_)/m,a)}var w=d[0],E=d[1];for(f=0;f<c;++f)a[f]=r(w[f],E[f],a[f]);return a},a.dcurve=function(t){var e=this._time,n=e.length,r=o.le(e,t),s=this._scratch[0],a=this._state,u=this._velocity,l=this.dimension;if(r>=n-1)for(var c=a.length-1,d=(e[n-1],0);d<l;++d,--c)s[d]=u[c];else{c=l*(r+1)-1;var h=e[r],f=e[r+1]-h||1,p=this._scratch[1],_=this._scratch[2],m=this._scratch[3],v=this._scratch[4],g=!0;for(d=0;d<l;++d,--c)p[d]=a[c],m[d]=u[c]*f,_[d]=a[c+l],v[d]=u[c+l]*f,g=g&&p[d]===_[d]&&m[d]===v[d]&&0===m[d];if(g)for(d=0;d<l;++d)s[d]=0;else for(i.derivative(p,m,_,v,(t-h)/f,s),d=0;d<l;++d)s[d]/=f}return s},a.lastT=function(){var t=this._time;return t[t.length-1]},a.stable=function(){for(var t=this._velocity,e=t.length,n=this.dimension-1;n>=0;--n)if(t[--e])return!1;return!0},a.jump=function(t){var e=this.lastT(),n=this.dimension;if(!(t<e||arguments.length!==n+1)){var i=this._state,o=this._velocity,s=i.length-this.dimension,a=this.bounds,u=a[0],l=a[1];this._time.push(e,t);for(var c=0;c<2;++c)for(var d=0;d<n;++d)i.push(i[s++]),o.push(0);for(this._time.push(t),d=n;d>0;--d)i.push(r(u[d-1],l[d-1],arguments[d])),o.push(0)}},a.push=function(t){var e=this.lastT(),n=this.dimension;if(!(t<e||arguments.length!==n+1)){var i=this._state,o=this._velocity,s=i.length-this.dimension,a=t-e,u=this.bounds,l=u[0],c=u[1],d=a>1e-6?1/a:0;this._time.push(t);for(var h=n;h>0;--h){var f=r(l[h-1],c[h-1],arguments[h]);i.push(f),o.push((f-i[s++])*d)}}},a.set=function(t){var e=this.dimension;if(!(t<this.lastT()||arguments.length!==e+1)){var n=this._state,i=this._velocity,o=this.bounds,s=o[0],a=o[1];this._time.push(t);for(var u=e;u>0;--u)n.push(r(s[u-1],a[u-1],arguments[u])),i.push(0)}},a.move=function(t){var e=this.lastT(),n=this.dimension;if(!(t<=e||arguments.length!==n+1)){var i=this._state,o=this._velocity,s=i.length-this.dimension,a=this.bounds,u=a[0],l=a[1],c=t-e,d=c>1e-6?1/c:0;this._time.push(t);for(var h=n;h>0;--h){var f=arguments[h];i.push(r(u[h-1],l[h-1],i[s++]+f)),o.push(f*d)}}},a.idle=function(t){var e=this.lastT();if(!(t<e)){var n=this.dimension,i=this._state,o=this._velocity,s=i.length-n,a=this.bounds,u=a[0],l=a[1],c=t-e;this._time.push(t);for(var d=n-1;d>=0;--d)i.push(r(u[d],l[d],i[s]+c*o[s])),o.push(0),s+=1}}},8447:t=>{t.exports=function(t){var e=new Float32Array(16);return e[0]=t[0],e[1]=t[1],e[2]=t[2],e[3]=t[3],e[4]=t[4],e[5]=t[5],e[6]=t[6],e[7]=t[7],e[8]=t[8],e[9]=t[9],e[10]=t[10],e[11]=t[11],e[12]=t[12],e[13]=t[13],e[14]=t[14],e[15]=t[15],e}},6252:t=>{t.exports=function(){var t=new Float32Array(16);return t[0]=1,t[1]=0,t[2]=0,t[3]=0,t[4]=0,t[5]=1,t[6]=0,t[7]=0,t[8]=0,t[9]=0,t[10]=1,t[11]=0,t[12]=0,t[13]=0,t[14]=0,t[15]=1,t}},7919:t=>{t.exports=function(t){var e=t[0],n=t[1],i=t[2],o=t[3],r=t[4],s=t[5],a=t[6],u=t[7],l=t[8],c=t[9],d=t[10],h=t[11],f=t[12],p=t[13],_=t[14],m=t[15];return(e*s-n*r)*(d*m-h*_)-(e*a-i*r)*(c*m-h*p)+(e*u-o*r)*(c*_-d*p)+(n*a-i*s)*(l*m-h*f)-(n*u-o*s)*(l*_-d*f)+(i*u-o*a)*(l*p-c*f)}},7127:t=>{t.exports=function(t,e){var n=e[0],i=e[1],o=e[2],r=e[3],s=n+n,a=i+i,u=o+o,l=n*s,c=i*s,d=i*a,h=o*s,f=o*a,p=o*u,_=r*s,m=r*a,v=r*u;return t[0]=1-d-p,t[1]=c+v,t[2]=h-m,t[3]=0,t[4]=c-v,t[5]=1-l-p,t[6]=f+_,t[7]=0,t[8]=h+m,t[9]=f-_,t[10]=1-l-d,t[11]=0,t[12]=0,t[13]=0,t[14]=0,t[15]=1,t}},1872:t=>{t.exports=function(t,e,n){var i=e[0],o=e[1],r=e[2],s=e[3],a=i+i,u=o+o,l=r+r,c=i*a,d=i*u,h=i*l,f=o*u,p=o*l,_=r*l,m=s*a,v=s*u,g=s*l;return t[0]=1-(f+_),t[1]=d+g,t[2]=h-v,t[3]=0,t[4]=d-g,t[5]=1-(c+_),t[6]=p+m,t[7]=0,t[8]=h+v,t[9]=p-m,t[10]=1-(c+f),t[11]=0,t[12]=n[0],t[13]=n[1],t[14]=n[2],t[15]=1,t}},6312:t=>{t.exports=function(t){return t[0]=1,t[1]=0,t[2]=0,t[3]=0,t[4]=0,t[5]=1,t[6]=0,t[7]=0,t[8]=0,t[9]=0,t[10]=1,t[11]=0,t[12]=0,t[13]=0,t[14]=0,t[15]=1,t}},4481:t=>{t.exports=function(t,e){var n=e[0],i=e[1],o=e[2],r=e[3],s=e[4],a=e[5],u=e[6],l=e[7],c=e[8],d=e[9],h=e[10],f=e[11],p=e[12],_=e[13],m=e[14],v=e[15],g=n*a-i*s,b=n*u-o*s,y=n*l-r*s,x=i*u-o*a,w=i*l-r*a,E=o*l-r*u,M=c*_-d*p,A=c*m-h*p,C=c*v-f*p,T=d*m-h*_,S=d*v-f*_,k=h*v-f*m,L=g*k-b*S+y*T+x*C-w*A+E*M;return L?(L=1/L,t[0]=(a*k-u*S+l*T)*L,t[1]=(o*S-i*k-r*T)*L,t[2]=(_*E-m*w+v*x)*L,t[3]=(h*w-d*E-f*x)*L,t[4]=(u*C-s*k-l*A)*L,t[5]=(n*k-o*C+r*A)*L,t[6]=(m*y-p*E-v*b)*L,t[7]=(c*E-h*y+f*b)*L,t[8]=(s*S-a*C+l*M)*L,t[9]=(i*C-n*S-r*M)*L,t[10]=(p*w-_*y+v*g)*L,t[11]=(d*y-c*w-f*g)*L,t[12]=(a*A-s*T-u*M)*L,t[13]=(n*T-i*A+o*M)*L,t[14]=(_*b-p*x-m*g)*L,t[15]=(c*x-d*b+h*g)*L,t):null}},4727:(t,e,n)=>{var i=n(6312);t.exports=function(t,e,n,o){var r,s,a,u,l,c,d,h,f,p,_=e[0],m=e[1],v=e[2],g=o[0],b=o[1],y=o[2],x=n[0],w=n[1],E=n[2];return Math.abs(_-x)<1e-6&&Math.abs(m-w)<1e-6&&Math.abs(v-E)<1e-6?i(t):(d=_-x,h=m-w,f=v-E,r=b*(f*=p=1/Math.sqrt(d*d+h*h+f*f))-y*(h*=p),s=y*(d*=p)-g*f,a=g*h-b*d,(p=Math.sqrt(r*r+s*s+a*a))?(r*=p=1/p,s*=p,a*=p):(r=0,s=0,a=0),u=h*a-f*s,l=f*r-d*a,c=d*s-h*r,(p=Math.sqrt(u*u+l*l+c*c))?(u*=p=1/p,l*=p,c*=p):(u=0,l=0,c=0),t[0]=r,t[1]=u,t[2]=d,t[3]=0,t[4]=s,t[5]=l,t[6]=h,t[7]=0,t[8]=a,t[9]=c,t[10]=f,t[11]=0,t[12]=-(r*_+s*m+a*v),t[13]=-(u*_+l*m+c*v),t[14]=-(d*_+h*m+f*v),t[15]=1,t)}},9401:t=>{t.exports=function(t,e,n){var i=e[0],o=e[1],r=e[2],s=e[3],a=e[4],u=e[5],l=e[6],c=e[7],d=e[8],h=e[9],f=e[10],p=e[11],_=e[12],m=e[13],v=e[14],g=e[15],b=n[0],y=n[1],x=n[2],w=n[3];return t[0]=b*i+y*a+x*d+w*_,t[1]=b*o+y*u+x*h+w*m,t[2]=b*r+y*l+x*f+w*v,t[3]=b*s+y*c+x*p+w*g,b=n[4],y=n[5],x=n[6],w=n[7],t[4]=b*i+y*a+x*d+w*_,t[5]=b*o+y*u+x*h+w*m,t[6]=b*r+y*l+x*f+w*v,t[7]=b*s+y*c+x*p+w*g,b=n[8],y=n[9],x=n[10],w=n[11],t[8]=b*i+y*a+x*d+w*_,t[9]=b*o+y*u+x*h+w*m,t[10]=b*r+y*l+x*f+w*v,t[11]=b*s+y*c+x*p+w*g,b=n[12],y=n[13],x=n[14],w=n[15],t[12]=b*i+y*a+x*d+w*_,t[13]=b*o+y*u+x*h+w*m,t[14]=b*r+y*l+x*f+w*v,t[15]=b*s+y*c+x*p+w*g,t}},397:t=>{t.exports=function(t,e,n,i){var o,r,s,a,u,l,c,d,h,f,p,_,m,v,g,b,y,x,w,E,M,A,C,T,S=i[0],k=i[1],L=i[2],R=Math.sqrt(S*S+k*k+L*L);return Math.abs(R)<1e-6?null:(S*=R=1/R,k*=R,L*=R,o=Math.sin(n),s=1-(r=Math.cos(n)),a=e[0],u=e[1],l=e[2],c=e[3],d=e[4],h=e[5],f=e[6],p=e[7],_=e[8],m=e[9],v=e[10],g=e[11],b=S*S*s+r,y=k*S*s+L*o,x=L*S*s-k*o,w=S*k*s-L*o,E=k*k*s+r,M=L*k*s+S*o,A=S*L*s+k*o,C=k*L*s-S*o,T=L*L*s+r,t[0]=a*b+d*y+_*x,t[1]=u*b+h*y+m*x,t[2]=l*b+f*y+v*x,t[3]=c*b+p*y+g*x,t[4]=a*w+d*E+_*M,t[5]=u*w+h*E+m*M,t[6]=l*w+f*E+v*M,t[7]=c*w+p*E+g*M,t[8]=a*A+d*C+_*T,t[9]=u*A+h*C+m*T,t[10]=l*A+f*C+v*T,t[11]=c*A+p*C+g*T,e!==t&&(t[12]=e[12],t[13]=e[13],t[14]=e[14],t[15]=e[15]),t)}},4663:t=>{t.exports=function(t,e,n){var i=Math.sin(n),o=Math.cos(n),r=e[4],s=e[5],a=e[6],u=e[7],l=e[8],c=e[9],d=e[10],h=e[11];return e!==t&&(t[0]=e[0],t[1]=e[1],t[2]=e[2],t[3]=e[3],t[12]=e[12],t[13]=e[13],t[14]=e[14],t[15]=e[15]),t[4]=r*o+l*i,t[5]=s*o+c*i,t[6]=a*o+d*i,t[7]=u*o+h*i,t[8]=l*o-r*i,t[9]=c*o-s*i,t[10]=d*o-a*i,t[11]=h*o-u*i,t}},2113:t=>{t.exports=function(t,e,n){var i=Math.sin(n),o=Math.cos(n),r=e[0],s=e[1],a=e[2],u=e[3],l=e[8],c=e[9],d=e[10],h=e[11];return e!==t&&(t[4]=e[4],t[5]=e[5],t[6]=e[6],t[7]=e[7],t[12]=e[12],t[13]=e[13],t[14]=e[14],t[15]=e[15]),t[0]=r*o-l*i,t[1]=s*o-c*i,t[2]=a*o-d*i,t[3]=u*o-h*i,t[8]=r*i+l*o,t[9]=s*i+c*o,t[10]=a*i+d*o,t[11]=u*i+h*o,t}},974:t=>{t.exports=function(t,e,n){var i=Math.sin(n),o=Math.cos(n),r=e[0],s=e[1],a=e[2],u=e[3],l=e[4],c=e[5],d=e[6],h=e[7];return e!==t&&(t[8]=e[8],t[9]=e[9],t[10]=e[10],t[11]=e[11],t[12]=e[12],t[13]=e[13],t[14]=e[14],t[15]=e[15]),t[0]=r*o+l*i,t[1]=s*o+c*i,t[2]=a*o+d*i,t[3]=u*o+h*i,t[4]=l*o-r*i,t[5]=c*o-s*i,t[6]=d*o-a*i,t[7]=h*o-u*i,t}},4028:t=>{t.exports=function(t,e,n){var i=n[0],o=n[1],r=n[2];return t[0]=e[0]*i,t[1]=e[1]*i,t[2]=e[2]*i,t[3]=e[3]*i,t[4]=e[4]*o,t[5]=e[5]*o,t[6]=e[6]*o,t[7]=e[7]*o,t[8]=e[8]*r,t[9]=e[9]*r,t[10]=e[10]*r,t[11]=e[11]*r,t[12]=e[12],t[13]=e[13],t[14]=e[14],t[15]=e[15],t}},2602:t=>{t.exports=function(t,e,n){var i,o,r,s,a,u,l,c,d,h,f,p,_=n[0],m=n[1],v=n[2];return e===t?(t[12]=e[0]*_+e[4]*m+e[8]*v+e[12],t[13]=e[1]*_+e[5]*m+e[9]*v+e[13],t[14]=e[2]*_+e[6]*m+e[10]*v+e[14],t[15]=e[3]*_+e[7]*m+e[11]*v+e[15]):(i=e[0],o=e[1],r=e[2],s=e[3],a=e[4],u=e[5],l=e[6],c=e[7],d=e[8],h=e[9],f=e[10],p=e[11],t[0]=i,t[1]=o,t[2]=r,t[3]=s,t[4]=a,t[5]=u,t[6]=l,t[7]=c,t[8]=d,t[9]=h,t[10]=f,t[11]=p,t[12]=i*_+a*m+d*v+e[12],t[13]=o*_+u*m+h*v+e[13],t[14]=r*_+l*m+f*v+e[14],t[15]=s*_+c*m+p*v+e[15]),t}},9683:t=>{t.exports=function(t,e){if(t===e){var n=e[1],i=e[2],o=e[3],r=e[6],s=e[7],a=e[11];t[1]=e[4],t[2]=e[8],t[3]=e[12],t[4]=n,t[6]=e[9],t[7]=e[13],t[8]=i,t[9]=r,t[11]=e[14],t[12]=o,t[13]=s,t[14]=a}else t[0]=e[0],t[1]=e[4],t[2]=e[8],t[3]=e[12],t[4]=e[1],t[5]=e[5],t[6]=e[9],t[7]=e[13],t[8]=e[2],t[9]=e[6],t[10]=e[10],t[11]=e[14],t[12]=e[3],t[13]=e[7],t[14]=e[11],t[15]=e[15];return t}},4600:t=>{t.exports=function(t,e,n,i){var o,r,s,a,u,l=e[0],c=e[1],d=e[2],h=e[3],f=n[0],p=n[1],_=n[2],m=n[3];return(r=l*f+c*p+d*_+h*m)<0&&(r=-r,f=-f,p=-p,_=-_,m=-m),1-r>1e-6?(o=Math.acos(r),s=Math.sin(o),a=Math.sin((1-i)*o)/s,u=Math.sin(i*o)/s):(a=1-i,u=i),t[0]=a*l+u*f,t[1]=a*c+u*p,t[2]=a*d+u*_,t[3]=a*h+u*m,t}},3858:t=>{t.exports=function(t,e,n){var i=e[0],o=e[1],r=e[2],s=n[0],a=n[1],u=n[2];return t[0]=o*u-r*a,t[1]=r*s-i*u,t[2]=i*a-o*s,t}},8368:t=>{t.exports=function(t,e){return t[0]*e[0]+t[1]*e[1]+t[2]*e[2]}},7563:t=>{t.exports=function(t){var e=t[0],n=t[1],i=t[2];return Math.sqrt(e*e+n*n+i*i)}},6919:t=>{t.exports=function(t,e,n,i){var o=e[0],r=e[1],s=e[2];return t[0]=o+i*(n[0]-o),t[1]=r+i*(n[1]-r),t[2]=s+i*(n[2]-s),t}},91:t=>{t.exports=function(t,e){var n=e[0],i=e[1],o=e[2],r=n*n+i*i+o*o;return r>0&&(r=1/Math.sqrt(r),t[0]=e[0]*r,t[1]=e[1]*r,t[2]=e[2]*r),t}},6795:(t,e,n)=>{"use strict";var i=n(8033);t.exports=i&&function(){var t=!1;try{var e=Object.defineProperty({},"passive",{get:function(){t=!0}});window.addEventListener("test",null,e),window.removeEventListener("test",null,e)}catch(e){t=!1}return t}()},8033:t=>{t.exports=!0},9805:(t,e,n)=>{var i=n(9604),o=n(6252),r=n(8447),s=n(7919),a=n(4481),u=n(9683),l={length:n(7563),normalize:n(91),dot:n(8368),cross:n(3858)},c=o(),d=o(),h=[0,0,0,0],f=[[0,0,0],[0,0,0],[0,0,0]],p=[0,0,0];function _(t,e,n,i,o){t[0]=e[0]*i+n[0]*o,t[1]=e[1]*i+n[1]*o,t[2]=e[2]*i+n[2]*o}t.exports=function(t,e,n,o,m,v){if(e||(e=[0,0,0]),n||(n=[0,0,0]),o||(o=[0,0,0]),m||(m=[0,0,0,1]),v||(v=[0,0,0,1]),!i(c,t))return!1;if(r(d,c),d[3]=0,d[7]=0,d[11]=0,d[15]=1,Math.abs(s(d)<1e-8))return!1;var g,b,y,x,w,E,M,A=c[3],C=c[7],T=c[11],S=c[12],k=c[13],L=c[14],R=c[15];if(0!==A||0!==C||0!==T){if(h[0]=A,h[1]=C,h[2]=T,h[3]=R,!a(d,d))return!1;u(d,d),g=m,y=d,x=(b=h)[0],w=b[1],E=b[2],M=b[3],g[0]=y[0]*x+y[4]*w+y[8]*E+y[12]*M,g[1]=y[1]*x+y[5]*w+y[9]*E+y[13]*M,g[2]=y[2]*x+y[6]*w+y[10]*E+y[14]*M,g[3]=y[3]*x+y[7]*w+y[11]*E+y[15]*M}else m[0]=m[1]=m[2]=0,m[3]=1;if(e[0]=S,e[1]=k,e[2]=L,function(t,e){t[0][0]=e[0],t[0][1]=e[1],t[0][2]=e[2],t[1][0]=e[4],t[1][1]=e[5],t[1][2]=e[6],t[2][0]=e[8],t[2][1]=e[9],t[2][2]=e[10]}(f,c),n[0]=l.length(f[0]),l.normalize(f[0],f[0]),o[0]=l.dot(f[0],f[1]),_(f[1],f[1],f[0],1,-o[0]),n[1]=l.length(f[1]),l.normalize(f[1],f[1]),o[0]/=n[1],o[1]=l.dot(f[0],f[2]),_(f[2],f[2],f[0],1,-o[1]),o[2]=l.dot(f[1],f[2]),_(f[2],f[2],f[1],1,-o[2]),n[2]=l.length(f[2]),l.normalize(f[2],f[2]),o[1]/=n[2],o[2]/=n[2],l.cross(p,f[1],f[2]),l.dot(f[0],p)<0)for(var O=0;O<3;O++)n[O]*=-1,f[O][0]*=-1,f[O][1]*=-1,f[O][2]*=-1;return v[0]=.5*Math.sqrt(Math.max(1+f[0][0]-f[1][1]-f[2][2],0)),v[1]=.5*Math.sqrt(Math.max(1-f[0][0]+f[1][1]-f[2][2],0)),v[2]=.5*Math.sqrt(Math.max(1-f[0][0]-f[1][1]+f[2][2],0)),v[3]=.5*Math.sqrt(Math.max(1+f[0][0]+f[1][1]+f[2][2],0)),f[2][1]>f[1][2]&&(v[0]=-v[0]),f[0][2]>f[2][0]&&(v[1]=-v[1]),f[1][0]>f[0][1]&&(v[2]=-v[2]),!0}},9604:t=>{t.exports=function(t,e){var n=e[15];if(0===n)return!1;for(var i=1/n,o=0;o<16;o++)t[o]=e[o]*i;return!0}},2726:(t,e,n)=>{var i=n(6919),o=n(7814),r=n(9805),s=n(7919),a=n(2210),u=d(),l=d(),c=d();function d(){return{translate:h(),scale:h(1),skew:h(),perspective:[0,0,0,1],quaternion:[0,0,0,1]}}function h(t){return[t||0,t||0,t||0]}t.exports=function(t,e,n,d){if(0===s(e)||0===s(n))return!1;var h=r(e,u.translate,u.scale,u.skew,u.perspective,u.quaternion),f=r(n,l.translate,l.scale,l.skew,l.perspective,l.quaternion);return!(!h||!f||(i(c.translate,u.translate,l.translate,d),i(c.skew,u.skew,l.skew,d),i(c.scale,u.scale,l.scale,d),i(c.perspective,u.perspective,l.perspective,d),a(c.quaternion,u.quaternion,l.quaternion,d),o(t,c.translate,c.scale,c.skew,c.perspective,c.quaternion),0))}},7814:(t,e,n)=>{var i={identity:n(6312),translate:n(2602),multiply:n(9401),create:n(6252),scale:n(4028),fromRotationTranslation:n(1872)},o=(i.create(),i.create());t.exports=function(t,e,n,r,s,a){return i.identity(t),i.fromRotationTranslation(t,a,e),t[3]=s[0],t[7]=s[1],t[11]=s[2],t[15]=s[3],i.identity(o),0!==r[2]&&(o[9]=r[2],i.multiply(t,t,o)),0!==r[1]&&(o[9]=0,o[8]=r[1],i.multiply(t,t,o)),0!==r[0]&&(o[8]=0,o[4]=r[0],i.multiply(t,t,o)),i.scale(t,t,n),t}},7622:(t,e,n)=>{"use strict";var i=n(3076),o=n(2726),r=n(4481),s=n(4663),a=n(2113),u=n(974),l=n(4727),c=n(2602),d=(n(4028),n(91)),h=[0,0,0];function f(t){this._components=t.slice(),this._time=[0],this.prevMatrix=t.slice(),this.nextMatrix=t.slice(),this.computedMatrix=t.slice(),this.computedInverse=t.slice(),this.computedEye=[0,0,0],this.computedUp=[0,0,0],this.computedCenter=[0,0,0],this.computedRadius=[0],this._limits=[-1/0,1/0]}t.exports=function(t){return new f((t=t||{}).matrix||[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1])};var p=f.prototype;p.recalcMatrix=function(t){var e=this._time,n=i.le(e,t),s=this.computedMatrix;if(!(n<0)){var a=this._components;if(n===e.length-1)for(var u=16*n,l=0;l<16;++l)s[l]=a[u++];else{var c=e[n+1]-e[n],h=(u=16*n,this.prevMatrix),f=!0;for(l=0;l<16;++l)h[l]=a[u++];var p=this.nextMatrix;for(l=0;l<16;++l)p[l]=a[u++],f=f&&h[l]===p[l];if(c<1e-6||f)for(l=0;l<16;++l)s[l]=h[l];else o(s,h,p,(t-e[n])/c)}var _=this.computedUp;_[0]=s[1],_[1]=s[5],_[2]=s[9],d(_,_);var m=this.computedInverse;r(m,s);var v=this.computedEye,g=m[15];v[0]=m[12]/g,v[1]=m[13]/g,v[2]=m[14]/g;var b=this.computedCenter,y=Math.exp(this.computedRadius[0]);for(l=0;l<3;++l)b[l]=v[l]-s[2+4*l]*y}},p.idle=function(t){if(!(t<this.lastT())){for(var e=this._components,n=e.length-16,i=0;i<16;++i)e.push(e[n++]);this._time.push(t)}},p.flush=function(t){var e=i.gt(this._time,t)-2;e<0||(this._time.splice(0,e),this._components.splice(0,16*e))},p.lastT=function(){return this._time[this._time.length-1]},p.lookAt=function(t,e,n,i){this.recalcMatrix(t),e=e||this.computedEye,n=n||h,i=i||this.computedUp,this.setMatrix(t,l(this.computedMatrix,e,n,i));for(var o=0,r=0;r<3;++r)o+=Math.pow(n[r]-e[r],2);o=Math.log(Math.sqrt(o)),this.computedRadius[0]=o},p.rotate=function(t,e,n,i){this.recalcMatrix(t);var o=this.computedInverse;e&&a(o,o,e),n&&s(o,o,n),i&&u(o,o,i),this.setMatrix(t,r(this.computedMatrix,o))};var _=[0,0,0];p.pan=function(t,e,n,i){_[0]=-(e||0),_[1]=-(n||0),_[2]=-(i||0),this.recalcMatrix(t);var o=this.computedInverse;c(o,o,_),this.setMatrix(t,r(o,o))},p.translate=function(t,e,n,i){_[0]=e||0,_[1]=n||0,_[2]=i||0,this.recalcMatrix(t);var o=this.computedMatrix;c(o,o,_),this.setMatrix(t,o)},p.setMatrix=function(t,e){if(!(t<this.lastT())){this._time.push(t);for(var n=0;n<16;++n)this._components.push(e[n])}},p.setDistance=function(t,e){this.computedRadius[0]=e},p.setDistanceLimits=function(t,e){var n=this._limits;n[0]=t,n[1]=e},p.getDistanceLimits=function(t){var e=this._limits;return t?(t[0]=e[0],t[1]=e[1],t):e}},685:(t,e,n)=>{"use strict";t.exports=function(t,e){e||(e=t,t=window);var n=0,o=0,r=0,s={shift:!1,alt:!1,control:!1,meta:!1},a=!1;function u(t){var e=!1;return"altKey"in t&&(e=e||t.altKey!==s.alt,s.alt=!!t.altKey),"shiftKey"in t&&(e=e||t.shiftKey!==s.shift,s.shift=!!t.shiftKey),"ctrlKey"in t&&(e=e||t.ctrlKey!==s.control,s.control=!!t.ctrlKey),"metaKey"in t&&(e=e||t.metaKey!==s.meta,s.meta=!!t.metaKey),e}function l(t,a){var l=i.x(a),c=i.y(a);"buttons"in a&&(t=0|a.buttons),(t!==n||l!==o||c!==r||u(a))&&(n=0|t,o=l||0,r=c||0,e&&e(n,o,r,s))}function c(t){l(0,t)}function d(){(n||o||r||s.shift||s.alt||s.meta||s.control)&&(o=r=0,n=0,s.shift=s.alt=s.control=s.meta=!1,e&&e(0,0,0,s))}function h(t){u(t)&&e&&e(n,o,r,s)}function f(t){0===i.buttons(t)?l(0,t):l(n,t)}function p(t){l(n|i.buttons(t),t)}function _(t){l(n&~i.buttons(t),t)}function m(){a||(a=!0,t.addEventListener("mousemove",f),t.addEventListener("mousedown",p),t.addEventListener("mouseup",_),t.addEventListener("mouseleave",c),t.addEventListener("mouseenter",c),t.addEventListener("mouseout",c),t.addEventListener("mouseover",c),t.addEventListener("blur",d),t.addEventListener("keyup",h),t.addEventListener("keydown",h),t.addEventListener("keypress",h),t!==window&&(window.addEventListener("blur",d),window.addEventListener("keyup",h),window.addEventListener("keydown",h),window.addEventListener("keypress",h)))}m();var v={element:t};return Object.defineProperties(v,{enabled:{get:function(){return a},set:function(e){e?m():a&&(a=!1,t.removeEventListener("mousemove",f),t.removeEventListener("mousedown",p),t.removeEventListener("mouseup",_),t.removeEventListener("mouseleave",c),t.removeEventListener("mouseenter",c),t.removeEventListener("mouseout",c),t.removeEventListener("mouseover",c),t.removeEventListener("blur",d),t.removeEventListener("keyup",h),t.removeEventListener("keydown",h),t.removeEventListener("keypress",h),t!==window&&(window.removeEventListener("blur",d),window.removeEventListener("keyup",h),window.removeEventListener("keydown",h),window.removeEventListener("keypress",h)))},enumerable:!0},buttons:{get:function(){return n},enumerable:!0},x:{get:function(){return o},enumerable:!0},y:{get:function(){return r},enumerable:!0},mods:{get:function(){return s},enumerable:!0}}),v};var i=n(9294)},675:t=>{var e={left:0,top:0};t.exports=function(t,n,i){n=n||t.currentTarget||t.srcElement,Array.isArray(i)||(i=[0,0]);var o,r=t.clientX||0,s=t.clientY||0,a=(o=n)===window||o===document||o===document.body?e:o.getBoundingClientRect();return i[0]=r-a.left,i[1]=s-a.top,i}},9294:(t,e)=>{"use strict";function n(t){return t.target||t.srcElement||window}e.buttons=function(t){if("object"==typeof t){if("buttons"in t)return t.buttons;if("which"in t){if(2===(e=t.which))return 4;if(3===e)return 2;if(e>0)return 1<<e-1}else if("button"in t){var e;if(1===(e=t.button))return 4;if(2===e)return 2;if(e>=0)return 1<<e}}return 0},e.element=n,e.x=function(t){if("object"==typeof t){if("offsetX"in t)return t.offsetX;var e=n(t).getBoundingClientRect();return t.clientX-e.left}return 0},e.y=function(t){if("object"==typeof t){if("offsetY"in t)return t.offsetY;var e=n(t).getBoundingClientRect();return t.clientY-e.top}return 0}},2232:(t,e,n)=>{"use strict";var i=n(9810);t.exports=function(t,e,n){"function"==typeof t&&(n=!!e,e=t,t=window);var o=i("ex",t),r=function(t){n&&t.preventDefault();var i=t.deltaX||0,r=t.deltaY||0,s=t.deltaZ||0,a=1;switch(t.deltaMode){case 1:a=o;break;case 2:a=window.innerHeight}if(r*=a,s*=a,(i*=a)||r||s)return e(i,r,s,t)};return t.addEventListener("wheel",r),r}},8918:t=>{"use strict";t.exports=function(t,e,n,i,o,r,s,a,u,l){var c=e+r+l;if(d>0){var d=Math.sqrt(c+1);t[0]=.5*(s-u)/d,t[1]=.5*(a-i)/d,t[2]=.5*(n-r)/d,t[3]=.5*d}else{var h=Math.max(e,r,l);d=Math.sqrt(2*h-c+1),e>=h?(t[0]=.5*d,t[1]=.5*(o+n)/d,t[2]=.5*(a+i)/d,t[3]=.5*(s-u)/d):r>=h?(t[0]=.5*(n+o)/d,t[1]=.5*d,t[2]=.5*(u+s)/d,t[3]=.5*(a-i)/d):(t[0]=.5*(i+a)/d,t[1]=.5*(s+u)/d,t[2]=.5*d,t[3]=.5*(n-o)/d)}return t}},809:(t,e,n)=>{"use strict";t.exports=function(t){var e=(t=t||{}).center||[0,0,0],n=t.rotation||[0,0,0,1],i=t.radius||1;e=[].slice.call(e,0,3),c(n=[].slice.call(n,0,4),n);var o=new d(n,e,Math.log(i));return o.setDistanceLimits(t.zoomMin,t.zoomMax),("eye"in t||"up"in t)&&o.lookAt(0,t.eye,t.center,t.up),o};var i=n(4173),o=n(4727),r=n(7127),s=n(4481),a=n(8918);function u(t,e,n){return Math.sqrt(Math.pow(t,2)+Math.pow(e,2)+Math.pow(n,2))}function l(t,e,n,i){return Math.sqrt(Math.pow(t,2)+Math.pow(e,2)+Math.pow(n,2)+Math.pow(i,2))}function c(t,e){var n=e[0],i=e[1],o=e[2],r=e[3],s=l(n,i,o,r);s>1e-6?(t[0]=n/s,t[1]=i/s,t[2]=o/s,t[3]=r/s):(t[0]=t[1]=t[2]=0,t[3]=1)}function d(t,e,n){this.radius=i([n]),this.center=i(e),this.rotation=i(t),this.computedRadius=this.radius.curve(0),this.computedCenter=this.center.curve(0),this.computedRotation=this.rotation.curve(0),this.computedUp=[.1,0,0],this.computedEye=[.1,0,0],this.computedMatrix=[.1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],this.recalcMatrix(0)}var h=d.prototype;h.lastT=function(){return Math.max(this.radius.lastT(),this.center.lastT(),this.rotation.lastT())},h.recalcMatrix=function(t){this.radius.curve(t),this.center.curve(t),this.rotation.curve(t);var e=this.computedRotation;c(e,e);var n=this.computedMatrix;r(n,e);var i=this.computedCenter,o=this.computedEye,s=this.computedUp,a=Math.exp(this.computedRadius[0]);o[0]=i[0]+a*n[2],o[1]=i[1]+a*n[6],o[2]=i[2]+a*n[10],s[0]=n[1],s[1]=n[5],s[2]=n[9];for(var u=0;u<3;++u){for(var l=0,d=0;d<3;++d)l+=n[u+4*d]*o[d];n[12+u]=-l}},h.getMatrix=function(t,e){this.recalcMatrix(t);var n=this.computedMatrix;if(e){for(var i=0;i<16;++i)e[i]=n[i];return e}return n},h.idle=function(t){this.center.idle(t),this.radius.idle(t),this.rotation.idle(t)},h.flush=function(t){this.center.flush(t),this.radius.flush(t),this.rotation.flush(t)},h.pan=function(t,e,n,i){e=e||0,n=n||0,i=i||0,this.recalcMatrix(t);var o=this.computedMatrix,r=o[1],s=o[5],a=o[9],l=u(r,s,a);r/=l,s/=l,a/=l;var c=o[0],d=o[4],h=o[8],f=c*r+d*s+h*a,p=u(c-=r*f,d-=s*f,h-=a*f);c/=p,d/=p,h/=p;var _=o[2],m=o[6],v=o[10],g=_*r+m*s+v*a,b=_*c+m*d+v*h,y=u(_-=g*r+b*c,m-=g*s+b*d,v-=g*a+b*h);_/=y,m/=y,v/=y;var x=c*e+r*n,w=d*e+s*n,E=h*e+a*n;this.center.move(t,x,w,E);var M=Math.exp(this.computedRadius[0]);M=Math.max(1e-4,M+i),this.radius.set(t,Math.log(M))},h.rotate=function(t,e,n,i){this.recalcMatrix(t),e=e||0,n=n||0;var o=this.computedMatrix,r=o[0],s=o[4],a=o[8],c=o[1],d=o[5],h=o[9],f=o[2],p=o[6],_=o[10],m=e*r+n*c,v=e*s+n*d,g=e*a+n*h,b=-(p*g-_*v),y=-(_*m-f*g),x=-(f*v-p*m),w=Math.sqrt(Math.max(0,1-Math.pow(b,2)-Math.pow(y,2)-Math.pow(x,2))),E=l(b,y,x,w);E>1e-6?(b/=E,y/=E,x/=E,w/=E):(b=y=x=0,w=1);var M=this.computedRotation,A=M[0],C=M[1],T=M[2],S=M[3],k=A*w+S*b+C*x-T*y,L=C*w+S*y+T*b-A*x,R=T*w+S*x+A*y-C*b,O=S*w-A*b-C*y-T*x;if(i){b=f,y=p,x=_;var P=Math.sin(i)/u(b,y,x);b*=P,y*=P,x*=P,O=O*(w=Math.cos(e))-(k=k*w+O*b+L*x-R*y)*b-(L=L*w+O*y+R*b-k*x)*y-(R=R*w+O*x+k*y-L*b)*x}var B=l(k,L,R,O);B>1e-6?(k/=B,L/=B,R/=B,O/=B):(k=L=R=0,O=1),this.rotation.set(t,k,L,R,O)},h.lookAt=function(t,e,n,i){this.recalcMatrix(t),n=n||this.computedCenter,e=e||this.computedEye,i=i||this.computedUp;var r=this.computedMatrix;o(r,e,n,i);var s=this.computedRotation;a(s,r[0],r[1],r[2],r[4],r[5],r[6],r[8],r[9],r[10]),c(s,s),this.rotation.set(t,s[0],s[1],s[2],s[3]);for(var u=0,l=0;l<3;++l)u+=Math.pow(n[l]-e[l],2);this.radius.set(t,.5*Math.log(Math.max(u,1e-6))),this.center.set(t,n[0],n[1],n[2])},h.translate=function(t,e,n,i){this.center.move(t,e||0,n||0,i||0)},h.setMatrix=function(t,e){var n=this.computedRotation;a(n,e[0],e[1],e[2],e[4],e[5],e[6],e[8],e[9],e[10]),c(n,n),this.rotation.set(t,n[0],n[1],n[2],n[3]);var i=this.computedMatrix;s(i,e);var o=i[15];if(Math.abs(o)>1e-6){var r=i[12]/o,u=i[13]/o,l=i[14]/o;this.recalcMatrix(t);var d=Math.exp(this.computedRadius[0]);this.center.set(t,r-i[2]*d,u-i[6]*d,l-i[10]*d),this.radius.idle(t)}else this.center.idle(t),this.radius.idle(t)},h.setDistance=function(t,e){e>0&&this.radius.set(t,Math.log(e))},h.setDistanceLimits=function(t,e){t=t>0?Math.log(t):-1/0,e=e>0?Math.log(e):1/0,e=Math.max(e,t),this.radius.bounds[0][0]=t,this.radius.bounds[1][0]=e},h.getDistanceLimits=function(t){var e=this.radius.bounds;return t?(t[0]=Math.exp(e[0][0]),t[1]=Math.exp(e[1][0]),t):[Math.exp(e[0][0]),Math.exp(e[1][0])]},h.toJSON=function(){return this.recalcMatrix(this.lastT()),{center:this.computedCenter.slice(),rotation:this.computedRotation.slice(),distance:Math.log(this.computedRadius[0]),zoomMin:this.radius.bounds[0][0],zoomMax:this.radius.bounds[1][0]}},h.fromJSON=function(t){var e=this.lastT(),n=t.center;n&&this.center.set(e,n[0],n[1],n[2]);var i=t.rotation;i&&this.rotation.set(e,i[0],i[1],i[2],i[3]);var o=t.distance;o&&o>0&&this.radius.set(e,Math.log(o)),this.setDistanceLimits(t.zoomMin,t.zoomMax)}},1885:t=>{t.exports=function(t,e){e||(e=[0,""]),t=String(t);var n=parseFloat(t,10);return e[0]=n,e[1]=t.match(/[\d.\-\+]*\s*(.*)/)[1]||"",e}},2210:(t,e,n)=>{t.exports=n(4600)},698:(t,e,n)=>{t.exports=n.g.performance&&n.g.performance.now?function(){return performance.now()}:Date.now||function(){return+new Date}},2792:function(t){t.exports=function(){"use strict";var t=function(){var e=0,n=document.createElement("div");function i(t){return n.appendChild(t.dom),t}function o(t){for(var i=0;i<n.children.length;i++)n.children[i].style.display=i===t?"block":"none";e=t}n.style.cssText="position:fixed;top:0;left:0;cursor:pointer;opacity:0.9;z-index:10000",n.addEventListener("click",(function(t){t.preventDefault(),o(++e%n.children.length)}),!1);var r=(performance||Date).now(),s=r,a=0,u=i(new t.Panel("FPS","#0ff","#002")),l=i(new t.Panel("MS","#0f0","#020"));if(self.performance&&self.performance.memory)var c=i(new t.Panel("MB","#f08","#201"));return o(0),{REVISION:16,dom:n,addPanel:i,showPanel:o,begin:function(){r=(performance||Date).now()},end:function(){a++;var t=(performance||Date).now();if(l.update(t-r,200),s+1e3<=t&&(u.update(1e3*a/(t-s),100),s=t,a=0,c)){var e=performance.memory;c.update(e.usedJSHeapSize/1048576,e.jsHeapSizeLimit/1048576)}return t},update:function(){r=this.end()},domElement:n,setMode:o}};return t.Panel=function(t,e,n){var i=1/0,o=0,r=Math.round,s=r(window.devicePixelRatio||1),a=80*s,u=48*s,l=3*s,c=2*s,d=3*s,h=15*s,f=74*s,p=30*s,_=document.createElement("canvas");_.width=a,_.height=u,_.style.cssText="width:80px;height:48px";var m=_.getContext("2d");return m.font="bold "+9*s+"px Helvetica,Arial,sans-serif",m.textBaseline="top",m.fillStyle=n,m.fillRect(0,0,a,u),m.fillStyle=e,m.fillText(t,l,c),m.fillRect(d,h,f,p),m.fillStyle=n,m.globalAlpha=.9,m.fillRect(d,h,f,p),{dom:_,update:function(u,v){i=Math.min(i,u),o=Math.max(o,u),m.fillStyle=n,m.globalAlpha=1,m.fillRect(0,0,a,h),m.fillStyle=e,m.fillText(r(u)+" "+t+" ("+r(i)+"-"+r(o)+")",l,c),m.drawImage(_,d+s,h,f-s,p,d,h,f-s,p),m.fillRect(d+f-s,h,s,p),m.fillStyle=n,m.globalAlpha=.9,m.fillRect(d+f-s,h,s,r((1-u/v)*p))}}},t}()},9810:(t,e,n)=>{"use strict";var i=n(1885);t.exports=a;var o=s("in",document.body);function r(t,e){var n=i(getComputedStyle(t).getPropertyValue(e));return n[0]*a(n[1],t)}function s(t,e){var n=document.createElement("div");n.style.height="128"+t,e.appendChild(n);var i=r(n,"height")/128;return e.removeChild(n),i}function a(t,e){if(!t)return null;switch(e=e||document.body,t=(t+""||"px").trim().toLowerCase(),e!==window&&e!==document||(e=document.body),t){case"%":return e.clientHeight/100;case"ch":case"ex":return s(t,e);case"em":return r(e,"font-size");case"rem":return r(document.body,"font-size");case"vw":return window.innerWidth/100;case"vh":return window.innerHeight/100;case"vmin":return Math.min(window.innerWidth,window.innerHeight)/100;case"vmax":return Math.max(window.innerWidth,window.innerHeight)/100;case"in":return o;case"cm":return o/2.54;case"mm":return o/25.4;case"pt":return o/72;case"pc":return o/6;case"px":return 1}var n=i(t);if(!isNaN(n[0])&&n[1]){var u=a(n[1],e);return"number"==typeof u?n[0]*u:null}return null}},8786:(t,e,n)=>{"use strict";t.exports=function(t){var e=(t=t||{}).center||[0,0,0],n=t.up||[0,1,0],i=t.right||d(n),o=t.radius||1,r=t.theta||0,c=t.phi||0;if(e=[].slice.call(e,0,3),n=[].slice.call(n,0,3),a(n,n),i=[].slice.call(i,0,3),a(i,i),"eye"in t){var f=t.eye,p=[f[0]-e[0],f[1]-e[1],f[2]-e[2]];s(i,p,n),l(i[0],i[1],i[2])<1e-6?i=d(n):a(i,i),o=l(p[0],p[1],p[2]);var _=u(n,p)/o,m=u(i,p)/o;c=Math.acos(_),r=Math.acos(m)}return o=Math.log(o),new h(t.zoomMin,t.zoomMax,e,n,i,o,r,c)};var i=n(4173),o=n(4481),r=n(397),s=n(3858),a=n(91),u=n(8368);function l(t,e,n){return Math.sqrt(Math.pow(t,2)+Math.pow(e,2)+Math.pow(n,2))}function c(t){return Math.min(1,Math.max(-1,t))}function d(t){var e=Math.abs(t[0]),n=Math.abs(t[1]),i=Math.abs(t[2]),o=[0,0,0];e>Math.max(n,i)?o[2]=1:n>Math.max(e,i)?o[0]=1:o[1]=1;for(var r=0,s=0,u=0;u<3;++u)r+=t[u]*t[u],s+=o[u]*t[u];for(u=0;u<3;++u)o[u]-=s/r*t[u];return a(o,o),o}function h(t,e,n,o,r,s,a,u){this.center=i(n),this.up=i(o),this.right=i(r),this.radius=i([s]),this.angle=i([a,u]),this.angle.bounds=[[-1/0,-Math.PI/2],[1/0,Math.PI/2]],this.setDistanceLimits(t,e),this.computedCenter=this.center.curve(0),this.computedUp=this.up.curve(0),this.computedRight=this.right.curve(0),this.computedRadius=this.radius.curve(0),this.computedAngle=this.angle.curve(0),this.computedToward=[0,0,0],this.computedEye=[0,0,0],this.computedMatrix=new Array(16);for(var l=0;l<16;++l)this.computedMatrix[l]=.5;this.recalcMatrix(0)}var f=h.prototype;f.setDistanceLimits=function(t,e){t=t>0?Math.log(t):-1/0,e=e>0?Math.log(e):1/0,e=Math.max(e,t),this.radius.bounds[0][0]=t,this.radius.bounds[1][0]=e},f.getDistanceLimits=function(t){var e=this.radius.bounds[0];return t?(t[0]=Math.exp(e[0][0]),t[1]=Math.exp(e[1][0]),t):[Math.exp(e[0][0]),Math.exp(e[1][0])]},f.recalcMatrix=function(t){this.center.curve(t),this.up.curve(t),this.right.curve(t),this.radius.curve(t),this.angle.curve(t);for(var e=this.computedUp,n=this.computedRight,i=0,o=0,r=0;r<3;++r)o+=e[r]*n[r],i+=e[r]*e[r];var u=Math.sqrt(i),c=0;for(r=0;r<3;++r)n[r]-=e[r]*o/i,c+=n[r]*n[r],e[r]/=u;var d=Math.sqrt(c);for(r=0;r<3;++r)n[r]/=d;var h=this.computedToward;s(h,e,n),a(h,h);var f=Math.exp(this.computedRadius[0]),p=this.computedAngle[0],_=this.computedAngle[1],m=Math.cos(p),v=Math.sin(p),g=Math.cos(_),b=Math.sin(_),y=this.computedCenter,x=m*g,w=v*g,E=b,M=-m*b,A=-v*b,C=g,T=this.computedEye,S=this.computedMatrix;for(r=0;r<3;++r){var k=x*n[r]+w*h[r]+E*e[r];S[4*r+1]=M*n[r]+A*h[r]+C*e[r],S[4*r+2]=k,S[4*r+3]=0}var L=S[1],R=S[5],O=S[9],P=S[2],B=S[6],N=S[10],D=R*N-O*B,F=O*P-L*N,U=L*B-R*P,I=l(D,F,U);for(D/=I,F/=I,U/=I,S[0]=D,S[4]=F,S[8]=U,r=0;r<3;++r)T[r]=y[r]+S[2+4*r]*f;for(r=0;r<3;++r){c=0;for(var H=0;H<3;++H)c+=S[r+4*H]*T[H];S[12+r]=-c}S[15]=1},f.getMatrix=function(t,e){this.recalcMatrix(t);var n=this.computedMatrix;if(e){for(var i=0;i<16;++i)e[i]=n[i];return e}return n};var p=[0,0,0];f.rotate=function(t,e,n,i){if(this.angle.move(t,e,n),i){this.recalcMatrix(t);var o=this.computedMatrix;p[0]=o[2],p[1]=o[6],p[2]=o[10];for(var s=this.computedUp,a=this.computedRight,u=this.computedToward,l=0;l<3;++l)o[4*l]=s[l],o[4*l+1]=a[l],o[4*l+2]=u[l];for(r(o,o,i,p),l=0;l<3;++l)s[l]=o[4*l],a[l]=o[4*l+1];this.up.set(t,s[0],s[1],s[2]),this.right.set(t,a[0],a[1],a[2])}},f.pan=function(t,e,n,i){e=e||0,n=n||0,i=i||0,this.recalcMatrix(t);var o=this.computedMatrix,r=(Math.exp(this.computedRadius[0]),o[1]),s=o[5],a=o[9],u=l(r,s,a);r/=u,s/=u,a/=u;var c=o[0],d=o[4],h=o[8],f=c*r+d*s+h*a,p=l(c-=r*f,d-=s*f,h-=a*f),_=(c/=p)*e+r*n,m=(d/=p)*e+s*n,v=(h/=p)*e+a*n;this.center.move(t,_,m,v);var g=Math.exp(this.computedRadius[0]);g=Math.max(1e-4,g+i),this.radius.set(t,Math.log(g))},f.translate=function(t,e,n,i){this.center.move(t,e||0,n||0,i||0)},f.setMatrix=function(t,e,n,i){var r=1;"number"==typeof n&&(r=0|n),(r<0||r>3)&&(r=1);var s=(r+2)%3;e||(this.recalcMatrix(t),e=this.computedMatrix);var a=e[r],u=e[r+4],d=e[r+8];if(i){var h=Math.abs(a),f=Math.abs(u),p=Math.abs(d),_=Math.max(h,f,p);h===_?(a=a<0?-1:1,u=d=0):p===_?(d=d<0?-1:1,a=u=0):(u=u<0?-1:1,a=d=0)}else{var m=l(a,u,d);a/=m,u/=m,d/=m}var v,g,b=e[s],y=e[s+4],x=e[s+8],w=b*a+y*u+x*d,E=l(b-=a*w,y-=u*w,x-=d*w),M=u*(x/=E)-d*(y/=E),A=d*(b/=E)-a*x,C=a*y-u*b,T=l(M,A,C);if(M/=T,A/=T,C/=T,this.center.jump(t,Y,G,W),this.radius.idle(t),this.up.jump(t,a,u,d),this.right.jump(t,b,y,x),2===r){var S=e[1],k=e[5],L=e[9],R=S*b+k*y+L*x,O=S*M+k*A+L*C;v=D<0?-Math.PI/2:Math.PI/2,g=Math.atan2(O,R)}else{var P=e[2],B=e[6],N=e[10],D=P*a+B*u+N*d,F=P*b+B*y+N*x,U=P*M+B*A+N*C;v=Math.asin(c(D)),g=Math.atan2(U,F)}this.angle.jump(t,g,v),this.recalcMatrix(t);var I=e[2],H=e[6],z=e[10],j=this.computedMatrix;o(j,e);var V=j[15],Y=j[12]/V,G=j[13]/V,W=j[14]/V,X=Math.exp(this.computedRadius[0]);this.center.jump(t,Y-I*X,G-H*X,W-z*X)},f.lastT=function(){return Math.max(this.center.lastT(),this.up.lastT(),this.right.lastT(),this.radius.lastT(),this.angle.lastT())},f.idle=function(t){this.center.idle(t),this.up.idle(t),this.right.idle(t),this.radius.idle(t),this.angle.idle(t)},f.flush=function(t){this.center.flush(t),this.up.flush(t),this.right.flush(t),this.radius.flush(t),this.angle.flush(t)},f.setDistance=function(t,e){e>0&&this.radius.set(t,Math.log(e))},f.lookAt=function(t,e,n,i){this.recalcMatrix(t),e=e||this.computedEye,n=n||this.computedCenter;var o=(i=i||this.computedUp)[0],r=i[1],s=i[2],a=l(o,r,s);if(!(a<1e-6)){o/=a,r/=a,s/=a;var u=e[0]-n[0],d=e[1]-n[1],h=e[2]-n[2],f=l(u,d,h);if(!(f<1e-6)){u/=f,d/=f,h/=f;var p=this.computedRight,_=p[0],m=p[1],v=p[2],g=o*_+r*m+s*v,b=l(_-=g*o,m-=g*r,v-=g*s);if(!(b<.01&&(b=l(_=r*h-s*d,m=s*u-o*h,v=o*d-r*u))<1e-6)){_/=b,m/=b,v/=b,this.up.set(t,o,r,s),this.right.set(t,_,m,v),this.center.set(t,n[0],n[1],n[2]),this.radius.set(t,Math.log(f));var y=r*v-s*m,x=s*_-o*v,w=o*m-r*_,E=l(y,x,w),M=o*u+r*d+s*h,A=_*u+m*d+v*h,C=(y/=E)*u+(x/=E)*d+(w/=E)*h,T=Math.asin(c(M)),S=Math.atan2(C,A),k=this.angle._state,L=k[k.length-1],R=k[k.length-2];L%=2*Math.PI;var O=Math.abs(L+2*Math.PI-S),P=Math.abs(L-S),B=Math.abs(L-2*Math.PI-S);O<P&&(L+=2*Math.PI),B<P&&(L-=2*Math.PI),this.angle.jump(this.angle.lastT(),L,R),this.angle.set(t,S,T)}}}}},5327:t=>{t.exports="#version 300 es\nprecision highp float;\n\nuniform vec3 u_Eye, u_Ref, u_Up;\nuniform vec2 u_Dimensions;\nuniform float u_Time;\n\nin vec2 fs_Pos;\nout vec4 out_Col;\n\nfloat gradient(float k,float x){\n\tfloat h = k*x;\n\treturn h*exp(1.f-h);\n}\n\nfloat easeInOut(in vec2 pos ) \n{\n\tvec2 p = pos;\n\tp.x *= u_Dimensions.x/u_Dimensions.y;\n\t\n\tfloat radius = length(p);\n\n\tradius = smoothstep(0.2,1.0,radius);\n\n    radius *= sin(u_Time);\n\n\tfloat color  = 1.0 - 1.5*radius;\n\n\tcolor = gradient(1.,color);\n\treturn pow(max(color,0.),2.);\n}\n\nvoid main() {\n    vec3 color = vec3(1, 0.1, 0) * (easeInOut(fs_Pos)*0.8);\n\tout_Col = vec4(color,1.);\n}\n"},3238:t=>{t.exports="#version 300 es\nprecision highp float;\n\n// The vertex shader used to render the background of the scene\n\nin vec4 vs_Pos;\n\nuniform float u_Time;\n\nout vec2 fs_Pos;\n\nvoid main() {\n  fs_Pos = vs_Pos.xy;\n  gl_Position = vs_Pos;\n}"},7063:t=>{t.exports="#version 300 es\n\nprecision highp float;\n\nuniform vec4 u_Color;\nuniform vec4 u_Color2;\nuniform mat4 u_Model;\n\nin vec4 fs_Nor;\nin vec4 fs_LightVec;\nin vec4 fs_Col;\nin vec4 fs_Pos;\nin float fs_Bump;\nout vec4 out_Col;\n\nvec3 random3(vec3 p) {\n return fract(\n    sin(\n        vec3(\n            dot(p.xy, vec2(127.1, 311.7)),\n            dot(p.yz, vec2(269.5, 183.3)),\n            dot(p.zx, vec2(20.1, 123.3))\n            )\n        ) * 43758.5453\n );\n}\n\nfloat WorleyNoise(vec3 uv) {\n    uv *= 3.f;\n    vec3 uvInt = floor(uv);\n    vec3 uvFract = fract(uv);\n    float minDist = 100.f;\n    for(int z = -1; z <= 1; ++z){\n        for(int y = -1; y <= 1; ++y) {\n            for(int x = -1; x <= 1; ++x) {\n                vec3 neighbor = vec3(float(x), float(y), float(z));\n                vec3 point = random3(uvInt + neighbor);\n                vec3 diff = neighbor + point - uvFract;\n                float dist = length(diff);\n                minDist = min(minDist, dist);\n            }\n        } \n    }\n    return minDist;\n}\n\nfloat fbm3d(vec3 xyz) {\n    float f;\n   \tf  = 0.5f * WorleyNoise(xyz);\n\tf += 0.25f * WorleyNoise(xyz);\n\tf += 0.1250 * WorleyNoise(xyz);\n\tf += 0.0625 * WorleyNoise(xyz);\n\tf = 0.5 + 0.5 * f;\n\treturn f;\n}\n\nvoid main()\n{\n    vec4 diffuseColor = u_Color;\n\n    float diffuseTerm = clamp(dot(fs_Nor,fs_LightVec), 0.f, 1.f);\n\n    float ambientTerm = 0.2f;\n\n    float lightIntensity = diffuseTerm + ambientTerm;\n\n    vec4 center = -u_Model[3];\n\n    float u = clamp(0.8 * (fs_Bump - 0.1) - fbm3d(fs_Nor.xyz), 0.f, 1.f);\n    vec3 color = mix(diffuseColor.rgb, u_Color2.xyz, u);\n    color = floor(color * 4.f) / 3.f;\n    out_Col = vec4(color, 1.f);\n}\n"},8816:t=>{t.exports="#version 300 es\n\nuniform mat4 u_Model;\n\nuniform mat4 u_ModelInvTr;\n\nuniform mat4 u_ViewProj;\nuniform float u_Time;\n\nuniform float u_lowAmp;\nuniform float u_highAmp;\n\nin vec4 vs_Pos;\nin vec4 vs_Nor;\nin vec4 vs_Col;\n\nout vec4 fs_Nor;\nout vec4 fs_LightVec;\nout vec4 fs_Col;\nout vec4 fs_Pos;\nout float fs_Bump;\n\nconst vec4 lightPos = vec4(4.5, 5.2, 2.8, 1);\n\nfloat hash(float p) {\n    p = fract(p * 0.011); p *= p + 1.f; p *= p + p; return fract(p); \n}\n\nfloat snoise(vec3 x) {\n    const vec3 step = vec3(110, 241, 171);\n    vec3 i = floor(x);\n    vec3 f = fract(x);\n    float n = dot(i, step);\n    vec3 u = f * f * (3. - 2. * f);\n    return mix(mix(mix(hash(n + dot(step, vec3(0, 0, 0))), \n                       hash(n + dot(step, vec3(1, 0, 0))), u.x),\n                   mix(hash(n + dot(step, vec3(0, 1, 0))), \n                       hash(n + dot(step, vec3(1, 1, 0))), u.x), u.y),\n                   mix(mix(hash(n + dot(step, vec3(0, 0, 1))), \n                           hash(n + dot(step, vec3(1, 0, 1))), u.x),\n                   mix(hash(n + dot(step, vec3(0, 1, 1))), \n                       hash(n + dot(step, vec3(1, 1, 1))), u.x), u.y), u.z);\n}\n\nfloat fbm3d(vec3 x) {\n    x *= 5.f;\n\tfloat v = 0.0;\n\tfloat a = 0.3;\n\tvec3 shift = vec3(100);\n\tfor (int i = 0; i < 10; ++i) {\n\t\tv += a * snoise(x);\n\t\tx = x * 3.0 + shift;\n\t\ta *= 0.3;\n\t}\n\treturn v;\n}\n\nvec3 random3(vec3 p) {\n return fract(\n    sin(\n        vec3(\n            dot(p.xy, vec2(127.1, 311.7)),\n            dot(p.yz, vec2(269.5, 183.3)),\n            dot(p.zx, vec2(20.1, 123.3))\n            )\n        ) * 43758.5453\n );\n}\n\nvoid main()\n{\n    fs_Col = vs_Col;\n\n    mat3 invTranspose = mat3(u_ModelInvTr);\n    fs_Nor = vec4(invTranspose * vec3(vs_Nor), 0);\n\n    vec4 fs_Pos = vs_Pos;\n\n    fs_Bump = random3(fs_Nor.xyz + vec3(0, u_Time, 0)).x * u_highAmp + \n\t\t5.f * fbm3d(fs_Nor.xyz + vec3(0, u_Time * 0.75, 0)) * u_lowAmp;\n\n    fs_Pos += fs_Nor * 0.3 * fs_Bump;\n\n    vec4 modelposition = u_Model * fs_Pos;\n    fs_Pos = modelposition;\n\n    fs_LightVec = lightPos - modelposition;\n    gl_Position = u_ViewProj * modelposition;\n}\n"}},e={};function n(i){var o=e[i];if(void 0!==o)return o.exports;var r=e[i]={exports:{}};return t[i].call(r.exports,r,r.exports,n),r.exports}n.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(t){if("object"==typeof window)return window}}(),(()=>{"use strict";var t,e=1e-6,i="undefined"!=typeof Float32Array?Float32Array:Array;function o(){var t=new i(3);return i!=Float32Array&&(t[0]=0,t[1]=0,t[2]=0),t}function r(t,e,n){var o=new i(3);return o[0]=t,o[1]=e,o[2]=n,o}function s(t,e,n){return t[0]=e[0]+n[0],t[1]=e[1]+n[1],t[2]=e[2]+n[2],t}function a(t,e,n,o){var r=new i(4);return r[0]=t,r[1]=e,r[2]=n,r[3]=o,r}function u(t,e,n){return t[0]=e[0]+n[0],t[1]=e[1]+n[1],t[2]=e[2]+n[2],t[3]=e[3]+n[3],t}function l(t,e,n,i){return t[0]=e[0]+n[0]*i,t[1]=e[1]+n[1]*i,t[2]=e[2]+n[2]*i,t[3]=e[3]+n[3]*i,t}function c(t,e){var n=e[0],i=e[1],o=e[2],r=e[3],s=n*n+i*i+o*o+r*r;return s>0&&(s=1/Math.sqrt(s)),t[0]=n*s,t[1]=i*s,t[2]=o*s,t[3]=r*s,t}function d(){var t=new i(16);return i!=Float32Array&&(t[1]=0,t[2]=0,t[3]=0,t[4]=0,t[6]=0,t[7]=0,t[8]=0,t[9]=0,t[11]=0,t[12]=0,t[13]=0,t[14]=0),t[0]=1,t[5]=1,t[10]=1,t[15]=1,t}function h(t){return t[0]=1,t[1]=0,t[2]=0,t[3]=0,t[4]=0,t[5]=1,t[6]=0,t[7]=0,t[8]=0,t[9]=0,t[10]=1,t[11]=0,t[12]=0,t[13]=0,t[14]=0,t[15]=1,t}function f(t,n,i,o){var r,s,a,u,l,c,d,f,p,_,m=n[0],v=n[1],g=n[2],b=o[0],y=o[1],x=o[2],w=i[0],E=i[1],M=i[2];return Math.abs(m-w)<e&&Math.abs(v-E)<e&&Math.abs(g-M)<e?h(t):(d=m-w,f=v-E,p=g-M,r=y*(p*=_=1/Math.hypot(d,f,p))-x*(f*=_),s=x*(d*=_)-b*p,a=b*f-y*d,(_=Math.hypot(r,s,a))?(r*=_=1/_,s*=_,a*=_):(r=0,s=0,a=0),u=f*a-p*s,l=p*r-d*a,c=d*s-f*r,(_=Math.hypot(u,l,c))?(u*=_=1/_,l*=_,c*=_):(u=0,l=0,c=0),t[0]=r,t[1]=u,t[2]=d,t[3]=0,t[4]=s,t[5]=l,t[6]=f,t[7]=0,t[8]=a,t[9]=c,t[10]=p,t[11]=0,t[12]=-(r*m+s*v+a*g),t[13]=-(u*m+l*v+c*g),t[14]=-(d*m+f*v+p*g),t[15]=1,t)}function p(t,e){var n=t.__state.conversionName.toString(),i=Math.round(t.r),o=Math.round(t.g),r=Math.round(t.b),s=t.a,a=Math.round(t.h),u=t.s.toFixed(1),l=t.v.toFixed(1);if(e||"THREE_CHAR_HEX"===n||"SIX_CHAR_HEX"===n){for(var c=t.hex.toString(16);c.length<6;)c="0"+c;return"#"+c}return"CSS_RGB"===n?"rgb("+i+","+o+","+r+")":"CSS_RGBA"===n?"rgba("+i+","+o+","+r+","+s+")":"HEX"===n?"0x"+t.hex.toString(16):"RGB_ARRAY"===n?"["+i+","+o+","+r+"]":"RGBA_ARRAY"===n?"["+i+","+o+","+r+","+s+"]":"RGB_OBJ"===n?"{r:"+i+",g:"+o+",b:"+r+"}":"RGBA_OBJ"===n?"{r:"+i+",g:"+o+",b:"+r+",a:"+s+"}":"HSV_OBJ"===n?"{h:"+a+",s:"+u+",v:"+l+"}":"HSVA_OBJ"===n?"{h:"+a+",s:"+u+",v:"+l+",a:"+s+"}":"unknown format"}Math.random,Math.PI,Math.hypot||(Math.hypot=function(){for(var t=0,e=arguments.length;e--;)t+=arguments[e]*arguments[e];return Math.sqrt(t)}),o(),t=new i(4),i!=Float32Array&&(t[0]=0,t[1]=0,t[2]=0,t[3]=0);var _=Array.prototype.forEach,m=Array.prototype.slice,v={BREAK:{},extend:function(t){return this.each(m.call(arguments,1),(function(e){(this.isObject(e)?Object.keys(e):[]).forEach(function(n){this.isUndefined(e[n])||(t[n]=e[n])}.bind(this))}),this),t},defaults:function(t){return this.each(m.call(arguments,1),(function(e){(this.isObject(e)?Object.keys(e):[]).forEach(function(n){this.isUndefined(t[n])&&(t[n]=e[n])}.bind(this))}),this),t},compose:function(){var t=m.call(arguments);return function(){for(var e=m.call(arguments),n=t.length-1;n>=0;n--)e=[t[n].apply(this,e)];return e[0]}},each:function(t,e,n){if(t)if(_&&t.forEach&&t.forEach===_)t.forEach(e,n);else if(t.length===t.length+0){var i,o=void 0;for(o=0,i=t.length;o<i;o++)if(o in t&&e.call(n,t[o],o)===this.BREAK)return}else for(var r in t)if(e.call(n,t[r],r)===this.BREAK)return},defer:function(t){setTimeout(t,0)},debounce:function(t,e,n){var i=void 0;return function(){var o=this,r=arguments;function s(){i=null,n||t.apply(o,r)}var a=n||!i;clearTimeout(i),i=setTimeout(s,e),a&&t.apply(o,r)}},toArray:function(t){return t.toArray?t.toArray():m.call(t)},isUndefined:function(t){return void 0===t},isNull:function(t){return null===t},isNaN:function(t){function e(e){return t.apply(this,arguments)}return e.toString=function(){return t.toString()},e}((function(t){return isNaN(t)})),isArray:Array.isArray||function(t){return t.constructor===Array},isObject:function(t){return t===Object(t)},isNumber:function(t){return t===t+0},isString:function(t){return t===t+""},isBoolean:function(t){return!1===t||!0===t},isFunction:function(t){return t instanceof Function}},g=[{litmus:v.isString,conversions:{THREE_CHAR_HEX:{read:function(t){var e=t.match(/^#([A-F0-9])([A-F0-9])([A-F0-9])$/i);return null!==e&&{space:"HEX",hex:parseInt("0x"+e[1].toString()+e[1].toString()+e[2].toString()+e[2].toString()+e[3].toString()+e[3].toString(),0)}},write:p},SIX_CHAR_HEX:{read:function(t){var e=t.match(/^#([A-F0-9]{6})$/i);return null!==e&&{space:"HEX",hex:parseInt("0x"+e[1].toString(),0)}},write:p},CSS_RGB:{read:function(t){var e=t.match(/^rgb\(\s*(.+)\s*,\s*(.+)\s*,\s*(.+)\s*\)/);return null!==e&&{space:"RGB",r:parseFloat(e[1]),g:parseFloat(e[2]),b:parseFloat(e[3])}},write:p},CSS_RGBA:{read:function(t){var e=t.match(/^rgba\(\s*(.+)\s*,\s*(.+)\s*,\s*(.+)\s*,\s*(.+)\s*\)/);return null!==e&&{space:"RGB",r:parseFloat(e[1]),g:parseFloat(e[2]),b:parseFloat(e[3]),a:parseFloat(e[4])}},write:p}}},{litmus:v.isNumber,conversions:{HEX:{read:function(t){return{space:"HEX",hex:t,conversionName:"HEX"}},write:function(t){return t.hex}}}},{litmus:v.isArray,conversions:{RGB_ARRAY:{read:function(t){return 3===t.length&&{space:"RGB",r:t[0],g:t[1],b:t[2]}},write:function(t){return[t.r,t.g,t.b]}},RGBA_ARRAY:{read:function(t){return 4===t.length&&{space:"RGB",r:t[0],g:t[1],b:t[2],a:t[3]}},write:function(t){return[t.r,t.g,t.b,t.a]}}}},{litmus:v.isObject,conversions:{RGBA_OBJ:{read:function(t){return!!(v.isNumber(t.r)&&v.isNumber(t.g)&&v.isNumber(t.b)&&v.isNumber(t.a))&&{space:"RGB",r:t.r,g:t.g,b:t.b,a:t.a}},write:function(t){return{r:t.r,g:t.g,b:t.b,a:t.a}}},RGB_OBJ:{read:function(t){return!!(v.isNumber(t.r)&&v.isNumber(t.g)&&v.isNumber(t.b))&&{space:"RGB",r:t.r,g:t.g,b:t.b}},write:function(t){return{r:t.r,g:t.g,b:t.b}}},HSVA_OBJ:{read:function(t){return!!(v.isNumber(t.h)&&v.isNumber(t.s)&&v.isNumber(t.v)&&v.isNumber(t.a))&&{space:"HSV",h:t.h,s:t.s,v:t.v,a:t.a}},write:function(t){return{h:t.h,s:t.s,v:t.v,a:t.a}}},HSV_OBJ:{read:function(t){return!!(v.isNumber(t.h)&&v.isNumber(t.s)&&v.isNumber(t.v))&&{space:"HSV",h:t.h,s:t.s,v:t.v}},write:function(t){return{h:t.h,s:t.s,v:t.v}}}}}],b=void 0,y=void 0,x=function(){y=!1;var t=arguments.length>1?v.toArray(arguments):arguments[0];return v.each(g,(function(e){if(e.litmus(t))return v.each(e.conversions,(function(e,n){if(b=e.read(t),!1===y&&!1!==b)return y=b,b.conversionName=n,b.conversion=e,v.BREAK})),v.BREAK})),y},w=void 0,E={hsv_to_rgb:function(t,e,n){var i=Math.floor(t/60)%6,o=t/60-Math.floor(t/60),r=n*(1-e),s=n*(1-o*e),a=n*(1-(1-o)*e),u=[[n,a,r],[s,n,r],[r,n,a],[r,s,n],[a,r,n],[n,r,s]][i];return{r:255*u[0],g:255*u[1],b:255*u[2]}},rgb_to_hsv:function(t,e,n){var i=Math.min(t,e,n),o=Math.max(t,e,n),r=o-i,s=void 0;return 0===o?{h:NaN,s:0,v:0}:(s=t===o?(e-n)/r:e===o?2+(n-t)/r:4+(t-e)/r,(s/=6)<0&&(s+=1),{h:360*s,s:r/o,v:o/255})},rgb_to_hex:function(t,e,n){var i=this.hex_with_component(0,2,t);return i=this.hex_with_component(i,1,e),this.hex_with_component(i,0,n)},component_from_hex:function(t,e){return t>>8*e&255},hex_with_component:function(t,e,n){return n<<(w=8*e)|t&~(255<<w)}},M="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},A=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},C=function(){function t(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,n,i){return n&&t(e.prototype,n),i&&t(e,i),e}}(),T=function t(e,n,i){null===e&&(e=Function.prototype);var o=Object.getOwnPropertyDescriptor(e,n);if(void 0===o){var r=Object.getPrototypeOf(e);return null===r?void 0:t(r,n,i)}if("value"in o)return o.value;var s=o.get;return void 0!==s?s.call(i):void 0},S=function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)},k=function(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e},L=function(){function t(){if(A(this,t),this.__state=x.apply(this,arguments),!1===this.__state)throw new Error("Failed to interpret color arguments");this.__state.a=this.__state.a||1}return C(t,[{key:"toString",value:function(){return p(this)}},{key:"toHexString",value:function(){return p(this,!0)}},{key:"toOriginal",value:function(){return this.__state.conversion.write(this)}}]),t}();function R(t,e,n){Object.defineProperty(t,e,{get:function(){return"RGB"===this.__state.space||L.recalculateRGB(this,e,n),this.__state[e]},set:function(t){"RGB"!==this.__state.space&&(L.recalculateRGB(this,e,n),this.__state.space="RGB"),this.__state[e]=t}})}function O(t,e){Object.defineProperty(t,e,{get:function(){return"HSV"===this.__state.space||L.recalculateHSV(this),this.__state[e]},set:function(t){"HSV"!==this.__state.space&&(L.recalculateHSV(this),this.__state.space="HSV"),this.__state[e]=t}})}L.recalculateRGB=function(t,e,n){if("HEX"===t.__state.space)t.__state[e]=E.component_from_hex(t.__state.hex,n);else{if("HSV"!==t.__state.space)throw new Error("Corrupted color state");v.extend(t.__state,E.hsv_to_rgb(t.__state.h,t.__state.s,t.__state.v))}},L.recalculateHSV=function(t){var e=E.rgb_to_hsv(t.r,t.g,t.b);v.extend(t.__state,{s:e.s,v:e.v}),v.isNaN(e.h)?v.isUndefined(t.__state.h)&&(t.__state.h=0):t.__state.h=e.h},L.COMPONENTS=["r","g","b","h","s","v","hex","a"],R(L.prototype,"r",2),R(L.prototype,"g",1),R(L.prototype,"b",0),O(L.prototype,"h"),O(L.prototype,"s"),O(L.prototype,"v"),Object.defineProperty(L.prototype,"a",{get:function(){return this.__state.a},set:function(t){this.__state.a=t}}),Object.defineProperty(L.prototype,"hex",{get:function(){return"HEX"!==this.__state.space&&(this.__state.hex=E.rgb_to_hex(this.r,this.g,this.b),this.__state.space="HEX"),this.__state.hex},set:function(t){this.__state.space="HEX",this.__state.hex=t}});var P=function(){function t(e,n){A(this,t),this.initialValue=e[n],this.domElement=document.createElement("div"),this.object=e,this.property=n,this.__onChange=void 0,this.__onFinishChange=void 0}return C(t,[{key:"onChange",value:function(t){return this.__onChange=t,this}},{key:"onFinishChange",value:function(t){return this.__onFinishChange=t,this}},{key:"setValue",value:function(t){return this.object[this.property]=t,this.__onChange&&this.__onChange.call(this,t),this.updateDisplay(),this}},{key:"getValue",value:function(){return this.object[this.property]}},{key:"updateDisplay",value:function(){return this}},{key:"isModified",value:function(){return this.initialValue!==this.getValue()}}]),t}(),B={};v.each({HTMLEvents:["change"],MouseEvents:["click","mousemove","mousedown","mouseup","mouseover"],KeyboardEvents:["keydown"]},(function(t,e){v.each(t,(function(t){B[t]=e}))}));var N=/(\d+(\.\d+)?)px/;function D(t){if("0"===t||v.isUndefined(t))return 0;var e=t.match(N);return v.isNull(e)?0:parseFloat(e[1])}var F={makeSelectable:function(t,e){void 0!==t&&void 0!==t.style&&(t.onselectstart=e?function(){return!1}:function(){},t.style.MozUserSelect=e?"auto":"none",t.style.KhtmlUserSelect=e?"auto":"none",t.unselectable=e?"on":"off")},makeFullscreen:function(t,e,n){var i=n,o=e;v.isUndefined(o)&&(o=!0),v.isUndefined(i)&&(i=!0),t.style.position="absolute",o&&(t.style.left=0,t.style.right=0),i&&(t.style.top=0,t.style.bottom=0)},fakeEvent:function(t,e,n,i){var o=n||{},r=B[e];if(!r)throw new Error("Event type "+e+" not supported.");var s=document.createEvent(r);switch(r){case"MouseEvents":var a=o.x||o.clientX||0,u=o.y||o.clientY||0;s.initMouseEvent(e,o.bubbles||!1,o.cancelable||!0,window,o.clickCount||1,0,0,a,u,!1,!1,!1,!1,0,null);break;case"KeyboardEvents":var l=s.initKeyboardEvent||s.initKeyEvent;v.defaults(o,{cancelable:!0,ctrlKey:!1,altKey:!1,shiftKey:!1,metaKey:!1,keyCode:void 0,charCode:void 0}),l(e,o.bubbles||!1,o.cancelable,window,o.ctrlKey,o.altKey,o.shiftKey,o.metaKey,o.keyCode,o.charCode);break;default:s.initEvent(e,o.bubbles||!1,o.cancelable||!0)}v.defaults(s,i),t.dispatchEvent(s)},bind:function(t,e,n,i){var o=i||!1;return t.addEventListener?t.addEventListener(e,n,o):t.attachEvent&&t.attachEvent("on"+e,n),F},unbind:function(t,e,n,i){var o=i||!1;return t.removeEventListener?t.removeEventListener(e,n,o):t.detachEvent&&t.detachEvent("on"+e,n),F},addClass:function(t,e){if(void 0===t.className)t.className=e;else if(t.className!==e){var n=t.className.split(/ +/);-1===n.indexOf(e)&&(n.push(e),t.className=n.join(" ").replace(/^\s+/,"").replace(/\s+$/,""))}return F},removeClass:function(t,e){if(e)if(t.className===e)t.removeAttribute("class");else{var n=t.className.split(/ +/),i=n.indexOf(e);-1!==i&&(n.splice(i,1),t.className=n.join(" "))}else t.className=void 0;return F},hasClass:function(t,e){return new RegExp("(?:^|\\s+)"+e+"(?:\\s+|$)").test(t.className)||!1},getWidth:function(t){var e=getComputedStyle(t);return D(e["border-left-width"])+D(e["border-right-width"])+D(e["padding-left"])+D(e["padding-right"])+D(e.width)},getHeight:function(t){var e=getComputedStyle(t);return D(e["border-top-width"])+D(e["border-bottom-width"])+D(e["padding-top"])+D(e["padding-bottom"])+D(e.height)},getOffset:function(t){var e=t,n={left:0,top:0};if(e.offsetParent)do{n.left+=e.offsetLeft,n.top+=e.offsetTop,e=e.offsetParent}while(e);return n},isActive:function(t){return t===document.activeElement&&(t.type||t.href)}},U=function(t){function e(t,n){A(this,e);var i=k(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t,n)),o=i;return i.__prev=i.getValue(),i.__checkbox=document.createElement("input"),i.__checkbox.setAttribute("type","checkbox"),F.bind(i.__checkbox,"change",(function(){o.setValue(!o.__prev)}),!1),i.domElement.appendChild(i.__checkbox),i.updateDisplay(),i}return S(e,t),C(e,[{key:"setValue",value:function(t){var n=T(e.prototype.__proto__||Object.getPrototypeOf(e.prototype),"setValue",this).call(this,t);return this.__onFinishChange&&this.__onFinishChange.call(this,this.getValue()),this.__prev=this.getValue(),n}},{key:"updateDisplay",value:function(){return!0===this.getValue()?(this.__checkbox.setAttribute("checked","checked"),this.__checkbox.checked=!0,this.__prev=!0):(this.__checkbox.checked=!1,this.__prev=!1),T(e.prototype.__proto__||Object.getPrototypeOf(e.prototype),"updateDisplay",this).call(this)}}]),e}(P),I=function(t){function e(t,n,i){A(this,e);var o=k(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t,n)),r=i,s=o;if(o.__select=document.createElement("select"),v.isArray(r)){var a={};v.each(r,(function(t){a[t]=t})),r=a}return v.each(r,(function(t,e){var n=document.createElement("option");n.innerHTML=e,n.setAttribute("value",t),s.__select.appendChild(n)})),o.updateDisplay(),F.bind(o.__select,"change",(function(){var t=this.options[this.selectedIndex].value;s.setValue(t)})),o.domElement.appendChild(o.__select),o}return S(e,t),C(e,[{key:"setValue",value:function(t){var n=T(e.prototype.__proto__||Object.getPrototypeOf(e.prototype),"setValue",this).call(this,t);return this.__onFinishChange&&this.__onFinishChange.call(this,this.getValue()),n}},{key:"updateDisplay",value:function(){return F.isActive(this.__select)?this:(this.__select.value=this.getValue(),T(e.prototype.__proto__||Object.getPrototypeOf(e.prototype),"updateDisplay",this).call(this))}}]),e}(P),H=function(t){function e(t,n){A(this,e);var i=k(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t,n)),o=i;function r(){o.setValue(o.__input.value)}return i.__input=document.createElement("input"),i.__input.setAttribute("type","text"),F.bind(i.__input,"keyup",r),F.bind(i.__input,"change",r),F.bind(i.__input,"blur",(function(){o.__onFinishChange&&o.__onFinishChange.call(o,o.getValue())})),F.bind(i.__input,"keydown",(function(t){13===t.keyCode&&this.blur()})),i.updateDisplay(),i.domElement.appendChild(i.__input),i}return S(e,t),C(e,[{key:"updateDisplay",value:function(){return F.isActive(this.__input)||(this.__input.value=this.getValue()),T(e.prototype.__proto__||Object.getPrototypeOf(e.prototype),"updateDisplay",this).call(this)}}]),e}(P);function z(t){var e=t.toString();return e.indexOf(".")>-1?e.length-e.indexOf(".")-1:0}var j=function(t){function e(t,n,i){A(this,e);var o=k(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t,n)),r=i||{};return o.__min=r.min,o.__max=r.max,o.__step=r.step,v.isUndefined(o.__step)?0===o.initialValue?o.__impliedStep=1:o.__impliedStep=Math.pow(10,Math.floor(Math.log(Math.abs(o.initialValue))/Math.LN10))/10:o.__impliedStep=o.__step,o.__precision=z(o.__impliedStep),o}return S(e,t),C(e,[{key:"setValue",value:function(t){var n=t;return void 0!==this.__min&&n<this.__min?n=this.__min:void 0!==this.__max&&n>this.__max&&(n=this.__max),void 0!==this.__step&&n%this.__step!=0&&(n=Math.round(n/this.__step)*this.__step),T(e.prototype.__proto__||Object.getPrototypeOf(e.prototype),"setValue",this).call(this,n)}},{key:"min",value:function(t){return this.__min=t,this}},{key:"max",value:function(t){return this.__max=t,this}},{key:"step",value:function(t){return this.__step=t,this.__impliedStep=t,this.__precision=z(t),this}}]),e}(P),V=function(t){function e(t,n,i){A(this,e);var o=k(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t,n,i));o.__truncationSuspended=!1;var r=o,s=void 0;function a(){r.__onFinishChange&&r.__onFinishChange.call(r,r.getValue())}function u(t){var e=s-t.clientY;r.setValue(r.getValue()+e*r.__impliedStep),s=t.clientY}function l(){F.unbind(window,"mousemove",u),F.unbind(window,"mouseup",l),a()}return o.__input=document.createElement("input"),o.__input.setAttribute("type","text"),F.bind(o.__input,"change",(function(){var t=parseFloat(r.__input.value);v.isNaN(t)||r.setValue(t)})),F.bind(o.__input,"blur",(function(){a()})),F.bind(o.__input,"mousedown",(function(t){F.bind(window,"mousemove",u),F.bind(window,"mouseup",l),s=t.clientY})),F.bind(o.__input,"keydown",(function(t){13===t.keyCode&&(r.__truncationSuspended=!0,this.blur(),r.__truncationSuspended=!1,a())})),o.updateDisplay(),o.domElement.appendChild(o.__input),o}return S(e,t),C(e,[{key:"updateDisplay",value:function(){var t,n,i;return this.__input.value=this.__truncationSuspended?this.getValue():(t=this.getValue(),n=this.__precision,i=Math.pow(10,n),Math.round(t*i)/i),T(e.prototype.__proto__||Object.getPrototypeOf(e.prototype),"updateDisplay",this).call(this)}}]),e}(j);function Y(t,e,n,i,o){return i+(t-e)/(n-e)*(o-i)}var G=function(t){function e(t,n,i,o,r){A(this,e);var s=k(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t,n,{min:i,max:o,step:r})),a=s;function u(t){t.preventDefault();var e=a.__background.getBoundingClientRect();return a.setValue(Y(t.clientX,e.left,e.right,a.__min,a.__max)),!1}function l(){F.unbind(window,"mousemove",u),F.unbind(window,"mouseup",l),a.__onFinishChange&&a.__onFinishChange.call(a,a.getValue())}function c(t){var e=t.touches[0].clientX,n=a.__background.getBoundingClientRect();a.setValue(Y(e,n.left,n.right,a.__min,a.__max))}function d(){F.unbind(window,"touchmove",c),F.unbind(window,"touchend",d),a.__onFinishChange&&a.__onFinishChange.call(a,a.getValue())}return s.__background=document.createElement("div"),s.__foreground=document.createElement("div"),F.bind(s.__background,"mousedown",(function(t){document.activeElement.blur(),F.bind(window,"mousemove",u),F.bind(window,"mouseup",l),u(t)})),F.bind(s.__background,"touchstart",(function(t){1===t.touches.length&&(F.bind(window,"touchmove",c),F.bind(window,"touchend",d),c(t))})),F.addClass(s.__background,"slider"),F.addClass(s.__foreground,"slider-fg"),s.updateDisplay(),s.__background.appendChild(s.__foreground),s.domElement.appendChild(s.__background),s}return S(e,t),C(e,[{key:"updateDisplay",value:function(){var t=(this.getValue()-this.__min)/(this.__max-this.__min);return this.__foreground.style.width=100*t+"%",T(e.prototype.__proto__||Object.getPrototypeOf(e.prototype),"updateDisplay",this).call(this)}}]),e}(j),W=function(t){function e(t,n,i){A(this,e);var o=k(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t,n)),r=o;return o.__button=document.createElement("div"),o.__button.innerHTML=void 0===i?"Fire":i,F.bind(o.__button,"click",(function(t){return t.preventDefault(),r.fire(),!1})),F.addClass(o.__button,"button"),o.domElement.appendChild(o.__button),o}return S(e,t),C(e,[{key:"fire",value:function(){this.__onChange&&this.__onChange.call(this),this.getValue().call(this.object),this.__onFinishChange&&this.__onFinishChange.call(this,this.getValue())}}]),e}(P),X=function(t){function e(t,n){A(this,e);var i=k(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t,n));i.__color=new L(i.getValue()),i.__temp=new L(0);var o=i;i.domElement=document.createElement("div"),F.makeSelectable(i.domElement,!1),i.__selector=document.createElement("div"),i.__selector.className="selector",i.__saturation_field=document.createElement("div"),i.__saturation_field.className="saturation-field",i.__field_knob=document.createElement("div"),i.__field_knob.className="field-knob",i.__field_knob_border="2px solid ",i.__hue_knob=document.createElement("div"),i.__hue_knob.className="hue-knob",i.__hue_field=document.createElement("div"),i.__hue_field.className="hue-field",i.__input=document.createElement("input"),i.__input.type="text",i.__input_textShadow="0 1px 1px ",F.bind(i.__input,"keydown",(function(t){13===t.keyCode&&d.call(this)})),F.bind(i.__input,"blur",d),F.bind(i.__selector,"mousedown",(function(){F.addClass(this,"drag").bind(window,"mouseup",(function(){F.removeClass(o.__selector,"drag")}))})),F.bind(i.__selector,"touchstart",(function(){F.addClass(this,"drag").bind(window,"touchend",(function(){F.removeClass(o.__selector,"drag")}))}));var r,s=document.createElement("div");function a(t){f(t),F.bind(window,"mousemove",f),F.bind(window,"touchmove",f),F.bind(window,"mouseup",l),F.bind(window,"touchend",l)}function u(t){p(t),F.bind(window,"mousemove",p),F.bind(window,"touchmove",p),F.bind(window,"mouseup",c),F.bind(window,"touchend",c)}function l(){F.unbind(window,"mousemove",f),F.unbind(window,"touchmove",f),F.unbind(window,"mouseup",l),F.unbind(window,"touchend",l),h()}function c(){F.unbind(window,"mousemove",p),F.unbind(window,"touchmove",p),F.unbind(window,"mouseup",c),F.unbind(window,"touchend",c),h()}function d(){var t=x(this.value);!1!==t?(o.__color.__state=t,o.setValue(o.__color.toOriginal())):this.value=o.__color.toString()}function h(){o.__onFinishChange&&o.__onFinishChange.call(o,o.__color.toOriginal())}function f(t){-1===t.type.indexOf("touch")&&t.preventDefault();var e=o.__saturation_field.getBoundingClientRect(),n=t.touches&&t.touches[0]||t,i=n.clientX,r=n.clientY,s=(i-e.left)/(e.right-e.left),a=1-(r-e.top)/(e.bottom-e.top);return a>1?a=1:a<0&&(a=0),s>1?s=1:s<0&&(s=0),o.__color.v=a,o.__color.s=s,o.setValue(o.__color.toOriginal()),!1}function p(t){-1===t.type.indexOf("touch")&&t.preventDefault();var e=o.__hue_field.getBoundingClientRect(),n=1-((t.touches&&t.touches[0]||t).clientY-e.top)/(e.bottom-e.top);return n>1?n=1:n<0&&(n=0),o.__color.h=360*n,o.setValue(o.__color.toOriginal()),!1}return v.extend(i.__selector.style,{width:"122px",height:"102px",padding:"3px",backgroundColor:"#222",boxShadow:"0px 1px 3px rgba(0,0,0,0.3)"}),v.extend(i.__field_knob.style,{position:"absolute",width:"12px",height:"12px",border:i.__field_knob_border+(i.__color.v<.5?"#fff":"#000"),boxShadow:"0px 1px 3px rgba(0,0,0,0.5)",borderRadius:"12px",zIndex:1}),v.extend(i.__hue_knob.style,{position:"absolute",width:"15px",height:"2px",borderRight:"4px solid #fff",zIndex:1}),v.extend(i.__saturation_field.style,{width:"100px",height:"100px",border:"1px solid #555",marginRight:"3px",display:"inline-block",cursor:"pointer"}),v.extend(s.style,{width:"100%",height:"100%",background:"none"}),K(s,"top","rgba(0,0,0,0)","#000"),v.extend(i.__hue_field.style,{width:"15px",height:"100px",border:"1px solid #555",cursor:"ns-resize",position:"absolute",top:"3px",right:"3px"}),(r=i.__hue_field).style.background="",r.style.cssText+="background: -moz-linear-gradient(top,  #ff0000 0%, #ff00ff 17%, #0000ff 34%, #00ffff 50%, #00ff00 67%, #ffff00 84%, #ff0000 100%);",r.style.cssText+="background: -webkit-linear-gradient(top,  #ff0000 0%,#ff00ff 17%,#0000ff 34%,#00ffff 50%,#00ff00 67%,#ffff00 84%,#ff0000 100%);",r.style.cssText+="background: -o-linear-gradient(top,  #ff0000 0%,#ff00ff 17%,#0000ff 34%,#00ffff 50%,#00ff00 67%,#ffff00 84%,#ff0000 100%);",r.style.cssText+="background: -ms-linear-gradient(top,  #ff0000 0%,#ff00ff 17%,#0000ff 34%,#00ffff 50%,#00ff00 67%,#ffff00 84%,#ff0000 100%);",r.style.cssText+="background: linear-gradient(top,  #ff0000 0%,#ff00ff 17%,#0000ff 34%,#00ffff 50%,#00ff00 67%,#ffff00 84%,#ff0000 100%);",v.extend(i.__input.style,{outline:"none",textAlign:"center",color:"#fff",border:0,fontWeight:"bold",textShadow:i.__input_textShadow+"rgba(0,0,0,0.7)"}),F.bind(i.__saturation_field,"mousedown",a),F.bind(i.__saturation_field,"touchstart",a),F.bind(i.__field_knob,"mousedown",a),F.bind(i.__field_knob,"touchstart",a),F.bind(i.__hue_field,"mousedown",u),F.bind(i.__hue_field,"touchstart",u),i.__saturation_field.appendChild(s),i.__selector.appendChild(i.__field_knob),i.__selector.appendChild(i.__saturation_field),i.__selector.appendChild(i.__hue_field),i.__hue_field.appendChild(i.__hue_knob),i.domElement.appendChild(i.__input),i.domElement.appendChild(i.__selector),i.updateDisplay(),i}return S(e,t),C(e,[{key:"updateDisplay",value:function(){var t=x(this.getValue());if(!1!==t){var e=!1;v.each(L.COMPONENTS,(function(n){if(!v.isUndefined(t[n])&&!v.isUndefined(this.__color.__state[n])&&t[n]!==this.__color.__state[n])return e=!0,{}}),this),e&&v.extend(this.__color.__state,t)}v.extend(this.__temp.__state,this.__color.__state),this.__temp.a=1;var n=this.__color.v<.5||this.__color.s>.5?255:0,i=255-n;v.extend(this.__field_knob.style,{marginLeft:100*this.__color.s-7+"px",marginTop:100*(1-this.__color.v)-7+"px",backgroundColor:this.__temp.toHexString(),border:this.__field_knob_border+"rgb("+n+","+n+","+n+")"}),this.__hue_knob.style.marginTop=100*(1-this.__color.h/360)+"px",this.__temp.s=1,this.__temp.v=1,K(this.__saturation_field,"left","#fff",this.__temp.toHexString()),this.__input.value=this.__color.toString(),v.extend(this.__input.style,{backgroundColor:this.__color.toHexString(),color:"rgb("+n+","+n+","+n+")",textShadow:this.__input_textShadow+"rgba("+i+","+i+","+i+",.7)"})}}]),e}(P),q=["-moz-","-o-","-webkit-","-ms-",""];function K(t,e,n,i){t.style.background="",v.each(q,(function(o){t.style.cssText+="background: "+o+"linear-gradient("+e+", "+n+" 0%, "+i+" 100%); "}))}var J='<div id="dg-save" class="dg dialogue">\n\n  Here\'s the new load parameter for your <code>GUI</code>\'s constructor:\n\n  <textarea id="dg-new-constructor"></textarea>\n\n  <div id="dg-save-locally">\n\n    <input id="dg-local-storage" type="checkbox"/> Automatically save\n    values to <code>localStorage</code> on exit.\n\n    <div id="dg-local-explain">The values saved to <code>localStorage</code> will\n      override those passed to <code>dat.GUI</code>\'s constructor. This makes it\n      easier to work incrementally, but <code>localStorage</code> is fragile,\n      and your friends may not see the same values you do.\n\n    </div>\n\n  </div>\n\n</div>',Q=function(t,e){var n=t[e];return v.isArray(arguments[2])||v.isObject(arguments[2])?new I(t,e,arguments[2]):v.isNumber(n)?v.isNumber(arguments[2])&&v.isNumber(arguments[3])?v.isNumber(arguments[4])?new G(t,e,arguments[2],arguments[3],arguments[4]):new G(t,e,arguments[2],arguments[3]):v.isNumber(arguments[4])?new V(t,e,{min:arguments[2],max:arguments[3],step:arguments[4]}):new V(t,e,{min:arguments[2],max:arguments[3]}):v.isString(n)?new H(t,e):v.isFunction(n)?new W(t,e,""):v.isBoolean(n)?new U(t,e):null},Z=window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame||function(t){setTimeout(t,1e3/60)},$=function(){function t(){A(this,t),this.backgroundElement=document.createElement("div"),v.extend(this.backgroundElement.style,{backgroundColor:"rgba(0,0,0,0.8)",top:0,left:0,display:"none",zIndex:"1000",opacity:0,WebkitTransition:"opacity 0.2s linear",transition:"opacity 0.2s linear"}),F.makeFullscreen(this.backgroundElement),this.backgroundElement.style.position="fixed",this.domElement=document.createElement("div"),v.extend(this.domElement.style,{position:"fixed",display:"none",zIndex:"1001",opacity:0,WebkitTransition:"-webkit-transform 0.2s ease-out, opacity 0.2s linear",transition:"transform 0.2s ease-out, opacity 0.2s linear"}),document.body.appendChild(this.backgroundElement),document.body.appendChild(this.domElement);var e=this;F.bind(this.backgroundElement,"click",(function(){e.hide()}))}return C(t,[{key:"show",value:function(){var t=this;this.backgroundElement.style.display="block",this.domElement.style.display="block",this.domElement.style.opacity=0,this.domElement.style.webkitTransform="scale(1.1)",this.layout(),v.defer((function(){t.backgroundElement.style.opacity=1,t.domElement.style.opacity=1,t.domElement.style.webkitTransform="scale(1)"}))}},{key:"hide",value:function(){var t=this,e=function e(){t.domElement.style.display="none",t.backgroundElement.style.display="none",F.unbind(t.domElement,"webkitTransitionEnd",e),F.unbind(t.domElement,"transitionend",e),F.unbind(t.domElement,"oTransitionEnd",e)};F.bind(this.domElement,"webkitTransitionEnd",e),F.bind(this.domElement,"transitionend",e),F.bind(this.domElement,"oTransitionEnd",e),this.backgroundElement.style.opacity=0,this.domElement.style.opacity=0,this.domElement.style.webkitTransform="scale(1.1)"}},{key:"layout",value:function(){this.domElement.style.left=window.innerWidth/2-F.getWidth(this.domElement)/2+"px",this.domElement.style.top=window.innerHeight/2-F.getHeight(this.domElement)/2+"px"}}]),t}();!function(t,e){var n=e||document,i=document.createElement("style");i.type="text/css",i.innerHTML=t;var o=n.getElementsByTagName("head")[0];try{o.appendChild(i)}catch(t){}}(function(t){if("undefined"!=typeof window){var e=document.createElement("style");return e.setAttribute("type","text/css"),e.innerHTML=t,document.head.appendChild(e),t}}(".dg ul{list-style:none;margin:0;padding:0;width:100%;clear:both}.dg.ac{position:fixed;top:0;left:0;right:0;height:0;z-index:0}.dg:not(.ac) .main{overflow:hidden}.dg.main{-webkit-transition:opacity .1s linear;-o-transition:opacity .1s linear;-moz-transition:opacity .1s linear;transition:opacity .1s linear}.dg.main.taller-than-window{overflow-y:auto}.dg.main.taller-than-window .close-button{opacity:1;margin-top:-1px;border-top:1px solid #2c2c2c}.dg.main ul.closed .close-button{opacity:1 !important}.dg.main:hover .close-button,.dg.main .close-button.drag{opacity:1}.dg.main .close-button{-webkit-transition:opacity .1s linear;-o-transition:opacity .1s linear;-moz-transition:opacity .1s linear;transition:opacity .1s linear;border:0;line-height:19px;height:20px;cursor:pointer;text-align:center;background-color:#000}.dg.main .close-button.close-top{position:relative}.dg.main .close-button.close-bottom{position:absolute}.dg.main .close-button:hover{background-color:#111}.dg.a{float:right;margin-right:15px;overflow-y:visible}.dg.a.has-save>ul.close-top{margin-top:0}.dg.a.has-save>ul.close-bottom{margin-top:27px}.dg.a.has-save>ul.closed{margin-top:0}.dg.a .save-row{top:0;z-index:1002}.dg.a .save-row.close-top{position:relative}.dg.a .save-row.close-bottom{position:fixed}.dg li{-webkit-transition:height .1s ease-out;-o-transition:height .1s ease-out;-moz-transition:height .1s ease-out;transition:height .1s ease-out;-webkit-transition:overflow .1s linear;-o-transition:overflow .1s linear;-moz-transition:overflow .1s linear;transition:overflow .1s linear}.dg li:not(.folder){cursor:auto;height:27px;line-height:27px;padding:0 4px 0 5px}.dg li.folder{padding:0;border-left:4px solid rgba(0,0,0,0)}.dg li.title{cursor:pointer;margin-left:-4px}.dg .closed li:not(.title),.dg .closed ul li,.dg .closed ul li>*{height:0;overflow:hidden;border:0}.dg .cr{clear:both;padding-left:3px;height:27px;overflow:hidden}.dg .property-name{cursor:default;float:left;clear:left;width:40%;overflow:hidden;text-overflow:ellipsis}.dg .c{float:left;width:60%;position:relative}.dg .c input[type=text]{border:0;margin-top:4px;padding:3px;width:100%;float:right}.dg .has-slider input[type=text]{width:30%;margin-left:0}.dg .slider{float:left;width:66%;margin-left:-5px;margin-right:0;height:19px;margin-top:4px}.dg .slider-fg{height:100%}.dg .c input[type=checkbox]{margin-top:7px}.dg .c select{margin-top:5px}.dg .cr.function,.dg .cr.function .property-name,.dg .cr.function *,.dg .cr.boolean,.dg .cr.boolean *{cursor:pointer}.dg .cr.color{overflow:visible}.dg .selector{display:none;position:absolute;margin-left:-9px;margin-top:23px;z-index:10}.dg .c:hover .selector,.dg .selector.drag{display:block}.dg li.save-row{padding:0}.dg li.save-row .button{display:inline-block;padding:0px 6px}.dg.dialogue{background-color:#222;width:460px;padding:15px;font-size:13px;line-height:15px}#dg-new-constructor{padding:10px;color:#222;font-family:Monaco, monospace;font-size:10px;border:0;resize:none;box-shadow:inset 1px 1px 1px #888;word-wrap:break-word;margin:12px 0;display:block;width:440px;overflow-y:scroll;height:100px;position:relative}#dg-local-explain{display:none;font-size:11px;line-height:17px;border-radius:3px;background-color:#333;padding:8px;margin-top:10px}#dg-local-explain code{font-size:10px}#dat-gui-save-locally{display:none}.dg{color:#eee;font:11px 'Lucida Grande', sans-serif;text-shadow:0 -1px 0 #111}.dg.main::-webkit-scrollbar{width:5px;background:#1a1a1a}.dg.main::-webkit-scrollbar-corner{height:0;display:none}.dg.main::-webkit-scrollbar-thumb{border-radius:5px;background:#676767}.dg li:not(.folder){background:#1a1a1a;border-bottom:1px solid #2c2c2c}.dg li.save-row{line-height:25px;background:#dad5cb;border:0}.dg li.save-row select{margin-left:5px;width:108px}.dg li.save-row .button{margin-left:5px;margin-top:1px;border-radius:2px;font-size:9px;line-height:7px;padding:4px 4px 5px 4px;background:#c5bdad;color:#fff;text-shadow:0 1px 0 #b0a58f;box-shadow:0 -1px 0 #b0a58f;cursor:pointer}.dg li.save-row .button.gears{background:#c5bdad url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAANCAYAAAB/9ZQ7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAQJJREFUeNpiYKAU/P//PwGIC/ApCABiBSAW+I8AClAcgKxQ4T9hoMAEUrxx2QSGN6+egDX+/vWT4e7N82AMYoPAx/evwWoYoSYbACX2s7KxCxzcsezDh3evFoDEBYTEEqycggWAzA9AuUSQQgeYPa9fPv6/YWm/Acx5IPb7ty/fw+QZblw67vDs8R0YHyQhgObx+yAJkBqmG5dPPDh1aPOGR/eugW0G4vlIoTIfyFcA+QekhhHJhPdQxbiAIguMBTQZrPD7108M6roWYDFQiIAAv6Aow/1bFwXgis+f2LUAynwoIaNcz8XNx3Dl7MEJUDGQpx9gtQ8YCueB+D26OECAAQDadt7e46D42QAAAABJRU5ErkJggg==) 2px 1px no-repeat;height:7px;width:8px}.dg li.save-row .button:hover{background-color:#bab19e;box-shadow:0 -1px 0 #b0a58f}.dg li.folder{border-bottom:0}.dg li.title{padding-left:16px;background:#000 url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==) 6px 10px no-repeat;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.2)}.dg .closed li.title{background-image:url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlGIWqMCbWAEAOw==)}.dg .cr.boolean{border-left:3px solid #806787}.dg .cr.color{border-left:3px solid}.dg .cr.function{border-left:3px solid #e61d5f}.dg .cr.number{border-left:3px solid #2FA1D6}.dg .cr.number input[type=text]{color:#2FA1D6}.dg .cr.string{border-left:3px solid #1ed36f}.dg .cr.string input[type=text]{color:#1ed36f}.dg .cr.function:hover,.dg .cr.boolean:hover{background:#111}.dg .c input[type=text]{background:#303030;outline:none}.dg .c input[type=text]:hover{background:#3c3c3c}.dg .c input[type=text]:focus{background:#494949;color:#fff}.dg .c .slider{background:#303030;cursor:ew-resize}.dg .c .slider-fg{background:#2FA1D6;max-width:100%}.dg .c .slider:hover{background:#3c3c3c}.dg .c .slider:hover .slider-fg{background:#44abda}\n"));var tt="Default",et=function(){try{return!!window.localStorage}catch(t){return!1}}(),nt=void 0,it=!0,ot=void 0,rt=!1,st=[],at=function t(e){var n=this,i=e||{};this.domElement=document.createElement("div"),this.__ul=document.createElement("ul"),this.domElement.appendChild(this.__ul),F.addClass(this.domElement,"dg"),this.__folders={},this.__controllers=[],this.__rememberedObjects=[],this.__rememberedObjectIndecesToControllers=[],this.__listening=[],i=v.defaults(i,{closeOnTop:!1,autoPlace:!0,width:t.DEFAULT_WIDTH}),i=v.defaults(i,{resizable:i.autoPlace,hideable:i.autoPlace}),v.isUndefined(i.load)?i.load={preset:tt}:i.preset&&(i.load.preset=i.preset),v.isUndefined(i.parent)&&i.hideable&&st.push(this),i.resizable=v.isUndefined(i.parent)&&i.resizable,i.autoPlace&&v.isUndefined(i.scrollable)&&(i.scrollable=!0);var o,r=et&&"true"===localStorage.getItem(ft(0,"isLocal")),s=void 0,a=void 0;if(Object.defineProperties(this,{parent:{get:function(){return i.parent}},scrollable:{get:function(){return i.scrollable}},autoPlace:{get:function(){return i.autoPlace}},closeOnTop:{get:function(){return i.closeOnTop}},preset:{get:function(){return n.parent?n.getRoot().preset:i.load.preset},set:function(t){n.parent?n.getRoot().preset=t:i.load.preset=t,function(t){for(var e=0;e<t.__preset_select.length;e++)t.__preset_select[e].value===t.preset&&(t.__preset_select.selectedIndex=e)}(this),n.revert()}},width:{get:function(){return i.width},set:function(t){i.width=t,gt(n,t)}},name:{get:function(){return i.name},set:function(t){i.name=t,a&&(a.innerHTML=i.name)}},closed:{get:function(){return i.closed},set:function(e){i.closed=e,i.closed?F.addClass(n.__ul,t.CLASS_CLOSED):F.removeClass(n.__ul,t.CLASS_CLOSED),this.onResize(),n.__closeButton&&(n.__closeButton.innerHTML=e?t.TEXT_OPEN:t.TEXT_CLOSED)}},load:{get:function(){return i.load}},useLocalStorage:{get:function(){return r},set:function(t){et&&(r=t,t?F.bind(window,"unload",s):F.unbind(window,"unload",s),localStorage.setItem(ft(0,"isLocal"),t))}}}),v.isUndefined(i.parent)){if(this.closed=i.closed||!1,F.addClass(this.domElement,t.CLASS_MAIN),F.makeSelectable(this.domElement,!1),et&&r){n.useLocalStorage=!0;var u=localStorage.getItem(ft(0,"gui"));u&&(i.load=JSON.parse(u))}this.__closeButton=document.createElement("div"),this.__closeButton.innerHTML=t.TEXT_CLOSED,F.addClass(this.__closeButton,t.CLASS_CLOSE_BUTTON),i.closeOnTop?(F.addClass(this.__closeButton,t.CLASS_CLOSE_TOP),this.domElement.insertBefore(this.__closeButton,this.domElement.childNodes[0])):(F.addClass(this.__closeButton,t.CLASS_CLOSE_BOTTOM),this.domElement.appendChild(this.__closeButton)),F.bind(this.__closeButton,"click",(function(){n.closed=!n.closed}))}else{void 0===i.closed&&(i.closed=!0);var l=document.createTextNode(i.name);F.addClass(l,"controller-name"),a=ut(n,l),F.addClass(this.__ul,t.CLASS_CLOSED),F.addClass(a,"title"),F.bind(a,"click",(function(t){return t.preventDefault(),n.closed=!n.closed,!1})),i.closed||(this.closed=!1)}i.autoPlace&&(v.isUndefined(i.parent)&&(it&&(ot=document.createElement("div"),F.addClass(ot,"dg"),F.addClass(ot,t.CLASS_AUTO_PLACE_CONTAINER),document.body.appendChild(ot),it=!1),ot.appendChild(this.domElement),F.addClass(this.domElement,t.CLASS_AUTO_PLACE)),this.parent||gt(n,i.width)),this.__resizeHandler=function(){n.onResizeDebounced()},F.bind(window,"resize",this.__resizeHandler),F.bind(this.__ul,"webkitTransitionEnd",this.__resizeHandler),F.bind(this.__ul,"transitionend",this.__resizeHandler),F.bind(this.__ul,"oTransitionEnd",this.__resizeHandler),this.onResize(),i.resizable&&vt(this),s=function(){et&&"true"===localStorage.getItem(ft(0,"isLocal"))&&localStorage.setItem(ft(0,"gui"),JSON.stringify(n.getSaveObject()))},this.saveToLocalStorageIfPossible=s,i.parent||((o=n.getRoot()).width+=1,v.defer((function(){o.width-=1})))};function ut(t,e,n){var i=document.createElement("li");return e&&i.appendChild(e),n?t.__ul.insertBefore(i,n):t.__ul.appendChild(i),t.onResize(),i}function lt(t){F.unbind(window,"resize",t.__resizeHandler),t.saveToLocalStorageIfPossible&&F.unbind(window,"unload",t.saveToLocalStorageIfPossible)}function ct(t,e){var n=t.__preset_select[t.__preset_select.selectedIndex];n.innerHTML=e?n.value+"*":n.value}function dt(t,e){var n=t.getRoot(),i=n.__rememberedObjects.indexOf(e.object);if(-1!==i){var o=n.__rememberedObjectIndecesToControllers[i];if(void 0===o&&(o={},n.__rememberedObjectIndecesToControllers[i]=o),o[e.property]=e,n.load&&n.load.remembered){var r=n.load.remembered,s=void 0;if(r[t.preset])s=r[t.preset];else{if(!r.Default)return;s=r.Default}if(s[i]&&void 0!==s[i][e.property]){var a=s[i][e.property];e.initialValue=a,e.setValue(a)}}}}function ht(t,e,n,i){if(void 0===e[n])throw new Error('Object "'+e+'" has no property "'+n+'"');var o=void 0;if(i.color)o=new X(e,n);else{var r=[e,n].concat(i.factoryArgs);o=Q.apply(t,r)}i.before instanceof P&&(i.before=i.before.__li),dt(t,o),F.addClass(o.domElement,"c");var s=document.createElement("span");F.addClass(s,"property-name"),s.innerHTML=o.property;var a=document.createElement("div");a.appendChild(s),a.appendChild(o.domElement);var u=ut(t,a,i.before);return F.addClass(u,at.CLASS_CONTROLLER_ROW),o instanceof X?F.addClass(u,"color"):F.addClass(u,M(o.getValue())),function(t,e,n){if(n.__li=e,n.__gui=t,v.extend(n,{options:function(e){if(arguments.length>1){var i=n.__li.nextElementSibling;return n.remove(),ht(t,n.object,n.property,{before:i,factoryArgs:[v.toArray(arguments)]})}if(v.isArray(e)||v.isObject(e)){var o=n.__li.nextElementSibling;return n.remove(),ht(t,n.object,n.property,{before:o,factoryArgs:[e]})}},name:function(t){return n.__li.firstElementChild.firstElementChild.innerHTML=t,n},listen:function(){return n.__gui.listen(n),n},remove:function(){return n.__gui.remove(n),n}}),n instanceof G){var i=new V(n.object,n.property,{min:n.__min,max:n.__max,step:n.__step});v.each(["updateDisplay","onChange","onFinishChange","step","min","max"],(function(t){var e=n[t],o=i[t];n[t]=i[t]=function(){var t=Array.prototype.slice.call(arguments);return o.apply(i,t),e.apply(n,t)}})),F.addClass(e,"has-slider"),n.domElement.insertBefore(i.domElement,n.domElement.firstElementChild)}else if(n instanceof V){var o=function(e){if(v.isNumber(n.__min)&&v.isNumber(n.__max)){var i=n.__li.firstElementChild.firstElementChild.innerHTML,o=n.__gui.__listening.indexOf(n)>-1;n.remove();var r=ht(t,n.object,n.property,{before:n.__li.nextElementSibling,factoryArgs:[n.__min,n.__max,n.__step]});return r.name(i),o&&r.listen(),r}return e};n.min=v.compose(o,n.min),n.max=v.compose(o,n.max)}else n instanceof U?(F.bind(e,"click",(function(){F.fakeEvent(n.__checkbox,"click")})),F.bind(n.__checkbox,"click",(function(t){t.stopPropagation()}))):n instanceof W?(F.bind(e,"click",(function(){F.fakeEvent(n.__button,"click")})),F.bind(e,"mouseover",(function(){F.addClass(n.__button,"hover")})),F.bind(e,"mouseout",(function(){F.removeClass(n.__button,"hover")}))):n instanceof X&&(F.addClass(e,"color"),n.updateDisplay=v.compose((function(t){return e.style.borderLeftColor=n.__color.toString(),t}),n.updateDisplay),n.updateDisplay());n.setValue=v.compose((function(e){return t.getRoot().__preset_select&&n.isModified()&&ct(t.getRoot(),!0),e}),n.setValue)}(t,u,o),t.__controllers.push(o),o}function ft(t,e){return document.location.href+"."+e}function pt(t,e,n){var i=document.createElement("option");i.innerHTML=e,i.value=e,t.__preset_select.appendChild(i),n&&(t.__preset_select.selectedIndex=t.__preset_select.length-1)}function _t(t,e){e.style.display=t.useLocalStorage?"block":"none"}function mt(t){var e=t.__save_row=document.createElement("li");F.addClass(t.domElement,"has-save"),t.__ul.insertBefore(e,t.__ul.firstChild),F.addClass(e,"save-row");var n=document.createElement("span");n.innerHTML="&nbsp;",F.addClass(n,"button gears");var i=document.createElement("span");i.innerHTML="Save",F.addClass(i,"button"),F.addClass(i,"save");var o=document.createElement("span");o.innerHTML="New",F.addClass(o,"button"),F.addClass(o,"save-as");var r=document.createElement("span");r.innerHTML="Revert",F.addClass(r,"button"),F.addClass(r,"revert");var s=t.__preset_select=document.createElement("select");if(t.load&&t.load.remembered?v.each(t.load.remembered,(function(e,n){pt(t,n,n===t.preset)})):pt(t,tt,!1),F.bind(s,"change",(function(){for(var e=0;e<t.__preset_select.length;e++)t.__preset_select[e].innerHTML=t.__preset_select[e].value;t.preset=this.value})),e.appendChild(s),e.appendChild(n),e.appendChild(i),e.appendChild(o),e.appendChild(r),et){var a=document.getElementById("dg-local-explain"),u=document.getElementById("dg-local-storage");document.getElementById("dg-save-locally").style.display="block","true"===localStorage.getItem(ft(0,"isLocal"))&&u.setAttribute("checked","checked"),_t(t,a),F.bind(u,"change",(function(){t.useLocalStorage=!t.useLocalStorage,_t(t,a)}))}var l=document.getElementById("dg-new-constructor");F.bind(l,"keydown",(function(t){!t.metaKey||67!==t.which&&67!==t.keyCode||nt.hide()})),F.bind(n,"click",(function(){l.innerHTML=JSON.stringify(t.getSaveObject(),void 0,2),nt.show(),l.focus(),l.select()})),F.bind(i,"click",(function(){t.save()})),F.bind(o,"click",(function(){var e=prompt("Enter a new preset name.");e&&t.saveAs(e)})),F.bind(r,"click",(function(){t.revert()}))}function vt(t){var e=void 0;function n(n){return n.preventDefault(),t.width+=e-n.clientX,t.onResize(),e=n.clientX,!1}function i(){F.removeClass(t.__closeButton,at.CLASS_DRAG),F.unbind(window,"mousemove",n),F.unbind(window,"mouseup",i)}function o(o){return o.preventDefault(),e=o.clientX,F.addClass(t.__closeButton,at.CLASS_DRAG),F.bind(window,"mousemove",n),F.bind(window,"mouseup",i),!1}t.__resize_handle=document.createElement("div"),v.extend(t.__resize_handle.style,{width:"6px",marginLeft:"-3px",height:"200px",cursor:"ew-resize",position:"absolute"}),F.bind(t.__resize_handle,"mousedown",o),F.bind(t.__closeButton,"mousedown",o),t.domElement.insertBefore(t.__resize_handle,t.domElement.firstElementChild)}function gt(t,e){t.domElement.style.width=e+"px",t.__save_row&&t.autoPlace&&(t.__save_row.style.width=e+"px"),t.__closeButton&&(t.__closeButton.style.width=e+"px")}function bt(t,e){var n={};return v.each(t.__rememberedObjects,(function(i,o){var r={},s=t.__rememberedObjectIndecesToControllers[o];v.each(s,(function(t,n){r[n]=e?t.initialValue:t.getValue()})),n[o]=r})),n}function yt(t){0!==t.length&&Z.call(window,(function(){yt(t)})),v.each(t,(function(t){t.updateDisplay()}))}at.toggleHide=function(){rt=!rt,v.each(st,(function(t){t.domElement.style.display=rt?"none":""}))},at.CLASS_AUTO_PLACE="a",at.CLASS_AUTO_PLACE_CONTAINER="ac",at.CLASS_MAIN="main",at.CLASS_CONTROLLER_ROW="cr",at.CLASS_TOO_TALL="taller-than-window",at.CLASS_CLOSED="closed",at.CLASS_CLOSE_BUTTON="close-button",at.CLASS_CLOSE_TOP="close-top",at.CLASS_CLOSE_BOTTOM="close-bottom",at.CLASS_DRAG="drag",at.DEFAULT_WIDTH=245,at.TEXT_CLOSED="Close Controls",at.TEXT_OPEN="Open Controls",at._keydownHandler=function(t){"text"===document.activeElement.type||72!==t.which&&72!==t.keyCode||at.toggleHide()},F.bind(window,"keydown",at._keydownHandler,!1),v.extend(at.prototype,{add:function(t,e){return ht(this,t,e,{factoryArgs:Array.prototype.slice.call(arguments,2)})},addColor:function(t,e){return ht(this,t,e,{color:!0})},remove:function(t){this.__ul.removeChild(t.__li),this.__controllers.splice(this.__controllers.indexOf(t),1);var e=this;v.defer((function(){e.onResize()}))},destroy:function(){if(this.parent)throw new Error("Only the root GUI should be removed with .destroy(). For subfolders, use gui.removeFolder(folder) instead.");this.autoPlace&&ot.removeChild(this.domElement);var t=this;v.each(this.__folders,(function(e){t.removeFolder(e)})),F.unbind(window,"keydown",at._keydownHandler,!1),lt(this)},addFolder:function(t){if(void 0!==this.__folders[t])throw new Error('You already have a folder in this GUI by the name "'+t+'"');var e={name:t,parent:this};e.autoPlace=this.autoPlace,this.load&&this.load.folders&&this.load.folders[t]&&(e.closed=this.load.folders[t].closed,e.load=this.load.folders[t]);var n=new at(e);this.__folders[t]=n;var i=ut(this,n.domElement);return F.addClass(i,"folder"),n},removeFolder:function(t){this.__ul.removeChild(t.domElement.parentElement),delete this.__folders[t.name],this.load&&this.load.folders&&this.load.folders[t.name]&&delete this.load.folders[t.name],lt(t);var e=this;v.each(t.__folders,(function(e){t.removeFolder(e)})),v.defer((function(){e.onResize()}))},open:function(){this.closed=!1},close:function(){this.closed=!0},hide:function(){this.domElement.style.display="none"},show:function(){this.domElement.style.display=""},onResize:function(){var t=this.getRoot();if(t.scrollable){var e=F.getOffset(t.__ul).top,n=0;v.each(t.__ul.childNodes,(function(e){t.autoPlace&&e===t.__save_row||(n+=F.getHeight(e))})),window.innerHeight-e-20<n?(F.addClass(t.domElement,at.CLASS_TOO_TALL),t.__ul.style.height=window.innerHeight-e-20+"px"):(F.removeClass(t.domElement,at.CLASS_TOO_TALL),t.__ul.style.height="auto")}t.__resize_handle&&v.defer((function(){t.__resize_handle.style.height=t.__ul.offsetHeight+"px"})),t.__closeButton&&(t.__closeButton.style.width=t.width+"px")},onResizeDebounced:v.debounce((function(){this.onResize()}),50),remember:function(){if(v.isUndefined(nt)&&((nt=new $).domElement.innerHTML=J),this.parent)throw new Error("You can only call remember on a top level GUI.");var t=this;v.each(Array.prototype.slice.call(arguments),(function(e){0===t.__rememberedObjects.length&&mt(t),-1===t.__rememberedObjects.indexOf(e)&&t.__rememberedObjects.push(e)})),this.autoPlace&&gt(this,this.width)},getRoot:function(){for(var t=this;t.parent;)t=t.parent;return t},getSaveObject:function(){var t=this.load;return t.closed=this.closed,this.__rememberedObjects.length>0&&(t.preset=this.preset,t.remembered||(t.remembered={}),t.remembered[this.preset]=bt(this)),t.folders={},v.each(this.__folders,(function(e,n){t.folders[n]=e.getSaveObject()})),t},save:function(){this.load.remembered||(this.load.remembered={}),this.load.remembered[this.preset]=bt(this),ct(this,!1),this.saveToLocalStorageIfPossible()},saveAs:function(t){this.load.remembered||(this.load.remembered={},this.load.remembered.Default=bt(this,!0)),this.load.remembered[t]=bt(this),this.preset=t,pt(this,t,!0),this.saveToLocalStorageIfPossible()},revert:function(t){v.each(this.__controllers,(function(e){this.getRoot().load.remembered?dt(t||this.getRoot(),e):e.setValue(e.initialValue),e.__onFinishChange&&e.__onFinishChange.call(e,e.getValue())}),this),v.each(this.__folders,(function(t){t.revert(t)})),t||ct(this.getRoot(),!1)},listen:function(t){var e=0===this.__listening.length;this.__listening.push(t),e&&yt(this.__listening)},updateDisplay:function(){v.each(this.__controllers,(function(t){t.updateDisplay()})),v.each(this.__folders,(function(t){t.updateDisplay()}))}});var xt,wt=at;function Et(t){xt=t}const Mt=class{constructor(){this.count=0,this.idxBound=!1,this.posBound=!1,this.norBound=!1}destory(){xt.deleteBuffer(this.bufIdx),xt.deleteBuffer(this.bufPos),xt.deleteBuffer(this.bufNor)}generateIdx(){this.idxBound=!0,this.bufIdx=xt.createBuffer()}generatePos(){this.posBound=!0,this.bufPos=xt.createBuffer()}generateNor(){this.norBound=!0,this.bufNor=xt.createBuffer()}bindIdx(){return this.idxBound&&xt.bindBuffer(xt.ELEMENT_ARRAY_BUFFER,this.bufIdx),this.idxBound}bindPos(){return this.posBound&&xt.bindBuffer(xt.ARRAY_BUFFER,this.bufPos),this.posBound}bindNor(){return this.norBound&&xt.bindBuffer(xt.ARRAY_BUFFER,this.bufNor),this.norBound}elemCount(){return this.count}drawMode(){return xt.TRIANGLES}},At=class extends Mt{constructor(t,e,n){super(),this.radius=e,this.subdivisions=n,this.center=a(t[0],t[1],t[2],1)}create(){const t=.5257311121191336,e=.8506508083520399;let n=20*Math.pow(4,this.subdivisions),i=10*Math.pow(4,this.subdivisions)+2;const o=new ArrayBuffer(3*n*Uint32Array.BYTES_PER_ELEMENT+4*i*Float32Array.BYTES_PER_ELEMENT+4*i*Float32Array.BYTES_PER_ELEMENT),r=new ArrayBuffer(3*n*Uint32Array.BYTES_PER_ELEMENT),s=[o,r];let a=0;const d=3*n*Uint32Array.BYTES_PER_ELEMENT,h=d,f=d+4*i*Float32Array.BYTES_PER_ELEMENT;let p=new Array(20),_=new Array;for(let t=0;t<20;++t)p[t]=new Uint32Array(s[a],0+3*t*Uint32Array.BYTES_PER_ELEMENT,3);let m=new Array(12);for(let t=0;t<12;++t)m[t]=new Float32Array(o,d+4*t*Float32Array.BYTES_PER_ELEMENT,4);m[0].set([-t,0,e,0]),m[1].set([t,0,e,0]),m[2].set([-t,0,-e,0]),m[3].set([t,0,-e,0]),m[4].set([0,e,t,0]),m[5].set([0,e,-t,0]),m[6].set([0,-e,t,0]),m[7].set([0,-e,-t,0]),m[8].set([e,t,0,0]),m[9].set([-e,t,0,0]),m[10].set([e,-t,0,0]),m[11].set([-e,-t,0,0]),p[0].set([0,4,1]),p[1].set([0,9,4]),p[2].set([9,5,4]),p[3].set([4,5,8]),p[4].set([4,8,1]),p[5].set([8,10,1]),p[6].set([8,3,10]),p[7].set([5,3,8]),p[8].set([5,2,3]),p[9].set([2,7,3]),p[10].set([7,10,3]),p[11].set([7,6,10]),p[12].set([7,11,6]),p[13].set([11,0,6]),p[14].set([0,1,6]),p[15].set([6,1,10]),p[16].set([9,0,11]),p[17].set([9,11,2]),p[18].set([9,2,5]),p[19].set([7,2,11]);for(let t=0;t<this.subdivisions;++t){a=1-a,_.length=4*p.length;let t=0,e=new Map;function n(t,n){let i=[t,n].sort().join("_");if(!e.has(i)){let r=new Float32Array(o,d+4*m.length*Float32Array.BYTES_PER_ELEMENT,4);u(r,m[t],m[n]),c(r,r),e.set(i,m.length),m.push(r)}return e.get(i)}for(let e=0;e<p.length;++e){let i=p[e][0],o=p[e][1],r=p[e][2],u=n(i,o),l=n(o,r),c=n(r,i),d=_[t]=new Uint32Array(s[a],0+3*t++*Uint32Array.BYTES_PER_ELEMENT,3),h=_[t]=new Uint32Array(s[a],0+3*t++*Uint32Array.BYTES_PER_ELEMENT,3),f=_[t]=new Uint32Array(s[a],0+3*t++*Uint32Array.BYTES_PER_ELEMENT,3),m=_[t]=new Uint32Array(s[a],0+3*t++*Uint32Array.BYTES_PER_ELEMENT,3);_.length,d.set([i,u,c]),h.set([u,l,c]),f.set([u,o,l]),m.set([c,l,r])}let i=p;p=_,_=i}if(1===a){let t=new Uint32Array(o,0,3*p.length),e=new Uint32Array(r,0,3*p.length);t.set(e)}for(let t=0;t<m.length;++t)l(new Float32Array(o,f+4*t*Float32Array.BYTES_PER_ELEMENT,4),this.center,m[t],this.radius);this.buffer=o,this.indices=new Uint32Array(this.buffer,0,3*p.length),this.normals=new Float32Array(this.buffer,h,4*m.length),this.positions=new Float32Array(this.buffer,f,4*m.length),this.generateIdx(),this.generatePos(),this.generateNor(),this.count=this.indices.length,xt.bindBuffer(xt.ELEMENT_ARRAY_BUFFER,this.bufIdx),xt.bufferData(xt.ELEMENT_ARRAY_BUFFER,this.indices,xt.STATIC_DRAW),xt.bindBuffer(xt.ARRAY_BUFFER,this.bufNor),xt.bufferData(xt.ARRAY_BUFFER,this.normals,xt.STATIC_DRAW),xt.bindBuffer(xt.ARRAY_BUFFER,this.bufPos),xt.bufferData(xt.ARRAY_BUFFER,this.positions,xt.STATIC_DRAW),console.log(`Created icosphere with ${m.length} vertices`)}},Ct=class extends Mt{constructor(t){super(),this.center=a(t[0],t[1],t[2],1)}create(){this.indices=new Uint32Array([0,1,2,0,2,3]),this.positions=new Float32Array([-1,-1,.999,1,1,-1,.999,1,1,1,.999,1,-1,1,.999,1]),this.generateIdx(),this.generatePos(),this.count=this.indices.length,xt.bindBuffer(xt.ELEMENT_ARRAY_BUFFER,this.bufIdx),xt.bufferData(xt.ELEMENT_ARRAY_BUFFER,this.indices,xt.STATIC_DRAW),xt.bindBuffer(xt.ARRAY_BUFFER,this.bufPos),xt.bufferData(xt.ARRAY_BUFFER,this.positions,xt.STATIC_DRAW),console.log("Created square")}},Tt=class{constructor(t){this.canvas=t}setClearColor(t,e,n,i){xt.clearColor(t,e,n,i)}setSize(t,e){this.canvas.width=t,this.canvas.height=e}clear(){xt.clear(xt.COLOR_BUFFER_BIT|xt.DEPTH_BUFFER_BIT)}render(t,e,n){let i=d();(function(t,e,n){var i=e[0],o=e[1],r=e[2],s=e[3],a=e[4],u=e[5],l=e[6],c=e[7],d=e[8],h=e[9],f=e[10],p=e[11],_=e[12],m=e[13],v=e[14],g=e[15],b=n[0],y=n[1],x=n[2],w=n[3];t[0]=b*i+y*a+x*d+w*_,t[1]=b*o+y*u+x*h+w*m,t[2]=b*r+y*l+x*f+w*v,t[3]=b*s+y*c+x*p+w*g,b=n[4],y=n[5],x=n[6],w=n[7],t[4]=b*i+y*a+x*d+w*_,t[5]=b*o+y*u+x*h+w*m,t[6]=b*r+y*l+x*f+w*v,t[7]=b*s+y*c+x*p+w*g,b=n[8],y=n[9],x=n[10],w=n[11],t[8]=b*i+y*a+x*d+w*_,t[9]=b*o+y*u+x*h+w*m,t[10]=b*r+y*l+x*f+w*v,t[11]=b*s+y*c+x*p+w*g,b=n[12],y=n[13],x=n[14],w=n[15],t[12]=b*i+y*a+x*d+w*_,t[13]=b*o+y*u+x*h+w*m,t[14]=b*r+y*l+x*f+w*v,t[15]=b*s+y*c+x*p+w*g})(i,t.projectionMatrix,t.viewMatrix),e.setViewProjMatrix(i);for(let t of n)e.draw(t)}};var St=n(4478);var kt=null;class Lt{constructor(t,e){if(this.shader=xt.createShader(t),xt.shaderSource(this.shader,e),xt.compileShader(this.shader),!xt.getShaderParameter(this.shader,xt.COMPILE_STATUS))throw xt.getShaderInfoLog(this.shader)}}const Rt=class{constructor(t){this.prog=xt.createProgram();for(let e of t)xt.attachShader(this.prog,e.shader);if(xt.linkProgram(this.prog),!xt.getProgramParameter(this.prog,xt.LINK_STATUS))throw xt.getProgramInfoLog(this.prog);this.unifMap=new Map,this.attrPos=xt.getAttribLocation(this.prog,"vs_Pos"),this.attrNor=xt.getAttribLocation(this.prog,"vs_Nor"),this.attrCol=xt.getAttribLocation(this.prog,"vs_Col"),this.unifModel=xt.getUniformLocation(this.prog,"u_Model"),this.unifModelInvTr=xt.getUniformLocation(this.prog,"u_ModelInvTr"),this.unifViewProj=xt.getUniformLocation(this.prog,"u_ViewProj"),this.unifColor=xt.getUniformLocation(this.prog,"u_Color"),this.unifDimensions=xt.getUniformLocation(this.prog,"u_Dimensions")}addUnif(t){this.unifMap.set(t,xt.getUniformLocation(this.prog,t))}setUnifMat4(t,e){if(this.use(),this.unifMap.has(t)){let n=this.unifMap.get(t);-1!=n&&xt.uniformMatrix4fv(n,!1,e)}}setDimensions(t,e){this.use(),-1!==this.unifDimensions&&xt.uniform2f(this.unifDimensions,t,e)}setUnifFloat(t,e){if(this.use(),this.unifMap.has(t)){let n=this.unifMap.get(t);-1!=n&&xt.uniform1f(n,e)}}setUnifVec4(t,e){if(this.use(),this.unifMap.has(t)){let n=this.unifMap.get(t);-1!=n&&xt.uniform4fv(n,e)}}setUnifVec3(t,e){if(this.use(),this.unifMap.has(t)){let n=this.unifMap.get(t);-1!=n&&xt.uniform3fv(n,e)}}setUnifVec2(t,e){if(this.use(),this.unifMap.has(t)){let n=this.unifMap.get(t);-1!=n&&xt.uniform2fv(n,e)}}use(){kt!==this.prog&&(xt.useProgram(this.prog),kt=this.prog)}setModelMatrix(t){if(this.use(),-1!==this.unifModel&&xt.uniformMatrix4fv(this.unifModel,!1,t),-1!==this.unifModelInvTr){let P=d();!function(t,e){if(t===e){var n=e[1],i=e[2],o=e[3],r=e[6],s=e[7],a=e[11];t[1]=e[4],t[2]=e[8],t[3]=e[12],t[4]=n,t[6]=e[9],t[7]=e[13],t[8]=i,t[9]=r,t[11]=e[14],t[12]=o,t[13]=s,t[14]=a}else t[0]=e[0],t[1]=e[4],t[2]=e[8],t[3]=e[12],t[4]=e[1],t[5]=e[5],t[6]=e[9],t[7]=e[13],t[8]=e[2],t[9]=e[6],t[10]=e[10],t[11]=e[14],t[12]=e[3],t[13]=e[7],t[14]=e[11],t[15]=e[15]}(P,t),e=P,i=(n=P)[0],o=n[1],r=n[2],s=n[3],a=n[4],u=n[5],l=n[6],c=n[7],h=n[8],f=n[9],p=n[10],_=n[11],m=n[12],v=n[13],g=n[14],(O=(y=i*u-o*a)*(R=p*(b=n[15])-_*g)-(x=i*l-r*a)*(L=f*b-_*v)+(w=i*c-s*a)*(k=f*g-p*v)+(E=o*l-r*u)*(S=h*b-_*m)-(M=o*c-s*u)*(T=h*g-p*m)+(A=r*c-s*l)*(C=h*v-f*m))&&(O=1/O,e[0]=(u*R-l*L+c*k)*O,e[1]=(r*L-o*R-s*k)*O,e[2]=(v*A-g*M+b*E)*O,e[3]=(p*M-f*A-_*E)*O,e[4]=(l*S-a*R-c*T)*O,e[5]=(i*R-r*S+s*T)*O,e[6]=(g*w-m*A-b*x)*O,e[7]=(h*A-p*w+_*x)*O,e[8]=(a*L-u*S+c*C)*O,e[9]=(o*S-i*L-s*C)*O,e[10]=(m*M-v*w+b*y)*O,e[11]=(f*w-h*M-_*y)*O,e[12]=(u*T-a*k-l*C)*O,e[13]=(i*k-o*T+r*C)*O,e[14]=(v*x-m*E-g*y)*O,e[15]=(h*E-f*x+p*y)*O),xt.uniformMatrix4fv(this.unifModelInvTr,!1,P)}var e,n,i,o,r,s,a,u,l,c,h,f,p,_,m,v,g,b,y,x,w,E,M,A,C,T,S,k,L,R,O}setViewProjMatrix(t){this.use(),-1!==this.unifViewProj&&xt.uniformMatrix4fv(this.unifViewProj,!1,t)}setGeometryColor(t){this.use(),-1!==this.unifColor&&xt.uniform4fv(this.unifColor,t)}draw(t){this.use(),-1!=this.attrPos&&t.bindPos()&&(xt.enableVertexAttribArray(this.attrPos),xt.vertexAttribPointer(this.attrPos,4,xt.FLOAT,!1,0,0)),-1!=this.attrNor&&t.bindNor()&&(xt.enableVertexAttribArray(this.attrNor),xt.vertexAttribPointer(this.attrNor,4,xt.FLOAT,!1,0,0)),t.bindIdx(),xt.drawElements(t.drawMode(),t.elemCount(),xt.UNSIGNED_INT,0),-1!=this.attrPos&&xt.disableVertexAttribArray(this.attrPos),-1!=this.attrNor&&xt.disableVertexAttribArray(this.attrNor)}},Ot=n(2792),Pt={tesselations:5,"Load Scene":It,primaryColor:[219,85,21,1],secondaryColor:[0,0,0,1],highAmp:.5,lowAmp:1};let Bt,Nt,Dt,Ft,Ut=5;function It(){Bt=new At(r(0,0,0),1,Pt.tesselations),Bt.create(),Nt=new Ct(r(0,0,0)),Nt.create()}!function(){const t=Ot();t.setMode(0),t.domElement.style.position="absolute",t.domElement.style.left="0px",t.domElement.style.top="0px",document.body.appendChild(t.domElement);const e=document.getElementById("canvas"),i=e.getContext("webgl2");i||alert("WebGL 2 not supported!"),Et(i),It(),function(){const t=new wt;t.add(Pt,"tesselations",0,8).step(1),Dt=a(.86,.33,.08,1),t.addColor(Pt,"primaryColor").name("primary color").onChange((t=>{Dt=a(t[0]/255,t[1]/255,t[2]/255,1)})),Ft=a(0,0,0,1),t.addColor(Pt,"secondaryColor").name("secondary color").onChange((t=>{Ft=a(t[0]/255,t[1]/255,t[2]/255,1)})),t.add(Pt,"highAmp",0,1).name("high amp"),t.add(Pt,"lowAmp",0,1).name("low amp");var e=function(e,n){for(var i=0;i<t.__controllers.length;i++)t.__controllers[i].property==e&&t.__controllers[i].setValue(n)},n={reset:function(){Pt.tesselations=5,Dt=a(219/255,85/255,21/255,1),Ft=a(0,0,0,1),Pt.highAmp=.5,Pt.lowAmp=1,e("tesselations",5),e("primaryColor",[219,85,21,1]),e("secondaryColor",[0,0,0,1]),e("highAmp",.5),e("lowAmp",1)}};t.add(n,"reset").name("reset")}();const u=new class{constructor(t,e){this.projectionMatrix=d(),this.viewMatrix=d(),this.fovy=45,this.aspectRatio=1,this.near=.1,this.far=1e3,this.position=o(),this.direction=o(),this.target=o(),this.up=o(),this.controls=St(document.getElementById("canvas"),{eye:t,center:e}),s(this.target,this.position,this.direction),f(this.viewMatrix,this.controls.eye,this.controls.center,this.controls.up)}setAspectRatio(t){this.aspectRatio=t}updateProjectionMatrix(){var t,e,n,i,o,r,s;t=this.projectionMatrix,e=this.fovy,n=this.aspectRatio,i=this.near,o=this.far,s=1/Math.tan(e/2),t[0]=s/n,t[1]=0,t[2]=0,t[3]=0,t[4]=0,t[5]=s,t[6]=0,t[7]=0,t[8]=0,t[9]=0,t[11]=-1,t[12]=0,t[13]=0,t[15]=0,null!=o&&o!==1/0?(r=1/(i-o),t[10]=(o+i)*r,t[14]=2*o*i*r):(t[10]=-1,t[14]=-2*i)}update(){this.controls.tick(),s(this.target,this.position,this.direction),f(this.viewMatrix,this.controls.eye,this.controls.center,this.controls.up)}}(r(0,0,5),r(0,0,0)),l=new Tt(e);l.setClearColor(.2,.2,.2,1),i.enable(i.DEPTH_TEST);const c=new Rt([new Lt(i.VERTEX_SHADER,n(8816)),new Lt(i.FRAGMENT_SHADER,n(7063))]);c.addUnif("u_Time"),c.addUnif("u_Color2"),c.addUnif("u_lowAmp"),c.addUnif("u_highAmp");const p=new Rt([new Lt(i.VERTEX_SHADER,n(3238)),new Lt(i.FRAGMENT_SHADER,n(5327))]);p.addUnif("u_Time"),p.addUnif("u_Color2"),p.addUnif("u_lowAmp"),p.addUnif("u_highAmp"),window.addEventListener("resize",(function(){l.setSize(window.innerWidth,window.innerHeight),u.setAspectRatio(window.innerWidth/window.innerHeight),u.updateProjectionMatrix(),p.setDimensions(window.innerWidth,window.innerHeight)}),!1),l.setSize(window.innerWidth,window.innerHeight),u.setAspectRatio(window.innerWidth/window.innerHeight),u.updateProjectionMatrix(),p.setDimensions(window.innerWidth,window.innerHeight),function e(){u.update(),t.begin(),i.viewport(0,0,window.innerWidth,window.innerHeight),l.clear(),Pt.tesselations!=Ut&&(Ut=Pt.tesselations,Bt=new At(r(0,0,0),1,Ut),Bt.create()),c.setGeometryColor(Dt);let n=Date.now()%2e6/1e3;c.setUnifFloat("u_Time",n),c.setUnifVec4("u_Color2",Ft),c.setUnifFloat("u_highAmp",Pt.highAmp),c.setUnifFloat("u_lowAmp",Pt.lowAmp),p.setGeometryColor(Dt),p.setUnifVec4("u_Color2",Ft),p.setUnifFloat("u_Time",n);let o=d();h(o),c.setModelMatrix(o),i.depthMask(!0),l.render(u,c,[Bt]),l.render(u,p,[Nt]),t.end(),requestAnimationFrame(e)}()}()})()})();
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./node_modules/3d-view-controls/camera.js":
+/*!*************************************************!*\
+  !*** ./node_modules/3d-view-controls/camera.js ***!
+  \*************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+module.exports = createCamera
+
+var now         = __webpack_require__(/*! right-now */ "./node_modules/right-now/browser.js")
+var createView  = __webpack_require__(/*! 3d-view */ "./node_modules/3d-view/view.js")
+var mouseChange = __webpack_require__(/*! mouse-change */ "./node_modules/mouse-change/mouse-listen.js")
+var mouseWheel  = __webpack_require__(/*! mouse-wheel */ "./node_modules/mouse-wheel/wheel.js")
+var mouseOffset = __webpack_require__(/*! mouse-event-offset */ "./node_modules/mouse-event-offset/index.js")
+var hasPassive  = __webpack_require__(/*! has-passive-events */ "./node_modules/has-passive-events/index.js")
+
+function createCamera(element, options) {
+  element = element || document.body
+  options = options || {}
+
+  var limits  = [ 0.01, Infinity ]
+  if('distanceLimits' in options) {
+    limits[0] = options.distanceLimits[0]
+    limits[1] = options.distanceLimits[1]
+  }
+  if('zoomMin' in options) {
+    limits[0] = options.zoomMin
+  }
+  if('zoomMax' in options) {
+    limits[1] = options.zoomMax
+  }
+
+  var view = createView({
+    center: options.center || [0,0,0],
+    up:     options.up     || [0,1,0],
+    eye:    options.eye    || [0,0,10],
+    mode:   options.mode   || 'orbit',
+    distanceLimits: limits
+  })
+
+  var pmatrix = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  var distance = 0.0
+  var width   = element.clientWidth
+  var height  = element.clientHeight
+
+  var camera = {
+    view:               view,
+    element:            element,
+    delay:              options.delay          || 16,
+    rotateSpeed:        options.rotateSpeed    || 1,
+    zoomSpeed:          options.zoomSpeed      || 1,
+    translateSpeed:     options.translateSpeed || 1,
+    flipX:              !!options.flipX,
+    flipY:              !!options.flipY,
+    modes:              view.modes,
+    tick: function() {
+      var t = now()
+      var delay = this.delay
+      view.idle(t-delay)
+      view.flush(t-(100+delay*2))
+      var ctime = t - 2 * delay
+      view.recalcMatrix(ctime)
+      var allEqual = true
+      var matrix = view.computedMatrix
+      for(var i=0; i<16; ++i) {
+        allEqual = allEqual && (pmatrix[i] === matrix[i])
+        pmatrix[i] = matrix[i]
+      }
+      var sizeChanged =
+          element.clientWidth === width &&
+          element.clientHeight === height
+      width  = element.clientWidth
+      height = element.clientHeight
+      if(allEqual) {
+        return !sizeChanged
+      }
+      distance = Math.exp(view.computedRadius[0])
+      return true
+    },
+    lookAt: function(center, eye, up) {
+      view.lookAt(view.lastT(), center, eye, up)
+    },
+    rotate: function(pitch, yaw, roll) {
+      view.rotate(view.lastT(), pitch, yaw, roll)
+    },
+    pan: function(dx, dy, dz) {
+      view.pan(view.lastT(), dx, dy, dz)
+    },
+    translate: function(dx, dy, dz) {
+      view.translate(view.lastT(), dx, dy, dz)
+    }
+  }
+
+  Object.defineProperties(camera, {
+    matrix: {
+      get: function() {
+        return view.computedMatrix
+      },
+      set: function(mat) {
+        view.setMatrix(view.lastT(), mat)
+        return view.computedMatrix
+      },
+      enumerable: true
+    },
+    mode: {
+      get: function() {
+        return view.getMode()
+      },
+      set: function(mode) {
+        view.setMode(mode)
+        return view.getMode()
+      },
+      enumerable: true
+    },
+    center: {
+      get: function() {
+        return view.computedCenter
+      },
+      set: function(ncenter) {
+        view.lookAt(view.lastT(), ncenter)
+        return view.computedCenter
+      },
+      enumerable: true
+    },
+    eye: {
+      get: function() {
+        return view.computedEye
+      },
+      set: function(neye) {
+        view.lookAt(view.lastT(), null, neye)
+        return view.computedEye
+      },
+      enumerable: true
+    },
+    up: {
+      get: function() {
+        return view.computedUp
+      },
+      set: function(nup) {
+        view.lookAt(view.lastT(), null, null, nup)
+        return view.computedUp
+      },
+      enumerable: true
+    },
+    distance: {
+      get: function() {
+        return distance
+      },
+      set: function(d) {
+        view.setDistance(view.lastT(), d)
+        return d
+      },
+      enumerable: true
+    },
+    distanceLimits: {
+      get: function() {
+        return view.getDistanceLimits(limits)
+      },
+      set: function(v) {
+        view.setDistanceLimits(v)
+        return v
+      },
+      enumerable: true
+    }
+  })
+
+  element.addEventListener('contextmenu', function(ev) {
+    ev.preventDefault()
+    return false
+  })
+
+  var lastX = 0, lastY = 0, lastMods = {shift: false, control: false, alt: false, meta: false}
+  mouseChange(element, handleInteraction)
+
+  //enable simple touch interactions
+  element.addEventListener('touchstart', function (ev) {
+    var xy = mouseOffset(ev.changedTouches[0], element)
+    handleInteraction(0, xy[0], xy[1], lastMods)
+    handleInteraction(1, xy[0], xy[1], lastMods)
+
+    ev.preventDefault()
+  }, hasPassive ? {passive: false} : false)
+
+  element.addEventListener('touchmove', function (ev) {
+    var xy = mouseOffset(ev.changedTouches[0], element)
+    handleInteraction(1, xy[0], xy[1], lastMods)
+
+    ev.preventDefault()
+  }, hasPassive ? {passive: false} : false)
+
+  element.addEventListener('touchend', function (ev) {
+    var xy = mouseOffset(ev.changedTouches[0], element)
+    handleInteraction(0, lastX, lastY, lastMods)
+
+    ev.preventDefault()
+  }, hasPassive ? {passive: false} : false)
+
+  function handleInteraction (buttons, x, y, mods) {
+    var scale = 1.0 / element.clientHeight
+    var dx    = scale * (x - lastX)
+    var dy    = scale * (y - lastY)
+
+    var flipX = camera.flipX ? 1 : -1
+    var flipY = camera.flipY ? 1 : -1
+
+    var drot  = Math.PI * camera.rotateSpeed
+
+    var t = now()
+
+    if(buttons & 1) {
+      if(mods.shift) {
+        view.rotate(t, 0, 0, -dx * drot)
+      } else {
+        view.rotate(t, flipX * drot * dx, -flipY * drot * dy, 0)
+      }
+    } else if(buttons & 2) {
+      view.pan(t, -camera.translateSpeed * dx * distance, camera.translateSpeed * dy * distance, 0)
+    } else if(buttons & 4) {
+      var kzoom = camera.zoomSpeed * dy / window.innerHeight * (t - view.lastT()) * 50.0
+      view.pan(t, 0, 0, distance * (Math.exp(kzoom) - 1))
+    }
+
+    lastX = x
+    lastY = y
+    lastMods = mods
+  }
+
+  mouseWheel(element, function(dx, dy, dz) {
+    var flipX = camera.flipX ? 1 : -1
+    var flipY = camera.flipY ? 1 : -1
+    var t = now()
+    if(Math.abs(dx) > Math.abs(dy)) {
+      view.rotate(t, 0, 0, -dx * flipX * Math.PI * camera.rotateSpeed / window.innerWidth)
+    } else {
+      var kzoom = camera.zoomSpeed * flipY * dy / window.innerHeight * (t - view.lastT()) / 100.0
+      view.pan(t, 0, 0, distance * (Math.exp(kzoom) - 1))
+    }
+  }, true)
+
+  return camera
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/3d-view/view.js":
+/*!**************************************!*\
+  !*** ./node_modules/3d-view/view.js ***!
+  \**************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+module.exports = createViewController
+
+var createTurntable = __webpack_require__(/*! turntable-camera-controller */ "./node_modules/turntable-camera-controller/turntable.js")
+var createOrbit     = __webpack_require__(/*! orbit-camera-controller */ "./node_modules/orbit-camera-controller/orbit.js")
+var createMatrix    = __webpack_require__(/*! matrix-camera-controller */ "./node_modules/matrix-camera-controller/matrix.js")
+
+function ViewController(controllers, mode) {
+  this._controllerNames = Object.keys(controllers)
+  this._controllerList = this._controllerNames.map(function(n) {
+    return controllers[n]
+  })
+  this._mode   = mode
+  this._active = controllers[mode]
+  if(!this._active) {
+    this._mode   = 'turntable'
+    this._active = controllers.turntable
+  }
+  this.modes = this._controllerNames
+  this.computedMatrix = this._active.computedMatrix
+  this.computedEye    = this._active.computedEye
+  this.computedUp     = this._active.computedUp
+  this.computedCenter = this._active.computedCenter
+  this.computedRadius = this._active.computedRadius
+}
+
+var proto = ViewController.prototype
+
+proto.flush = function(a0) {
+  var cc = this._controllerList
+  for (var i = 0; i < cc.length; ++i) {
+    cc[i].flush(a0)
+  }
+}
+proto.idle = function(a0) {
+  var cc = this._controllerList
+  for (var i = 0; i < cc.length; ++i) {
+    cc[i].idle(a0)
+  }
+}
+proto.lookAt = function(a0, a1, a2, a3) {
+  var cc = this._controllerList
+  for (var i = 0; i < cc.length; ++i) {
+    cc[i].lookAt(a0, a1, a2, a3)
+  }
+}
+proto.rotate = function(a0, a1, a2, a3) {
+  var cc = this._controllerList
+  for (var i = 0; i < cc.length; ++i) {
+    cc[i].rotate(a0, a1, a2, a3)
+  }
+}
+proto.pan = function(a0, a1, a2, a3) {
+  var cc = this._controllerList
+  for (var i = 0; i < cc.length; ++i) {
+    cc[i].pan(a0, a1, a2, a3)
+  }
+}
+proto.translate = function(a0, a1, a2, a3) {
+  var cc = this._controllerList
+  for (var i = 0; i < cc.length; ++i) {
+    cc[i].translate(a0, a1, a2, a3)
+  }
+}
+proto.setMatrix = function(a0, a1) {
+  var cc = this._controllerList
+  for (var i = 0; i < cc.length; ++i) {
+    cc[i].setMatrix(a0, a1)
+  }
+}
+proto.setDistanceLimits = function(a0, a1) {
+  var cc = this._controllerList
+  for (var i = 0; i < cc.length; ++i) {
+    cc[i].setDistanceLimits(a0, a1)
+  }
+}
+proto.setDistance = function(a0, a1) {
+  var cc = this._controllerList
+  for (var i = 0; i < cc.length; ++i) {
+    cc[i].setDistance(a0, a1)
+  }
+}
+
+proto.recalcMatrix = function(t) {
+  this._active.recalcMatrix(t)
+}
+
+proto.getDistance = function(t) {
+  return this._active.getDistance(t)
+}
+proto.getDistanceLimits = function(out) {
+  return this._active.getDistanceLimits(out)
+}
+
+proto.lastT = function() {
+  return this._active.lastT()
+}
+
+proto.setMode = function(mode) {
+  if(mode === this._mode) {
+    return
+  }
+  var idx = this._controllerNames.indexOf(mode)
+  if(idx < 0) {
+    return
+  }
+  var prev  = this._active
+  var next  = this._controllerList[idx]
+  var lastT = Math.max(prev.lastT(), next.lastT())
+
+  prev.recalcMatrix(lastT)
+  next.setMatrix(lastT, prev.computedMatrix)
+
+  this._active = next
+  this._mode   = mode
+
+  //Update matrix properties
+  this.computedMatrix = this._active.computedMatrix
+  this.computedEye    = this._active.computedEye
+  this.computedUp     = this._active.computedUp
+  this.computedCenter = this._active.computedCenter
+  this.computedRadius = this._active.computedRadius
+}
+
+proto.getMode = function() {
+  return this._mode
+}
+
+function createViewController(options) {
+  options = options || {}
+
+  var eye       = options.eye    || [0,0,1]
+  var center    = options.center || [0,0,0]
+  var up        = options.up     || [0,1,0]
+  var limits    = options.distanceLimits || [0, Infinity]
+  var mode      = options.mode   || 'turntable'
+
+  var turntable = createTurntable()
+  var orbit     = createOrbit()
+  var matrix    = createMatrix()
+
+  turntable.setDistanceLimits(limits[0], limits[1])
+  turntable.lookAt(0, eye, center, up)
+  orbit.setDistanceLimits(limits[0], limits[1])
+  orbit.lookAt(0, eye, center, up)
+  matrix.setDistanceLimits(limits[0], limits[1])
+  matrix.lookAt(0, eye, center, up)
+
+  return new ViewController({
+    turntable: turntable,
+    orbit: orbit,
+    matrix: matrix
+  }, mode)
+}
+
+/***/ }),
+
+/***/ "./node_modules/binary-search-bounds/search-bounds.js":
+/*!************************************************************!*\
+  !*** ./node_modules/binary-search-bounds/search-bounds.js ***!
+  \************************************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+// (a, y, c, l, h) = (array, y[, cmp, lo, hi])
+
+function ge(a, y, c, l, h) {
+  var i = h + 1;
+  while (l <= h) {
+    var m = (l + h) >>> 1, x = a[m];
+    var p = (c !== undefined) ? c(x, y) : (x - y);
+    if (p >= 0) { i = m; h = m - 1 } else { l = m + 1 }
+  }
+  return i;
+};
+
+function gt(a, y, c, l, h) {
+  var i = h + 1;
+  while (l <= h) {
+    var m = (l + h) >>> 1, x = a[m];
+    var p = (c !== undefined) ? c(x, y) : (x - y);
+    if (p > 0) { i = m; h = m - 1 } else { l = m + 1 }
+  }
+  return i;
+};
+
+function lt(a, y, c, l, h) {
+  var i = l - 1;
+  while (l <= h) {
+    var m = (l + h) >>> 1, x = a[m];
+    var p = (c !== undefined) ? c(x, y) : (x - y);
+    if (p < 0) { i = m; l = m + 1 } else { h = m - 1 }
+  }
+  return i;
+};
+
+function le(a, y, c, l, h) {
+  var i = l - 1;
+  while (l <= h) {
+    var m = (l + h) >>> 1, x = a[m];
+    var p = (c !== undefined) ? c(x, y) : (x - y);
+    if (p <= 0) { i = m; l = m + 1 } else { h = m - 1 }
+  }
+  return i;
+};
+
+function eq(a, y, c, l, h) {
+  while (l <= h) {
+    var m = (l + h) >>> 1, x = a[m];
+    var p = (c !== undefined) ? c(x, y) : (x - y);
+    if (p === 0) { return m }
+    if (p <= 0) { l = m + 1 } else { h = m - 1 }
+  }
+  return -1;
+};
+
+function norm(a, y, c, l, h, f) {
+  if (typeof c === 'function') {
+    return f(a, y, c, (l === undefined) ? 0 : l | 0, (h === undefined) ? a.length - 1 : h | 0);
+  }
+  return f(a, y, undefined, (c === undefined) ? 0 : c | 0, (l === undefined) ? a.length - 1 : l | 0);
+}
+
+module.exports = {
+  ge: function(a, y, c, l, h) { return norm(a, y, c, l, h, ge)},
+  gt: function(a, y, c, l, h) { return norm(a, y, c, l, h, gt)},
+  lt: function(a, y, c, l, h) { return norm(a, y, c, l, h, lt)},
+  le: function(a, y, c, l, h) { return norm(a, y, c, l, h, le)},
+  eq: function(a, y, c, l, h) { return norm(a, y, c, l, h, eq)}
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/cubic-hermite/hermite.js":
+/*!***********************************************!*\
+  !*** ./node_modules/cubic-hermite/hermite.js ***!
+  \***********************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+function dcubicHermite(p0, v0, p1, v1, t, f) {
+  var dh00 = 6*t*t-6*t,
+      dh10 = 3*t*t-4*t + 1,
+      dh01 = -6*t*t+6*t,
+      dh11 = 3*t*t-2*t
+  if(p0.length) {
+    if(!f) {
+      f = new Array(p0.length)
+    }
+    for(var i=p0.length-1; i>=0; --i) {
+      f[i] = dh00*p0[i] + dh10*v0[i] + dh01*p1[i] + dh11*v1[i]
+    }
+    return f
+  }
+  return dh00*p0 + dh10*v0 + dh01*p1[i] + dh11*v1
+}
+
+function cubicHermite(p0, v0, p1, v1, t, f) {
+  var ti  = (t-1), t2 = t*t, ti2 = ti*ti,
+      h00 = (1+2*t)*ti2,
+      h10 = t*ti2,
+      h01 = t2*(3-2*t),
+      h11 = t2*ti
+  if(p0.length) {
+    if(!f) {
+      f = new Array(p0.length)
+    }
+    for(var i=p0.length-1; i>=0; --i) {
+      f[i] = h00*p0[i] + h10*v0[i] + h01*p1[i] + h11*v1[i]
+    }
+    return f
+  }
+  return h00*p0 + h10*v0 + h01*p1 + h11*v1
+}
+
+module.exports = cubicHermite
+module.exports.derivative = dcubicHermite
+
+/***/ }),
+
+/***/ "./node_modules/dat.gui/build/dat.gui.module.js":
+/*!******************************************************!*\
+  !*** ./node_modules/dat.gui/build/dat.gui.module.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "color": () => (/* binding */ color),
+/* harmony export */   "controllers": () => (/* binding */ controllers),
+/* harmony export */   "dom": () => (/* binding */ dom$1),
+/* harmony export */   "gui": () => (/* binding */ gui),
+/* harmony export */   "GUI": () => (/* binding */ GUI$1),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * dat-gui JavaScript Controller Library
+ * http://code.google.com/p/dat-gui
+ *
+ * Copyright 2011 Data Arts Team, Google Creative Lab
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ */
+
+function ___$insertStyle(css) {
+  if (!css) {
+    return;
+  }
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  var style = document.createElement('style');
+
+  style.setAttribute('type', 'text/css');
+  style.innerHTML = css;
+  document.head.appendChild(style);
+
+  return css;
+}
+
+function colorToString (color, forceCSSHex) {
+  var colorFormat = color.__state.conversionName.toString();
+  var r = Math.round(color.r);
+  var g = Math.round(color.g);
+  var b = Math.round(color.b);
+  var a = color.a;
+  var h = Math.round(color.h);
+  var s = color.s.toFixed(1);
+  var v = color.v.toFixed(1);
+  if (forceCSSHex || colorFormat === 'THREE_CHAR_HEX' || colorFormat === 'SIX_CHAR_HEX') {
+    var str = color.hex.toString(16);
+    while (str.length < 6) {
+      str = '0' + str;
+    }
+    return '#' + str;
+  } else if (colorFormat === 'CSS_RGB') {
+    return 'rgb(' + r + ',' + g + ',' + b + ')';
+  } else if (colorFormat === 'CSS_RGBA') {
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+  } else if (colorFormat === 'HEX') {
+    return '0x' + color.hex.toString(16);
+  } else if (colorFormat === 'RGB_ARRAY') {
+    return '[' + r + ',' + g + ',' + b + ']';
+  } else if (colorFormat === 'RGBA_ARRAY') {
+    return '[' + r + ',' + g + ',' + b + ',' + a + ']';
+  } else if (colorFormat === 'RGB_OBJ') {
+    return '{r:' + r + ',g:' + g + ',b:' + b + '}';
+  } else if (colorFormat === 'RGBA_OBJ') {
+    return '{r:' + r + ',g:' + g + ',b:' + b + ',a:' + a + '}';
+  } else if (colorFormat === 'HSV_OBJ') {
+    return '{h:' + h + ',s:' + s + ',v:' + v + '}';
+  } else if (colorFormat === 'HSVA_OBJ') {
+    return '{h:' + h + ',s:' + s + ',v:' + v + ',a:' + a + '}';
+  }
+  return 'unknown format';
+}
+
+var ARR_EACH = Array.prototype.forEach;
+var ARR_SLICE = Array.prototype.slice;
+var Common = {
+  BREAK: {},
+  extend: function extend(target) {
+    this.each(ARR_SLICE.call(arguments, 1), function (obj) {
+      var keys = this.isObject(obj) ? Object.keys(obj) : [];
+      keys.forEach(function (key) {
+        if (!this.isUndefined(obj[key])) {
+          target[key] = obj[key];
+        }
+      }.bind(this));
+    }, this);
+    return target;
+  },
+  defaults: function defaults(target) {
+    this.each(ARR_SLICE.call(arguments, 1), function (obj) {
+      var keys = this.isObject(obj) ? Object.keys(obj) : [];
+      keys.forEach(function (key) {
+        if (this.isUndefined(target[key])) {
+          target[key] = obj[key];
+        }
+      }.bind(this));
+    }, this);
+    return target;
+  },
+  compose: function compose() {
+    var toCall = ARR_SLICE.call(arguments);
+    return function () {
+      var args = ARR_SLICE.call(arguments);
+      for (var i = toCall.length - 1; i >= 0; i--) {
+        args = [toCall[i].apply(this, args)];
+      }
+      return args[0];
+    };
+  },
+  each: function each(obj, itr, scope) {
+    if (!obj) {
+      return;
+    }
+    if (ARR_EACH && obj.forEach && obj.forEach === ARR_EACH) {
+      obj.forEach(itr, scope);
+    } else if (obj.length === obj.length + 0) {
+      var key = void 0;
+      var l = void 0;
+      for (key = 0, l = obj.length; key < l; key++) {
+        if (key in obj && itr.call(scope, obj[key], key) === this.BREAK) {
+          return;
+        }
+      }
+    } else {
+      for (var _key in obj) {
+        if (itr.call(scope, obj[_key], _key) === this.BREAK) {
+          return;
+        }
+      }
+    }
+  },
+  defer: function defer(fnc) {
+    setTimeout(fnc, 0);
+  },
+  debounce: function debounce(func, threshold, callImmediately) {
+    var timeout = void 0;
+    return function () {
+      var obj = this;
+      var args = arguments;
+      function delayed() {
+        timeout = null;
+        if (!callImmediately) func.apply(obj, args);
+      }
+      var callNow = callImmediately || !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(delayed, threshold);
+      if (callNow) {
+        func.apply(obj, args);
+      }
+    };
+  },
+  toArray: function toArray(obj) {
+    if (obj.toArray) return obj.toArray();
+    return ARR_SLICE.call(obj);
+  },
+  isUndefined: function isUndefined(obj) {
+    return obj === undefined;
+  },
+  isNull: function isNull(obj) {
+    return obj === null;
+  },
+  isNaN: function (_isNaN) {
+    function isNaN(_x) {
+      return _isNaN.apply(this, arguments);
+    }
+    isNaN.toString = function () {
+      return _isNaN.toString();
+    };
+    return isNaN;
+  }(function (obj) {
+    return isNaN(obj);
+  }),
+  isArray: Array.isArray || function (obj) {
+    return obj.constructor === Array;
+  },
+  isObject: function isObject(obj) {
+    return obj === Object(obj);
+  },
+  isNumber: function isNumber(obj) {
+    return obj === obj + 0;
+  },
+  isString: function isString(obj) {
+    return obj === obj + '';
+  },
+  isBoolean: function isBoolean(obj) {
+    return obj === false || obj === true;
+  },
+  isFunction: function isFunction(obj) {
+    return obj instanceof Function;
+  }
+};
+
+var INTERPRETATIONS = [
+{
+  litmus: Common.isString,
+  conversions: {
+    THREE_CHAR_HEX: {
+      read: function read(original) {
+        var test = original.match(/^#([A-F0-9])([A-F0-9])([A-F0-9])$/i);
+        if (test === null) {
+          return false;
+        }
+        return {
+          space: 'HEX',
+          hex: parseInt('0x' + test[1].toString() + test[1].toString() + test[2].toString() + test[2].toString() + test[3].toString() + test[3].toString(), 0)
+        };
+      },
+      write: colorToString
+    },
+    SIX_CHAR_HEX: {
+      read: function read(original) {
+        var test = original.match(/^#([A-F0-9]{6})$/i);
+        if (test === null) {
+          return false;
+        }
+        return {
+          space: 'HEX',
+          hex: parseInt('0x' + test[1].toString(), 0)
+        };
+      },
+      write: colorToString
+    },
+    CSS_RGB: {
+      read: function read(original) {
+        var test = original.match(/^rgb\(\s*(.+)\s*,\s*(.+)\s*,\s*(.+)\s*\)/);
+        if (test === null) {
+          return false;
+        }
+        return {
+          space: 'RGB',
+          r: parseFloat(test[1]),
+          g: parseFloat(test[2]),
+          b: parseFloat(test[3])
+        };
+      },
+      write: colorToString
+    },
+    CSS_RGBA: {
+      read: function read(original) {
+        var test = original.match(/^rgba\(\s*(.+)\s*,\s*(.+)\s*,\s*(.+)\s*,\s*(.+)\s*\)/);
+        if (test === null) {
+          return false;
+        }
+        return {
+          space: 'RGB',
+          r: parseFloat(test[1]),
+          g: parseFloat(test[2]),
+          b: parseFloat(test[3]),
+          a: parseFloat(test[4])
+        };
+      },
+      write: colorToString
+    }
+  }
+},
+{
+  litmus: Common.isNumber,
+  conversions: {
+    HEX: {
+      read: function read(original) {
+        return {
+          space: 'HEX',
+          hex: original,
+          conversionName: 'HEX'
+        };
+      },
+      write: function write(color) {
+        return color.hex;
+      }
+    }
+  }
+},
+{
+  litmus: Common.isArray,
+  conversions: {
+    RGB_ARRAY: {
+      read: function read(original) {
+        if (original.length !== 3) {
+          return false;
+        }
+        return {
+          space: 'RGB',
+          r: original[0],
+          g: original[1],
+          b: original[2]
+        };
+      },
+      write: function write(color) {
+        return [color.r, color.g, color.b];
+      }
+    },
+    RGBA_ARRAY: {
+      read: function read(original) {
+        if (original.length !== 4) return false;
+        return {
+          space: 'RGB',
+          r: original[0],
+          g: original[1],
+          b: original[2],
+          a: original[3]
+        };
+      },
+      write: function write(color) {
+        return [color.r, color.g, color.b, color.a];
+      }
+    }
+  }
+},
+{
+  litmus: Common.isObject,
+  conversions: {
+    RGBA_OBJ: {
+      read: function read(original) {
+        if (Common.isNumber(original.r) && Common.isNumber(original.g) && Common.isNumber(original.b) && Common.isNumber(original.a)) {
+          return {
+            space: 'RGB',
+            r: original.r,
+            g: original.g,
+            b: original.b,
+            a: original.a
+          };
+        }
+        return false;
+      },
+      write: function write(color) {
+        return {
+          r: color.r,
+          g: color.g,
+          b: color.b,
+          a: color.a
+        };
+      }
+    },
+    RGB_OBJ: {
+      read: function read(original) {
+        if (Common.isNumber(original.r) && Common.isNumber(original.g) && Common.isNumber(original.b)) {
+          return {
+            space: 'RGB',
+            r: original.r,
+            g: original.g,
+            b: original.b
+          };
+        }
+        return false;
+      },
+      write: function write(color) {
+        return {
+          r: color.r,
+          g: color.g,
+          b: color.b
+        };
+      }
+    },
+    HSVA_OBJ: {
+      read: function read(original) {
+        if (Common.isNumber(original.h) && Common.isNumber(original.s) && Common.isNumber(original.v) && Common.isNumber(original.a)) {
+          return {
+            space: 'HSV',
+            h: original.h,
+            s: original.s,
+            v: original.v,
+            a: original.a
+          };
+        }
+        return false;
+      },
+      write: function write(color) {
+        return {
+          h: color.h,
+          s: color.s,
+          v: color.v,
+          a: color.a
+        };
+      }
+    },
+    HSV_OBJ: {
+      read: function read(original) {
+        if (Common.isNumber(original.h) && Common.isNumber(original.s) && Common.isNumber(original.v)) {
+          return {
+            space: 'HSV',
+            h: original.h,
+            s: original.s,
+            v: original.v
+          };
+        }
+        return false;
+      },
+      write: function write(color) {
+        return {
+          h: color.h,
+          s: color.s,
+          v: color.v
+        };
+      }
+    }
+  }
+}];
+var result = void 0;
+var toReturn = void 0;
+var interpret = function interpret() {
+  toReturn = false;
+  var original = arguments.length > 1 ? Common.toArray(arguments) : arguments[0];
+  Common.each(INTERPRETATIONS, function (family) {
+    if (family.litmus(original)) {
+      Common.each(family.conversions, function (conversion, conversionName) {
+        result = conversion.read(original);
+        if (toReturn === false && result !== false) {
+          toReturn = result;
+          result.conversionName = conversionName;
+          result.conversion = conversion;
+          return Common.BREAK;
+        }
+      });
+      return Common.BREAK;
+    }
+  });
+  return toReturn;
+};
+
+var tmpComponent = void 0;
+var ColorMath = {
+  hsv_to_rgb: function hsv_to_rgb(h, s, v) {
+    var hi = Math.floor(h / 60) % 6;
+    var f = h / 60 - Math.floor(h / 60);
+    var p = v * (1.0 - s);
+    var q = v * (1.0 - f * s);
+    var t = v * (1.0 - (1.0 - f) * s);
+    var c = [[v, t, p], [q, v, p], [p, v, t], [p, q, v], [t, p, v], [v, p, q]][hi];
+    return {
+      r: c[0] * 255,
+      g: c[1] * 255,
+      b: c[2] * 255
+    };
+  },
+  rgb_to_hsv: function rgb_to_hsv(r, g, b) {
+    var min = Math.min(r, g, b);
+    var max = Math.max(r, g, b);
+    var delta = max - min;
+    var h = void 0;
+    var s = void 0;
+    if (max !== 0) {
+      s = delta / max;
+    } else {
+      return {
+        h: NaN,
+        s: 0,
+        v: 0
+      };
+    }
+    if (r === max) {
+      h = (g - b) / delta;
+    } else if (g === max) {
+      h = 2 + (b - r) / delta;
+    } else {
+      h = 4 + (r - g) / delta;
+    }
+    h /= 6;
+    if (h < 0) {
+      h += 1;
+    }
+    return {
+      h: h * 360,
+      s: s,
+      v: max / 255
+    };
+  },
+  rgb_to_hex: function rgb_to_hex(r, g, b) {
+    var hex = this.hex_with_component(0, 2, r);
+    hex = this.hex_with_component(hex, 1, g);
+    hex = this.hex_with_component(hex, 0, b);
+    return hex;
+  },
+  component_from_hex: function component_from_hex(hex, componentIndex) {
+    return hex >> componentIndex * 8 & 0xFF;
+  },
+  hex_with_component: function hex_with_component(hex, componentIndex, value) {
+    return value << (tmpComponent = componentIndex * 8) | hex & ~(0xFF << tmpComponent);
+  }
+};
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+
+
+
+
+
+
+
+
+
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+
+
+
+
+
+
+var get = function get(object, property, receiver) {
+  if (object === null) object = Function.prototype;
+  var desc = Object.getOwnPropertyDescriptor(object, property);
+
+  if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);
+
+    if (parent === null) {
+      return undefined;
+    } else {
+      return get(parent, property, receiver);
+    }
+  } else if ("value" in desc) {
+    return desc.value;
+  } else {
+    var getter = desc.get;
+
+    if (getter === undefined) {
+      return undefined;
+    }
+
+    return getter.call(receiver);
+  }
+};
+
+var inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+
+
+
+
+
+
+
+
+
+
+var possibleConstructorReturn = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+};
+
+var Color = function () {
+  function Color() {
+    classCallCheck(this, Color);
+    this.__state = interpret.apply(this, arguments);
+    if (this.__state === false) {
+      throw new Error('Failed to interpret color arguments');
+    }
+    this.__state.a = this.__state.a || 1;
+  }
+  createClass(Color, [{
+    key: 'toString',
+    value: function toString() {
+      return colorToString(this);
+    }
+  }, {
+    key: 'toHexString',
+    value: function toHexString() {
+      return colorToString(this, true);
+    }
+  }, {
+    key: 'toOriginal',
+    value: function toOriginal() {
+      return this.__state.conversion.write(this);
+    }
+  }]);
+  return Color;
+}();
+function defineRGBComponent(target, component, componentHexIndex) {
+  Object.defineProperty(target, component, {
+    get: function get$$1() {
+      if (this.__state.space === 'RGB') {
+        return this.__state[component];
+      }
+      Color.recalculateRGB(this, component, componentHexIndex);
+      return this.__state[component];
+    },
+    set: function set$$1(v) {
+      if (this.__state.space !== 'RGB') {
+        Color.recalculateRGB(this, component, componentHexIndex);
+        this.__state.space = 'RGB';
+      }
+      this.__state[component] = v;
+    }
+  });
+}
+function defineHSVComponent(target, component) {
+  Object.defineProperty(target, component, {
+    get: function get$$1() {
+      if (this.__state.space === 'HSV') {
+        return this.__state[component];
+      }
+      Color.recalculateHSV(this);
+      return this.__state[component];
+    },
+    set: function set$$1(v) {
+      if (this.__state.space !== 'HSV') {
+        Color.recalculateHSV(this);
+        this.__state.space = 'HSV';
+      }
+      this.__state[component] = v;
+    }
+  });
+}
+Color.recalculateRGB = function (color, component, componentHexIndex) {
+  if (color.__state.space === 'HEX') {
+    color.__state[component] = ColorMath.component_from_hex(color.__state.hex, componentHexIndex);
+  } else if (color.__state.space === 'HSV') {
+    Common.extend(color.__state, ColorMath.hsv_to_rgb(color.__state.h, color.__state.s, color.__state.v));
+  } else {
+    throw new Error('Corrupted color state');
+  }
+};
+Color.recalculateHSV = function (color) {
+  var result = ColorMath.rgb_to_hsv(color.r, color.g, color.b);
+  Common.extend(color.__state, {
+    s: result.s,
+    v: result.v
+  });
+  if (!Common.isNaN(result.h)) {
+    color.__state.h = result.h;
+  } else if (Common.isUndefined(color.__state.h)) {
+    color.__state.h = 0;
+  }
+};
+Color.COMPONENTS = ['r', 'g', 'b', 'h', 's', 'v', 'hex', 'a'];
+defineRGBComponent(Color.prototype, 'r', 2);
+defineRGBComponent(Color.prototype, 'g', 1);
+defineRGBComponent(Color.prototype, 'b', 0);
+defineHSVComponent(Color.prototype, 'h');
+defineHSVComponent(Color.prototype, 's');
+defineHSVComponent(Color.prototype, 'v');
+Object.defineProperty(Color.prototype, 'a', {
+  get: function get$$1() {
+    return this.__state.a;
+  },
+  set: function set$$1(v) {
+    this.__state.a = v;
+  }
+});
+Object.defineProperty(Color.prototype, 'hex', {
+  get: function get$$1() {
+    if (this.__state.space !== 'HEX') {
+      this.__state.hex = ColorMath.rgb_to_hex(this.r, this.g, this.b);
+      this.__state.space = 'HEX';
+    }
+    return this.__state.hex;
+  },
+  set: function set$$1(v) {
+    this.__state.space = 'HEX';
+    this.__state.hex = v;
+  }
+});
+
+var Controller = function () {
+  function Controller(object, property) {
+    classCallCheck(this, Controller);
+    this.initialValue = object[property];
+    this.domElement = document.createElement('div');
+    this.object = object;
+    this.property = property;
+    this.__onChange = undefined;
+    this.__onFinishChange = undefined;
+  }
+  createClass(Controller, [{
+    key: 'onChange',
+    value: function onChange(fnc) {
+      this.__onChange = fnc;
+      return this;
+    }
+  }, {
+    key: 'onFinishChange',
+    value: function onFinishChange(fnc) {
+      this.__onFinishChange = fnc;
+      return this;
+    }
+  }, {
+    key: 'setValue',
+    value: function setValue(newValue) {
+      this.object[this.property] = newValue;
+      if (this.__onChange) {
+        this.__onChange.call(this, newValue);
+      }
+      this.updateDisplay();
+      return this;
+    }
+  }, {
+    key: 'getValue',
+    value: function getValue() {
+      return this.object[this.property];
+    }
+  }, {
+    key: 'updateDisplay',
+    value: function updateDisplay() {
+      return this;
+    }
+  }, {
+    key: 'isModified',
+    value: function isModified() {
+      return this.initialValue !== this.getValue();
+    }
+  }]);
+  return Controller;
+}();
+
+var EVENT_MAP = {
+  HTMLEvents: ['change'],
+  MouseEvents: ['click', 'mousemove', 'mousedown', 'mouseup', 'mouseover'],
+  KeyboardEvents: ['keydown']
+};
+var EVENT_MAP_INV = {};
+Common.each(EVENT_MAP, function (v, k) {
+  Common.each(v, function (e) {
+    EVENT_MAP_INV[e] = k;
+  });
+});
+var CSS_VALUE_PIXELS = /(\d+(\.\d+)?)px/;
+function cssValueToPixels(val) {
+  if (val === '0' || Common.isUndefined(val)) {
+    return 0;
+  }
+  var match = val.match(CSS_VALUE_PIXELS);
+  if (!Common.isNull(match)) {
+    return parseFloat(match[1]);
+  }
+  return 0;
+}
+var dom = {
+  makeSelectable: function makeSelectable(elem, selectable) {
+    if (elem === undefined || elem.style === undefined) return;
+    elem.onselectstart = selectable ? function () {
+      return false;
+    } : function () {};
+    elem.style.MozUserSelect = selectable ? 'auto' : 'none';
+    elem.style.KhtmlUserSelect = selectable ? 'auto' : 'none';
+    elem.unselectable = selectable ? 'on' : 'off';
+  },
+  makeFullscreen: function makeFullscreen(elem, hor, vert) {
+    var vertical = vert;
+    var horizontal = hor;
+    if (Common.isUndefined(horizontal)) {
+      horizontal = true;
+    }
+    if (Common.isUndefined(vertical)) {
+      vertical = true;
+    }
+    elem.style.position = 'absolute';
+    if (horizontal) {
+      elem.style.left = 0;
+      elem.style.right = 0;
+    }
+    if (vertical) {
+      elem.style.top = 0;
+      elem.style.bottom = 0;
+    }
+  },
+  fakeEvent: function fakeEvent(elem, eventType, pars, aux) {
+    var params = pars || {};
+    var className = EVENT_MAP_INV[eventType];
+    if (!className) {
+      throw new Error('Event type ' + eventType + ' not supported.');
+    }
+    var evt = document.createEvent(className);
+    switch (className) {
+      case 'MouseEvents':
+        {
+          var clientX = params.x || params.clientX || 0;
+          var clientY = params.y || params.clientY || 0;
+          evt.initMouseEvent(eventType, params.bubbles || false, params.cancelable || true, window, params.clickCount || 1, 0,
+          0,
+          clientX,
+          clientY,
+          false, false, false, false, 0, null);
+          break;
+        }
+      case 'KeyboardEvents':
+        {
+          var init = evt.initKeyboardEvent || evt.initKeyEvent;
+          Common.defaults(params, {
+            cancelable: true,
+            ctrlKey: false,
+            altKey: false,
+            shiftKey: false,
+            metaKey: false,
+            keyCode: undefined,
+            charCode: undefined
+          });
+          init(eventType, params.bubbles || false, params.cancelable, window, params.ctrlKey, params.altKey, params.shiftKey, params.metaKey, params.keyCode, params.charCode);
+          break;
+        }
+      default:
+        {
+          evt.initEvent(eventType, params.bubbles || false, params.cancelable || true);
+          break;
+        }
+    }
+    Common.defaults(evt, aux);
+    elem.dispatchEvent(evt);
+  },
+  bind: function bind(elem, event, func, newBool) {
+    var bool = newBool || false;
+    if (elem.addEventListener) {
+      elem.addEventListener(event, func, bool);
+    } else if (elem.attachEvent) {
+      elem.attachEvent('on' + event, func);
+    }
+    return dom;
+  },
+  unbind: function unbind(elem, event, func, newBool) {
+    var bool = newBool || false;
+    if (elem.removeEventListener) {
+      elem.removeEventListener(event, func, bool);
+    } else if (elem.detachEvent) {
+      elem.detachEvent('on' + event, func);
+    }
+    return dom;
+  },
+  addClass: function addClass(elem, className) {
+    if (elem.className === undefined) {
+      elem.className = className;
+    } else if (elem.className !== className) {
+      var classes = elem.className.split(/ +/);
+      if (classes.indexOf(className) === -1) {
+        classes.push(className);
+        elem.className = classes.join(' ').replace(/^\s+/, '').replace(/\s+$/, '');
+      }
+    }
+    return dom;
+  },
+  removeClass: function removeClass(elem, className) {
+    if (className) {
+      if (elem.className === className) {
+        elem.removeAttribute('class');
+      } else {
+        var classes = elem.className.split(/ +/);
+        var index = classes.indexOf(className);
+        if (index !== -1) {
+          classes.splice(index, 1);
+          elem.className = classes.join(' ');
+        }
+      }
+    } else {
+      elem.className = undefined;
+    }
+    return dom;
+  },
+  hasClass: function hasClass(elem, className) {
+    return new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)').test(elem.className) || false;
+  },
+  getWidth: function getWidth(elem) {
+    var style = getComputedStyle(elem);
+    return cssValueToPixels(style['border-left-width']) + cssValueToPixels(style['border-right-width']) + cssValueToPixels(style['padding-left']) + cssValueToPixels(style['padding-right']) + cssValueToPixels(style.width);
+  },
+  getHeight: function getHeight(elem) {
+    var style = getComputedStyle(elem);
+    return cssValueToPixels(style['border-top-width']) + cssValueToPixels(style['border-bottom-width']) + cssValueToPixels(style['padding-top']) + cssValueToPixels(style['padding-bottom']) + cssValueToPixels(style.height);
+  },
+  getOffset: function getOffset(el) {
+    var elem = el;
+    var offset = { left: 0, top: 0 };
+    if (elem.offsetParent) {
+      do {
+        offset.left += elem.offsetLeft;
+        offset.top += elem.offsetTop;
+        elem = elem.offsetParent;
+      } while (elem);
+    }
+    return offset;
+  },
+  isActive: function isActive(elem) {
+    return elem === document.activeElement && (elem.type || elem.href);
+  }
+};
+
+var BooleanController = function (_Controller) {
+  inherits(BooleanController, _Controller);
+  function BooleanController(object, property) {
+    classCallCheck(this, BooleanController);
+    var _this2 = possibleConstructorReturn(this, (BooleanController.__proto__ || Object.getPrototypeOf(BooleanController)).call(this, object, property));
+    var _this = _this2;
+    _this2.__prev = _this2.getValue();
+    _this2.__checkbox = document.createElement('input');
+    _this2.__checkbox.setAttribute('type', 'checkbox');
+    function onChange() {
+      _this.setValue(!_this.__prev);
+    }
+    dom.bind(_this2.__checkbox, 'change', onChange, false);
+    _this2.domElement.appendChild(_this2.__checkbox);
+    _this2.updateDisplay();
+    return _this2;
+  }
+  createClass(BooleanController, [{
+    key: 'setValue',
+    value: function setValue(v) {
+      var toReturn = get(BooleanController.prototype.__proto__ || Object.getPrototypeOf(BooleanController.prototype), 'setValue', this).call(this, v);
+      if (this.__onFinishChange) {
+        this.__onFinishChange.call(this, this.getValue());
+      }
+      this.__prev = this.getValue();
+      return toReturn;
+    }
+  }, {
+    key: 'updateDisplay',
+    value: function updateDisplay() {
+      if (this.getValue() === true) {
+        this.__checkbox.setAttribute('checked', 'checked');
+        this.__checkbox.checked = true;
+        this.__prev = true;
+      } else {
+        this.__checkbox.checked = false;
+        this.__prev = false;
+      }
+      return get(BooleanController.prototype.__proto__ || Object.getPrototypeOf(BooleanController.prototype), 'updateDisplay', this).call(this);
+    }
+  }]);
+  return BooleanController;
+}(Controller);
+
+var OptionController = function (_Controller) {
+  inherits(OptionController, _Controller);
+  function OptionController(object, property, opts) {
+    classCallCheck(this, OptionController);
+    var _this2 = possibleConstructorReturn(this, (OptionController.__proto__ || Object.getPrototypeOf(OptionController)).call(this, object, property));
+    var options = opts;
+    var _this = _this2;
+    _this2.__select = document.createElement('select');
+    if (Common.isArray(options)) {
+      var map = {};
+      Common.each(options, function (element) {
+        map[element] = element;
+      });
+      options = map;
+    }
+    Common.each(options, function (value, key) {
+      var opt = document.createElement('option');
+      opt.innerHTML = key;
+      opt.setAttribute('value', value);
+      _this.__select.appendChild(opt);
+    });
+    _this2.updateDisplay();
+    dom.bind(_this2.__select, 'change', function () {
+      var desiredValue = this.options[this.selectedIndex].value;
+      _this.setValue(desiredValue);
+    });
+    _this2.domElement.appendChild(_this2.__select);
+    return _this2;
+  }
+  createClass(OptionController, [{
+    key: 'setValue',
+    value: function setValue(v) {
+      var toReturn = get(OptionController.prototype.__proto__ || Object.getPrototypeOf(OptionController.prototype), 'setValue', this).call(this, v);
+      if (this.__onFinishChange) {
+        this.__onFinishChange.call(this, this.getValue());
+      }
+      return toReturn;
+    }
+  }, {
+    key: 'updateDisplay',
+    value: function updateDisplay() {
+      if (dom.isActive(this.__select)) return this;
+      this.__select.value = this.getValue();
+      return get(OptionController.prototype.__proto__ || Object.getPrototypeOf(OptionController.prototype), 'updateDisplay', this).call(this);
+    }
+  }]);
+  return OptionController;
+}(Controller);
+
+var StringController = function (_Controller) {
+  inherits(StringController, _Controller);
+  function StringController(object, property) {
+    classCallCheck(this, StringController);
+    var _this2 = possibleConstructorReturn(this, (StringController.__proto__ || Object.getPrototypeOf(StringController)).call(this, object, property));
+    var _this = _this2;
+    function onChange() {
+      _this.setValue(_this.__input.value);
+    }
+    function onBlur() {
+      if (_this.__onFinishChange) {
+        _this.__onFinishChange.call(_this, _this.getValue());
+      }
+    }
+    _this2.__input = document.createElement('input');
+    _this2.__input.setAttribute('type', 'text');
+    dom.bind(_this2.__input, 'keyup', onChange);
+    dom.bind(_this2.__input, 'change', onChange);
+    dom.bind(_this2.__input, 'blur', onBlur);
+    dom.bind(_this2.__input, 'keydown', function (e) {
+      if (e.keyCode === 13) {
+        this.blur();
+      }
+    });
+    _this2.updateDisplay();
+    _this2.domElement.appendChild(_this2.__input);
+    return _this2;
+  }
+  createClass(StringController, [{
+    key: 'updateDisplay',
+    value: function updateDisplay() {
+      if (!dom.isActive(this.__input)) {
+        this.__input.value = this.getValue();
+      }
+      return get(StringController.prototype.__proto__ || Object.getPrototypeOf(StringController.prototype), 'updateDisplay', this).call(this);
+    }
+  }]);
+  return StringController;
+}(Controller);
+
+function numDecimals(x) {
+  var _x = x.toString();
+  if (_x.indexOf('.') > -1) {
+    return _x.length - _x.indexOf('.') - 1;
+  }
+  return 0;
+}
+var NumberController = function (_Controller) {
+  inherits(NumberController, _Controller);
+  function NumberController(object, property, params) {
+    classCallCheck(this, NumberController);
+    var _this = possibleConstructorReturn(this, (NumberController.__proto__ || Object.getPrototypeOf(NumberController)).call(this, object, property));
+    var _params = params || {};
+    _this.__min = _params.min;
+    _this.__max = _params.max;
+    _this.__step = _params.step;
+    if (Common.isUndefined(_this.__step)) {
+      if (_this.initialValue === 0) {
+        _this.__impliedStep = 1;
+      } else {
+        _this.__impliedStep = Math.pow(10, Math.floor(Math.log(Math.abs(_this.initialValue)) / Math.LN10)) / 10;
+      }
+    } else {
+      _this.__impliedStep = _this.__step;
+    }
+    _this.__precision = numDecimals(_this.__impliedStep);
+    return _this;
+  }
+  createClass(NumberController, [{
+    key: 'setValue',
+    value: function setValue(v) {
+      var _v = v;
+      if (this.__min !== undefined && _v < this.__min) {
+        _v = this.__min;
+      } else if (this.__max !== undefined && _v > this.__max) {
+        _v = this.__max;
+      }
+      if (this.__step !== undefined && _v % this.__step !== 0) {
+        _v = Math.round(_v / this.__step) * this.__step;
+      }
+      return get(NumberController.prototype.__proto__ || Object.getPrototypeOf(NumberController.prototype), 'setValue', this).call(this, _v);
+    }
+  }, {
+    key: 'min',
+    value: function min(minValue) {
+      this.__min = minValue;
+      return this;
+    }
+  }, {
+    key: 'max',
+    value: function max(maxValue) {
+      this.__max = maxValue;
+      return this;
+    }
+  }, {
+    key: 'step',
+    value: function step(stepValue) {
+      this.__step = stepValue;
+      this.__impliedStep = stepValue;
+      this.__precision = numDecimals(stepValue);
+      return this;
+    }
+  }]);
+  return NumberController;
+}(Controller);
+
+function roundToDecimal(value, decimals) {
+  var tenTo = Math.pow(10, decimals);
+  return Math.round(value * tenTo) / tenTo;
+}
+var NumberControllerBox = function (_NumberController) {
+  inherits(NumberControllerBox, _NumberController);
+  function NumberControllerBox(object, property, params) {
+    classCallCheck(this, NumberControllerBox);
+    var _this2 = possibleConstructorReturn(this, (NumberControllerBox.__proto__ || Object.getPrototypeOf(NumberControllerBox)).call(this, object, property, params));
+    _this2.__truncationSuspended = false;
+    var _this = _this2;
+    var prevY = void 0;
+    function onChange() {
+      var attempted = parseFloat(_this.__input.value);
+      if (!Common.isNaN(attempted)) {
+        _this.setValue(attempted);
+      }
+    }
+    function onFinish() {
+      if (_this.__onFinishChange) {
+        _this.__onFinishChange.call(_this, _this.getValue());
+      }
+    }
+    function onBlur() {
+      onFinish();
+    }
+    function onMouseDrag(e) {
+      var diff = prevY - e.clientY;
+      _this.setValue(_this.getValue() + diff * _this.__impliedStep);
+      prevY = e.clientY;
+    }
+    function onMouseUp() {
+      dom.unbind(window, 'mousemove', onMouseDrag);
+      dom.unbind(window, 'mouseup', onMouseUp);
+      onFinish();
+    }
+    function onMouseDown(e) {
+      dom.bind(window, 'mousemove', onMouseDrag);
+      dom.bind(window, 'mouseup', onMouseUp);
+      prevY = e.clientY;
+    }
+    _this2.__input = document.createElement('input');
+    _this2.__input.setAttribute('type', 'text');
+    dom.bind(_this2.__input, 'change', onChange);
+    dom.bind(_this2.__input, 'blur', onBlur);
+    dom.bind(_this2.__input, 'mousedown', onMouseDown);
+    dom.bind(_this2.__input, 'keydown', function (e) {
+      if (e.keyCode === 13) {
+        _this.__truncationSuspended = true;
+        this.blur();
+        _this.__truncationSuspended = false;
+        onFinish();
+      }
+    });
+    _this2.updateDisplay();
+    _this2.domElement.appendChild(_this2.__input);
+    return _this2;
+  }
+  createClass(NumberControllerBox, [{
+    key: 'updateDisplay',
+    value: function updateDisplay() {
+      this.__input.value = this.__truncationSuspended ? this.getValue() : roundToDecimal(this.getValue(), this.__precision);
+      return get(NumberControllerBox.prototype.__proto__ || Object.getPrototypeOf(NumberControllerBox.prototype), 'updateDisplay', this).call(this);
+    }
+  }]);
+  return NumberControllerBox;
+}(NumberController);
+
+function map(v, i1, i2, o1, o2) {
+  return o1 + (o2 - o1) * ((v - i1) / (i2 - i1));
+}
+var NumberControllerSlider = function (_NumberController) {
+  inherits(NumberControllerSlider, _NumberController);
+  function NumberControllerSlider(object, property, min, max, step) {
+    classCallCheck(this, NumberControllerSlider);
+    var _this2 = possibleConstructorReturn(this, (NumberControllerSlider.__proto__ || Object.getPrototypeOf(NumberControllerSlider)).call(this, object, property, { min: min, max: max, step: step }));
+    var _this = _this2;
+    _this2.__background = document.createElement('div');
+    _this2.__foreground = document.createElement('div');
+    dom.bind(_this2.__background, 'mousedown', onMouseDown);
+    dom.bind(_this2.__background, 'touchstart', onTouchStart);
+    dom.addClass(_this2.__background, 'slider');
+    dom.addClass(_this2.__foreground, 'slider-fg');
+    function onMouseDown(e) {
+      document.activeElement.blur();
+      dom.bind(window, 'mousemove', onMouseDrag);
+      dom.bind(window, 'mouseup', onMouseUp);
+      onMouseDrag(e);
+    }
+    function onMouseDrag(e) {
+      e.preventDefault();
+      var bgRect = _this.__background.getBoundingClientRect();
+      _this.setValue(map(e.clientX, bgRect.left, bgRect.right, _this.__min, _this.__max));
+      return false;
+    }
+    function onMouseUp() {
+      dom.unbind(window, 'mousemove', onMouseDrag);
+      dom.unbind(window, 'mouseup', onMouseUp);
+      if (_this.__onFinishChange) {
+        _this.__onFinishChange.call(_this, _this.getValue());
+      }
+    }
+    function onTouchStart(e) {
+      if (e.touches.length !== 1) {
+        return;
+      }
+      dom.bind(window, 'touchmove', onTouchMove);
+      dom.bind(window, 'touchend', onTouchEnd);
+      onTouchMove(e);
+    }
+    function onTouchMove(e) {
+      var clientX = e.touches[0].clientX;
+      var bgRect = _this.__background.getBoundingClientRect();
+      _this.setValue(map(clientX, bgRect.left, bgRect.right, _this.__min, _this.__max));
+    }
+    function onTouchEnd() {
+      dom.unbind(window, 'touchmove', onTouchMove);
+      dom.unbind(window, 'touchend', onTouchEnd);
+      if (_this.__onFinishChange) {
+        _this.__onFinishChange.call(_this, _this.getValue());
+      }
+    }
+    _this2.updateDisplay();
+    _this2.__background.appendChild(_this2.__foreground);
+    _this2.domElement.appendChild(_this2.__background);
+    return _this2;
+  }
+  createClass(NumberControllerSlider, [{
+    key: 'updateDisplay',
+    value: function updateDisplay() {
+      var pct = (this.getValue() - this.__min) / (this.__max - this.__min);
+      this.__foreground.style.width = pct * 100 + '%';
+      return get(NumberControllerSlider.prototype.__proto__ || Object.getPrototypeOf(NumberControllerSlider.prototype), 'updateDisplay', this).call(this);
+    }
+  }]);
+  return NumberControllerSlider;
+}(NumberController);
+
+var FunctionController = function (_Controller) {
+  inherits(FunctionController, _Controller);
+  function FunctionController(object, property, text) {
+    classCallCheck(this, FunctionController);
+    var _this2 = possibleConstructorReturn(this, (FunctionController.__proto__ || Object.getPrototypeOf(FunctionController)).call(this, object, property));
+    var _this = _this2;
+    _this2.__button = document.createElement('div');
+    _this2.__button.innerHTML = text === undefined ? 'Fire' : text;
+    dom.bind(_this2.__button, 'click', function (e) {
+      e.preventDefault();
+      _this.fire();
+      return false;
+    });
+    dom.addClass(_this2.__button, 'button');
+    _this2.domElement.appendChild(_this2.__button);
+    return _this2;
+  }
+  createClass(FunctionController, [{
+    key: 'fire',
+    value: function fire() {
+      if (this.__onChange) {
+        this.__onChange.call(this);
+      }
+      this.getValue().call(this.object);
+      if (this.__onFinishChange) {
+        this.__onFinishChange.call(this, this.getValue());
+      }
+    }
+  }]);
+  return FunctionController;
+}(Controller);
+
+var ColorController = function (_Controller) {
+  inherits(ColorController, _Controller);
+  function ColorController(object, property) {
+    classCallCheck(this, ColorController);
+    var _this2 = possibleConstructorReturn(this, (ColorController.__proto__ || Object.getPrototypeOf(ColorController)).call(this, object, property));
+    _this2.__color = new Color(_this2.getValue());
+    _this2.__temp = new Color(0);
+    var _this = _this2;
+    _this2.domElement = document.createElement('div');
+    dom.makeSelectable(_this2.domElement, false);
+    _this2.__selector = document.createElement('div');
+    _this2.__selector.className = 'selector';
+    _this2.__saturation_field = document.createElement('div');
+    _this2.__saturation_field.className = 'saturation-field';
+    _this2.__field_knob = document.createElement('div');
+    _this2.__field_knob.className = 'field-knob';
+    _this2.__field_knob_border = '2px solid ';
+    _this2.__hue_knob = document.createElement('div');
+    _this2.__hue_knob.className = 'hue-knob';
+    _this2.__hue_field = document.createElement('div');
+    _this2.__hue_field.className = 'hue-field';
+    _this2.__input = document.createElement('input');
+    _this2.__input.type = 'text';
+    _this2.__input_textShadow = '0 1px 1px ';
+    dom.bind(_this2.__input, 'keydown', function (e) {
+      if (e.keyCode === 13) {
+        onBlur.call(this);
+      }
+    });
+    dom.bind(_this2.__input, 'blur', onBlur);
+    dom.bind(_this2.__selector, 'mousedown', function ()        {
+      dom.addClass(this, 'drag').bind(window, 'mouseup', function ()        {
+        dom.removeClass(_this.__selector, 'drag');
+      });
+    });
+    dom.bind(_this2.__selector, 'touchstart', function ()        {
+      dom.addClass(this, 'drag').bind(window, 'touchend', function ()        {
+        dom.removeClass(_this.__selector, 'drag');
+      });
+    });
+    var valueField = document.createElement('div');
+    Common.extend(_this2.__selector.style, {
+      width: '122px',
+      height: '102px',
+      padding: '3px',
+      backgroundColor: '#222',
+      boxShadow: '0px 1px 3px rgba(0,0,0,0.3)'
+    });
+    Common.extend(_this2.__field_knob.style, {
+      position: 'absolute',
+      width: '12px',
+      height: '12px',
+      border: _this2.__field_knob_border + (_this2.__color.v < 0.5 ? '#fff' : '#000'),
+      boxShadow: '0px 1px 3px rgba(0,0,0,0.5)',
+      borderRadius: '12px',
+      zIndex: 1
+    });
+    Common.extend(_this2.__hue_knob.style, {
+      position: 'absolute',
+      width: '15px',
+      height: '2px',
+      borderRight: '4px solid #fff',
+      zIndex: 1
+    });
+    Common.extend(_this2.__saturation_field.style, {
+      width: '100px',
+      height: '100px',
+      border: '1px solid #555',
+      marginRight: '3px',
+      display: 'inline-block',
+      cursor: 'pointer'
+    });
+    Common.extend(valueField.style, {
+      width: '100%',
+      height: '100%',
+      background: 'none'
+    });
+    linearGradient(valueField, 'top', 'rgba(0,0,0,0)', '#000');
+    Common.extend(_this2.__hue_field.style, {
+      width: '15px',
+      height: '100px',
+      border: '1px solid #555',
+      cursor: 'ns-resize',
+      position: 'absolute',
+      top: '3px',
+      right: '3px'
+    });
+    hueGradient(_this2.__hue_field);
+    Common.extend(_this2.__input.style, {
+      outline: 'none',
+      textAlign: 'center',
+      color: '#fff',
+      border: 0,
+      fontWeight: 'bold',
+      textShadow: _this2.__input_textShadow + 'rgba(0,0,0,0.7)'
+    });
+    dom.bind(_this2.__saturation_field, 'mousedown', fieldDown);
+    dom.bind(_this2.__saturation_field, 'touchstart', fieldDown);
+    dom.bind(_this2.__field_knob, 'mousedown', fieldDown);
+    dom.bind(_this2.__field_knob, 'touchstart', fieldDown);
+    dom.bind(_this2.__hue_field, 'mousedown', fieldDownH);
+    dom.bind(_this2.__hue_field, 'touchstart', fieldDownH);
+    function fieldDown(e) {
+      setSV(e);
+      dom.bind(window, 'mousemove', setSV);
+      dom.bind(window, 'touchmove', setSV);
+      dom.bind(window, 'mouseup', fieldUpSV);
+      dom.bind(window, 'touchend', fieldUpSV);
+    }
+    function fieldDownH(e) {
+      setH(e);
+      dom.bind(window, 'mousemove', setH);
+      dom.bind(window, 'touchmove', setH);
+      dom.bind(window, 'mouseup', fieldUpH);
+      dom.bind(window, 'touchend', fieldUpH);
+    }
+    function fieldUpSV() {
+      dom.unbind(window, 'mousemove', setSV);
+      dom.unbind(window, 'touchmove', setSV);
+      dom.unbind(window, 'mouseup', fieldUpSV);
+      dom.unbind(window, 'touchend', fieldUpSV);
+      onFinish();
+    }
+    function fieldUpH() {
+      dom.unbind(window, 'mousemove', setH);
+      dom.unbind(window, 'touchmove', setH);
+      dom.unbind(window, 'mouseup', fieldUpH);
+      dom.unbind(window, 'touchend', fieldUpH);
+      onFinish();
+    }
+    function onBlur() {
+      var i = interpret(this.value);
+      if (i !== false) {
+        _this.__color.__state = i;
+        _this.setValue(_this.__color.toOriginal());
+      } else {
+        this.value = _this.__color.toString();
+      }
+    }
+    function onFinish() {
+      if (_this.__onFinishChange) {
+        _this.__onFinishChange.call(_this, _this.__color.toOriginal());
+      }
+    }
+    _this2.__saturation_field.appendChild(valueField);
+    _this2.__selector.appendChild(_this2.__field_knob);
+    _this2.__selector.appendChild(_this2.__saturation_field);
+    _this2.__selector.appendChild(_this2.__hue_field);
+    _this2.__hue_field.appendChild(_this2.__hue_knob);
+    _this2.domElement.appendChild(_this2.__input);
+    _this2.domElement.appendChild(_this2.__selector);
+    _this2.updateDisplay();
+    function setSV(e) {
+      if (e.type.indexOf('touch') === -1) {
+        e.preventDefault();
+      }
+      var fieldRect = _this.__saturation_field.getBoundingClientRect();
+      var _ref = e.touches && e.touches[0] || e,
+          clientX = _ref.clientX,
+          clientY = _ref.clientY;
+      var s = (clientX - fieldRect.left) / (fieldRect.right - fieldRect.left);
+      var v = 1 - (clientY - fieldRect.top) / (fieldRect.bottom - fieldRect.top);
+      if (v > 1) {
+        v = 1;
+      } else if (v < 0) {
+        v = 0;
+      }
+      if (s > 1) {
+        s = 1;
+      } else if (s < 0) {
+        s = 0;
+      }
+      _this.__color.v = v;
+      _this.__color.s = s;
+      _this.setValue(_this.__color.toOriginal());
+      return false;
+    }
+    function setH(e) {
+      if (e.type.indexOf('touch') === -1) {
+        e.preventDefault();
+      }
+      var fieldRect = _this.__hue_field.getBoundingClientRect();
+      var _ref2 = e.touches && e.touches[0] || e,
+          clientY = _ref2.clientY;
+      var h = 1 - (clientY - fieldRect.top) / (fieldRect.bottom - fieldRect.top);
+      if (h > 1) {
+        h = 1;
+      } else if (h < 0) {
+        h = 0;
+      }
+      _this.__color.h = h * 360;
+      _this.setValue(_this.__color.toOriginal());
+      return false;
+    }
+    return _this2;
+  }
+  createClass(ColorController, [{
+    key: 'updateDisplay',
+    value: function updateDisplay() {
+      var i = interpret(this.getValue());
+      if (i !== false) {
+        var mismatch = false;
+        Common.each(Color.COMPONENTS, function (component) {
+          if (!Common.isUndefined(i[component]) && !Common.isUndefined(this.__color.__state[component]) && i[component] !== this.__color.__state[component]) {
+            mismatch = true;
+            return {};
+          }
+        }, this);
+        if (mismatch) {
+          Common.extend(this.__color.__state, i);
+        }
+      }
+      Common.extend(this.__temp.__state, this.__color.__state);
+      this.__temp.a = 1;
+      var flip = this.__color.v < 0.5 || this.__color.s > 0.5 ? 255 : 0;
+      var _flip = 255 - flip;
+      Common.extend(this.__field_knob.style, {
+        marginLeft: 100 * this.__color.s - 7 + 'px',
+        marginTop: 100 * (1 - this.__color.v) - 7 + 'px',
+        backgroundColor: this.__temp.toHexString(),
+        border: this.__field_knob_border + 'rgb(' + flip + ',' + flip + ',' + flip + ')'
+      });
+      this.__hue_knob.style.marginTop = (1 - this.__color.h / 360) * 100 + 'px';
+      this.__temp.s = 1;
+      this.__temp.v = 1;
+      linearGradient(this.__saturation_field, 'left', '#fff', this.__temp.toHexString());
+      this.__input.value = this.__color.toString();
+      Common.extend(this.__input.style, {
+        backgroundColor: this.__color.toHexString(),
+        color: 'rgb(' + flip + ',' + flip + ',' + flip + ')',
+        textShadow: this.__input_textShadow + 'rgba(' + _flip + ',' + _flip + ',' + _flip + ',.7)'
+      });
+    }
+  }]);
+  return ColorController;
+}(Controller);
+var vendors = ['-moz-', '-o-', '-webkit-', '-ms-', ''];
+function linearGradient(elem, x, a, b) {
+  elem.style.background = '';
+  Common.each(vendors, function (vendor) {
+    elem.style.cssText += 'background: ' + vendor + 'linear-gradient(' + x + ', ' + a + ' 0%, ' + b + ' 100%); ';
+  });
+}
+function hueGradient(elem) {
+  elem.style.background = '';
+  elem.style.cssText += 'background: -moz-linear-gradient(top,  #ff0000 0%, #ff00ff 17%, #0000ff 34%, #00ffff 50%, #00ff00 67%, #ffff00 84%, #ff0000 100%);';
+  elem.style.cssText += 'background: -webkit-linear-gradient(top,  #ff0000 0%,#ff00ff 17%,#0000ff 34%,#00ffff 50%,#00ff00 67%,#ffff00 84%,#ff0000 100%);';
+  elem.style.cssText += 'background: -o-linear-gradient(top,  #ff0000 0%,#ff00ff 17%,#0000ff 34%,#00ffff 50%,#00ff00 67%,#ffff00 84%,#ff0000 100%);';
+  elem.style.cssText += 'background: -ms-linear-gradient(top,  #ff0000 0%,#ff00ff 17%,#0000ff 34%,#00ffff 50%,#00ff00 67%,#ffff00 84%,#ff0000 100%);';
+  elem.style.cssText += 'background: linear-gradient(top,  #ff0000 0%,#ff00ff 17%,#0000ff 34%,#00ffff 50%,#00ff00 67%,#ffff00 84%,#ff0000 100%);';
+}
+
+var css = {
+  load: function load(url, indoc) {
+    var doc = indoc || document;
+    var link = doc.createElement('link');
+    link.type = 'text/css';
+    link.rel = 'stylesheet';
+    link.href = url;
+    doc.getElementsByTagName('head')[0].appendChild(link);
+  },
+  inject: function inject(cssContent, indoc) {
+    var doc = indoc || document;
+    var injected = document.createElement('style');
+    injected.type = 'text/css';
+    injected.innerHTML = cssContent;
+    var head = doc.getElementsByTagName('head')[0];
+    try {
+      head.appendChild(injected);
+    } catch (e) {
+    }
+  }
+};
+
+var saveDialogContents = "<div id=\"dg-save\" class=\"dg dialogue\">\n\n  Here's the new load parameter for your <code>GUI</code>'s constructor:\n\n  <textarea id=\"dg-new-constructor\"></textarea>\n\n  <div id=\"dg-save-locally\">\n\n    <input id=\"dg-local-storage\" type=\"checkbox\"/> Automatically save\n    values to <code>localStorage</code> on exit.\n\n    <div id=\"dg-local-explain\">The values saved to <code>localStorage</code> will\n      override those passed to <code>dat.GUI</code>'s constructor. This makes it\n      easier to work incrementally, but <code>localStorage</code> is fragile,\n      and your friends may not see the same values you do.\n\n    </div>\n\n  </div>\n\n</div>";
+
+var ControllerFactory = function ControllerFactory(object, property) {
+  var initialValue = object[property];
+  if (Common.isArray(arguments[2]) || Common.isObject(arguments[2])) {
+    return new OptionController(object, property, arguments[2]);
+  }
+  if (Common.isNumber(initialValue)) {
+    if (Common.isNumber(arguments[2]) && Common.isNumber(arguments[3])) {
+      if (Common.isNumber(arguments[4])) {
+        return new NumberControllerSlider(object, property, arguments[2], arguments[3], arguments[4]);
+      }
+      return new NumberControllerSlider(object, property, arguments[2], arguments[3]);
+    }
+    if (Common.isNumber(arguments[4])) {
+      return new NumberControllerBox(object, property, { min: arguments[2], max: arguments[3], step: arguments[4] });
+    }
+    return new NumberControllerBox(object, property, { min: arguments[2], max: arguments[3] });
+  }
+  if (Common.isString(initialValue)) {
+    return new StringController(object, property);
+  }
+  if (Common.isFunction(initialValue)) {
+    return new FunctionController(object, property, '');
+  }
+  if (Common.isBoolean(initialValue)) {
+    return new BooleanController(object, property);
+  }
+  return null;
+};
+
+function requestAnimationFrame(callback) {
+  setTimeout(callback, 1000 / 60);
+}
+var requestAnimationFrame$1 = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || requestAnimationFrame;
+
+var CenteredDiv = function () {
+  function CenteredDiv() {
+    classCallCheck(this, CenteredDiv);
+    this.backgroundElement = document.createElement('div');
+    Common.extend(this.backgroundElement.style, {
+      backgroundColor: 'rgba(0,0,0,0.8)',
+      top: 0,
+      left: 0,
+      display: 'none',
+      zIndex: '1000',
+      opacity: 0,
+      WebkitTransition: 'opacity 0.2s linear',
+      transition: 'opacity 0.2s linear'
+    });
+    dom.makeFullscreen(this.backgroundElement);
+    this.backgroundElement.style.position = 'fixed';
+    this.domElement = document.createElement('div');
+    Common.extend(this.domElement.style, {
+      position: 'fixed',
+      display: 'none',
+      zIndex: '1001',
+      opacity: 0,
+      WebkitTransition: '-webkit-transform 0.2s ease-out, opacity 0.2s linear',
+      transition: 'transform 0.2s ease-out, opacity 0.2s linear'
+    });
+    document.body.appendChild(this.backgroundElement);
+    document.body.appendChild(this.domElement);
+    var _this = this;
+    dom.bind(this.backgroundElement, 'click', function () {
+      _this.hide();
+    });
+  }
+  createClass(CenteredDiv, [{
+    key: 'show',
+    value: function show() {
+      var _this = this;
+      this.backgroundElement.style.display = 'block';
+      this.domElement.style.display = 'block';
+      this.domElement.style.opacity = 0;
+      this.domElement.style.webkitTransform = 'scale(1.1)';
+      this.layout();
+      Common.defer(function () {
+        _this.backgroundElement.style.opacity = 1;
+        _this.domElement.style.opacity = 1;
+        _this.domElement.style.webkitTransform = 'scale(1)';
+      });
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      var _this = this;
+      var hide = function hide() {
+        _this.domElement.style.display = 'none';
+        _this.backgroundElement.style.display = 'none';
+        dom.unbind(_this.domElement, 'webkitTransitionEnd', hide);
+        dom.unbind(_this.domElement, 'transitionend', hide);
+        dom.unbind(_this.domElement, 'oTransitionEnd', hide);
+      };
+      dom.bind(this.domElement, 'webkitTransitionEnd', hide);
+      dom.bind(this.domElement, 'transitionend', hide);
+      dom.bind(this.domElement, 'oTransitionEnd', hide);
+      this.backgroundElement.style.opacity = 0;
+      this.domElement.style.opacity = 0;
+      this.domElement.style.webkitTransform = 'scale(1.1)';
+    }
+  }, {
+    key: 'layout',
+    value: function layout() {
+      this.domElement.style.left = window.innerWidth / 2 - dom.getWidth(this.domElement) / 2 + 'px';
+      this.domElement.style.top = window.innerHeight / 2 - dom.getHeight(this.domElement) / 2 + 'px';
+    }
+  }]);
+  return CenteredDiv;
+}();
+
+var styleSheet = ___$insertStyle(".dg ul{list-style:none;margin:0;padding:0;width:100%;clear:both}.dg.ac{position:fixed;top:0;left:0;right:0;height:0;z-index:0}.dg:not(.ac) .main{overflow:hidden}.dg.main{-webkit-transition:opacity .1s linear;-o-transition:opacity .1s linear;-moz-transition:opacity .1s linear;transition:opacity .1s linear}.dg.main.taller-than-window{overflow-y:auto}.dg.main.taller-than-window .close-button{opacity:1;margin-top:-1px;border-top:1px solid #2c2c2c}.dg.main ul.closed .close-button{opacity:1 !important}.dg.main:hover .close-button,.dg.main .close-button.drag{opacity:1}.dg.main .close-button{-webkit-transition:opacity .1s linear;-o-transition:opacity .1s linear;-moz-transition:opacity .1s linear;transition:opacity .1s linear;border:0;line-height:19px;height:20px;cursor:pointer;text-align:center;background-color:#000}.dg.main .close-button.close-top{position:relative}.dg.main .close-button.close-bottom{position:absolute}.dg.main .close-button:hover{background-color:#111}.dg.a{float:right;margin-right:15px;overflow-y:visible}.dg.a.has-save>ul.close-top{margin-top:0}.dg.a.has-save>ul.close-bottom{margin-top:27px}.dg.a.has-save>ul.closed{margin-top:0}.dg.a .save-row{top:0;z-index:1002}.dg.a .save-row.close-top{position:relative}.dg.a .save-row.close-bottom{position:fixed}.dg li{-webkit-transition:height .1s ease-out;-o-transition:height .1s ease-out;-moz-transition:height .1s ease-out;transition:height .1s ease-out;-webkit-transition:overflow .1s linear;-o-transition:overflow .1s linear;-moz-transition:overflow .1s linear;transition:overflow .1s linear}.dg li:not(.folder){cursor:auto;height:27px;line-height:27px;padding:0 4px 0 5px}.dg li.folder{padding:0;border-left:4px solid rgba(0,0,0,0)}.dg li.title{cursor:pointer;margin-left:-4px}.dg .closed li:not(.title),.dg .closed ul li,.dg .closed ul li>*{height:0;overflow:hidden;border:0}.dg .cr{clear:both;padding-left:3px;height:27px;overflow:hidden}.dg .property-name{cursor:default;float:left;clear:left;width:40%;overflow:hidden;text-overflow:ellipsis}.dg .c{float:left;width:60%;position:relative}.dg .c input[type=text]{border:0;margin-top:4px;padding:3px;width:100%;float:right}.dg .has-slider input[type=text]{width:30%;margin-left:0}.dg .slider{float:left;width:66%;margin-left:-5px;margin-right:0;height:19px;margin-top:4px}.dg .slider-fg{height:100%}.dg .c input[type=checkbox]{margin-top:7px}.dg .c select{margin-top:5px}.dg .cr.function,.dg .cr.function .property-name,.dg .cr.function *,.dg .cr.boolean,.dg .cr.boolean *{cursor:pointer}.dg .cr.color{overflow:visible}.dg .selector{display:none;position:absolute;margin-left:-9px;margin-top:23px;z-index:10}.dg .c:hover .selector,.dg .selector.drag{display:block}.dg li.save-row{padding:0}.dg li.save-row .button{display:inline-block;padding:0px 6px}.dg.dialogue{background-color:#222;width:460px;padding:15px;font-size:13px;line-height:15px}#dg-new-constructor{padding:10px;color:#222;font-family:Monaco, monospace;font-size:10px;border:0;resize:none;box-shadow:inset 1px 1px 1px #888;word-wrap:break-word;margin:12px 0;display:block;width:440px;overflow-y:scroll;height:100px;position:relative}#dg-local-explain{display:none;font-size:11px;line-height:17px;border-radius:3px;background-color:#333;padding:8px;margin-top:10px}#dg-local-explain code{font-size:10px}#dat-gui-save-locally{display:none}.dg{color:#eee;font:11px 'Lucida Grande', sans-serif;text-shadow:0 -1px 0 #111}.dg.main::-webkit-scrollbar{width:5px;background:#1a1a1a}.dg.main::-webkit-scrollbar-corner{height:0;display:none}.dg.main::-webkit-scrollbar-thumb{border-radius:5px;background:#676767}.dg li:not(.folder){background:#1a1a1a;border-bottom:1px solid #2c2c2c}.dg li.save-row{line-height:25px;background:#dad5cb;border:0}.dg li.save-row select{margin-left:5px;width:108px}.dg li.save-row .button{margin-left:5px;margin-top:1px;border-radius:2px;font-size:9px;line-height:7px;padding:4px 4px 5px 4px;background:#c5bdad;color:#fff;text-shadow:0 1px 0 #b0a58f;box-shadow:0 -1px 0 #b0a58f;cursor:pointer}.dg li.save-row .button.gears{background:#c5bdad url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAANCAYAAAB/9ZQ7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAQJJREFUeNpiYKAU/P//PwGIC/ApCABiBSAW+I8AClAcgKxQ4T9hoMAEUrxx2QSGN6+egDX+/vWT4e7N82AMYoPAx/evwWoYoSYbACX2s7KxCxzcsezDh3evFoDEBYTEEqycggWAzA9AuUSQQgeYPa9fPv6/YWm/Acx5IPb7ty/fw+QZblw67vDs8R0YHyQhgObx+yAJkBqmG5dPPDh1aPOGR/eugW0G4vlIoTIfyFcA+QekhhHJhPdQxbiAIguMBTQZrPD7108M6roWYDFQiIAAv6Aow/1bFwXgis+f2LUAynwoIaNcz8XNx3Dl7MEJUDGQpx9gtQ8YCueB+D26OECAAQDadt7e46D42QAAAABJRU5ErkJggg==) 2px 1px no-repeat;height:7px;width:8px}.dg li.save-row .button:hover{background-color:#bab19e;box-shadow:0 -1px 0 #b0a58f}.dg li.folder{border-bottom:0}.dg li.title{padding-left:16px;background:#000 url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==) 6px 10px no-repeat;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.2)}.dg .closed li.title{background-image:url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlGIWqMCbWAEAOw==)}.dg .cr.boolean{border-left:3px solid #806787}.dg .cr.color{border-left:3px solid}.dg .cr.function{border-left:3px solid #e61d5f}.dg .cr.number{border-left:3px solid #2FA1D6}.dg .cr.number input[type=text]{color:#2FA1D6}.dg .cr.string{border-left:3px solid #1ed36f}.dg .cr.string input[type=text]{color:#1ed36f}.dg .cr.function:hover,.dg .cr.boolean:hover{background:#111}.dg .c input[type=text]{background:#303030;outline:none}.dg .c input[type=text]:hover{background:#3c3c3c}.dg .c input[type=text]:focus{background:#494949;color:#fff}.dg .c .slider{background:#303030;cursor:ew-resize}.dg .c .slider-fg{background:#2FA1D6;max-width:100%}.dg .c .slider:hover{background:#3c3c3c}.dg .c .slider:hover .slider-fg{background:#44abda}\n");
+
+css.inject(styleSheet);
+var CSS_NAMESPACE = 'dg';
+var HIDE_KEY_CODE = 72;
+var CLOSE_BUTTON_HEIGHT = 20;
+var DEFAULT_DEFAULT_PRESET_NAME = 'Default';
+var SUPPORTS_LOCAL_STORAGE = function () {
+  try {
+    return !!window.localStorage;
+  } catch (e) {
+    return false;
+  }
+}();
+var SAVE_DIALOGUE = void 0;
+var autoPlaceVirgin = true;
+var autoPlaceContainer = void 0;
+var hide = false;
+var hideableGuis = [];
+var GUI = function GUI(pars) {
+  var _this = this;
+  var params = pars || {};
+  this.domElement = document.createElement('div');
+  this.__ul = document.createElement('ul');
+  this.domElement.appendChild(this.__ul);
+  dom.addClass(this.domElement, CSS_NAMESPACE);
+  this.__folders = {};
+  this.__controllers = [];
+  this.__rememberedObjects = [];
+  this.__rememberedObjectIndecesToControllers = [];
+  this.__listening = [];
+  params = Common.defaults(params, {
+    closeOnTop: false,
+    autoPlace: true,
+    width: GUI.DEFAULT_WIDTH
+  });
+  params = Common.defaults(params, {
+    resizable: params.autoPlace,
+    hideable: params.autoPlace
+  });
+  if (!Common.isUndefined(params.load)) {
+    if (params.preset) {
+      params.load.preset = params.preset;
+    }
+  } else {
+    params.load = { preset: DEFAULT_DEFAULT_PRESET_NAME };
+  }
+  if (Common.isUndefined(params.parent) && params.hideable) {
+    hideableGuis.push(this);
+  }
+  params.resizable = Common.isUndefined(params.parent) && params.resizable;
+  if (params.autoPlace && Common.isUndefined(params.scrollable)) {
+    params.scrollable = true;
+  }
+  var useLocalStorage = SUPPORTS_LOCAL_STORAGE && localStorage.getItem(getLocalStorageHash(this, 'isLocal')) === 'true';
+  var saveToLocalStorage = void 0;
+  var titleRow = void 0;
+  Object.defineProperties(this,
+  {
+    parent: {
+      get: function get$$1() {
+        return params.parent;
+      }
+    },
+    scrollable: {
+      get: function get$$1() {
+        return params.scrollable;
+      }
+    },
+    autoPlace: {
+      get: function get$$1() {
+        return params.autoPlace;
+      }
+    },
+    closeOnTop: {
+      get: function get$$1() {
+        return params.closeOnTop;
+      }
+    },
+    preset: {
+      get: function get$$1() {
+        if (_this.parent) {
+          return _this.getRoot().preset;
+        }
+        return params.load.preset;
+      },
+      set: function set$$1(v) {
+        if (_this.parent) {
+          _this.getRoot().preset = v;
+        } else {
+          params.load.preset = v;
+        }
+        setPresetSelectIndex(this);
+        _this.revert();
+      }
+    },
+    width: {
+      get: function get$$1() {
+        return params.width;
+      },
+      set: function set$$1(v) {
+        params.width = v;
+        setWidth(_this, v);
+      }
+    },
+    name: {
+      get: function get$$1() {
+        return params.name;
+      },
+      set: function set$$1(v) {
+        params.name = v;
+        if (titleRow) {
+          titleRow.innerHTML = params.name;
+        }
+      }
+    },
+    closed: {
+      get: function get$$1() {
+        return params.closed;
+      },
+      set: function set$$1(v) {
+        params.closed = v;
+        if (params.closed) {
+          dom.addClass(_this.__ul, GUI.CLASS_CLOSED);
+        } else {
+          dom.removeClass(_this.__ul, GUI.CLASS_CLOSED);
+        }
+        this.onResize();
+        if (_this.__closeButton) {
+          _this.__closeButton.innerHTML = v ? GUI.TEXT_OPEN : GUI.TEXT_CLOSED;
+        }
+      }
+    },
+    load: {
+      get: function get$$1() {
+        return params.load;
+      }
+    },
+    useLocalStorage: {
+      get: function get$$1() {
+        return useLocalStorage;
+      },
+      set: function set$$1(bool) {
+        if (SUPPORTS_LOCAL_STORAGE) {
+          useLocalStorage = bool;
+          if (bool) {
+            dom.bind(window, 'unload', saveToLocalStorage);
+          } else {
+            dom.unbind(window, 'unload', saveToLocalStorage);
+          }
+          localStorage.setItem(getLocalStorageHash(_this, 'isLocal'), bool);
+        }
+      }
+    }
+  });
+  if (Common.isUndefined(params.parent)) {
+    this.closed = params.closed || false;
+    dom.addClass(this.domElement, GUI.CLASS_MAIN);
+    dom.makeSelectable(this.domElement, false);
+    if (SUPPORTS_LOCAL_STORAGE) {
+      if (useLocalStorage) {
+        _this.useLocalStorage = true;
+        var savedGui = localStorage.getItem(getLocalStorageHash(this, 'gui'));
+        if (savedGui) {
+          params.load = JSON.parse(savedGui);
+        }
+      }
+    }
+    this.__closeButton = document.createElement('div');
+    this.__closeButton.innerHTML = GUI.TEXT_CLOSED;
+    dom.addClass(this.__closeButton, GUI.CLASS_CLOSE_BUTTON);
+    if (params.closeOnTop) {
+      dom.addClass(this.__closeButton, GUI.CLASS_CLOSE_TOP);
+      this.domElement.insertBefore(this.__closeButton, this.domElement.childNodes[0]);
+    } else {
+      dom.addClass(this.__closeButton, GUI.CLASS_CLOSE_BOTTOM);
+      this.domElement.appendChild(this.__closeButton);
+    }
+    dom.bind(this.__closeButton, 'click', function () {
+      _this.closed = !_this.closed;
+    });
+  } else {
+    if (params.closed === undefined) {
+      params.closed = true;
+    }
+    var titleRowName = document.createTextNode(params.name);
+    dom.addClass(titleRowName, 'controller-name');
+    titleRow = addRow(_this, titleRowName);
+    var onClickTitle = function onClickTitle(e) {
+      e.preventDefault();
+      _this.closed = !_this.closed;
+      return false;
+    };
+    dom.addClass(this.__ul, GUI.CLASS_CLOSED);
+    dom.addClass(titleRow, 'title');
+    dom.bind(titleRow, 'click', onClickTitle);
+    if (!params.closed) {
+      this.closed = false;
+    }
+  }
+  if (params.autoPlace) {
+    if (Common.isUndefined(params.parent)) {
+      if (autoPlaceVirgin) {
+        autoPlaceContainer = document.createElement('div');
+        dom.addClass(autoPlaceContainer, CSS_NAMESPACE);
+        dom.addClass(autoPlaceContainer, GUI.CLASS_AUTO_PLACE_CONTAINER);
+        document.body.appendChild(autoPlaceContainer);
+        autoPlaceVirgin = false;
+      }
+      autoPlaceContainer.appendChild(this.domElement);
+      dom.addClass(this.domElement, GUI.CLASS_AUTO_PLACE);
+    }
+    if (!this.parent) {
+      setWidth(_this, params.width);
+    }
+  }
+  this.__resizeHandler = function () {
+    _this.onResizeDebounced();
+  };
+  dom.bind(window, 'resize', this.__resizeHandler);
+  dom.bind(this.__ul, 'webkitTransitionEnd', this.__resizeHandler);
+  dom.bind(this.__ul, 'transitionend', this.__resizeHandler);
+  dom.bind(this.__ul, 'oTransitionEnd', this.__resizeHandler);
+  this.onResize();
+  if (params.resizable) {
+    addResizeHandle(this);
+  }
+  saveToLocalStorage = function saveToLocalStorage() {
+    if (SUPPORTS_LOCAL_STORAGE && localStorage.getItem(getLocalStorageHash(_this, 'isLocal')) === 'true') {
+      localStorage.setItem(getLocalStorageHash(_this, 'gui'), JSON.stringify(_this.getSaveObject()));
+    }
+  };
+  this.saveToLocalStorageIfPossible = saveToLocalStorage;
+  function resetWidth() {
+    var root = _this.getRoot();
+    root.width += 1;
+    Common.defer(function () {
+      root.width -= 1;
+    });
+  }
+  if (!params.parent) {
+    resetWidth();
+  }
+};
+GUI.toggleHide = function () {
+  hide = !hide;
+  Common.each(hideableGuis, function (gui) {
+    gui.domElement.style.display = hide ? 'none' : '';
+  });
+};
+GUI.CLASS_AUTO_PLACE = 'a';
+GUI.CLASS_AUTO_PLACE_CONTAINER = 'ac';
+GUI.CLASS_MAIN = 'main';
+GUI.CLASS_CONTROLLER_ROW = 'cr';
+GUI.CLASS_TOO_TALL = 'taller-than-window';
+GUI.CLASS_CLOSED = 'closed';
+GUI.CLASS_CLOSE_BUTTON = 'close-button';
+GUI.CLASS_CLOSE_TOP = 'close-top';
+GUI.CLASS_CLOSE_BOTTOM = 'close-bottom';
+GUI.CLASS_DRAG = 'drag';
+GUI.DEFAULT_WIDTH = 245;
+GUI.TEXT_CLOSED = 'Close Controls';
+GUI.TEXT_OPEN = 'Open Controls';
+GUI._keydownHandler = function (e) {
+  if (document.activeElement.type !== 'text' && (e.which === HIDE_KEY_CODE || e.keyCode === HIDE_KEY_CODE)) {
+    GUI.toggleHide();
+  }
+};
+dom.bind(window, 'keydown', GUI._keydownHandler, false);
+Common.extend(GUI.prototype,
+{
+  add: function add(object, property) {
+    return _add(this, object, property, {
+      factoryArgs: Array.prototype.slice.call(arguments, 2)
+    });
+  },
+  addColor: function addColor(object, property) {
+    return _add(this, object, property, {
+      color: true
+    });
+  },
+  remove: function remove(controller) {
+    this.__ul.removeChild(controller.__li);
+    this.__controllers.splice(this.__controllers.indexOf(controller), 1);
+    var _this = this;
+    Common.defer(function () {
+      _this.onResize();
+    });
+  },
+  destroy: function destroy() {
+    if (this.parent) {
+      throw new Error('Only the root GUI should be removed with .destroy(). ' + 'For subfolders, use gui.removeFolder(folder) instead.');
+    }
+    if (this.autoPlace) {
+      autoPlaceContainer.removeChild(this.domElement);
+    }
+    var _this = this;
+    Common.each(this.__folders, function (subfolder) {
+      _this.removeFolder(subfolder);
+    });
+    dom.unbind(window, 'keydown', GUI._keydownHandler, false);
+    removeListeners(this);
+  },
+  addFolder: function addFolder(name) {
+    if (this.__folders[name] !== undefined) {
+      throw new Error('You already have a folder in this GUI by the' + ' name "' + name + '"');
+    }
+    var newGuiParams = { name: name, parent: this };
+    newGuiParams.autoPlace = this.autoPlace;
+    if (this.load &&
+    this.load.folders &&
+    this.load.folders[name]) {
+      newGuiParams.closed = this.load.folders[name].closed;
+      newGuiParams.load = this.load.folders[name];
+    }
+    var gui = new GUI(newGuiParams);
+    this.__folders[name] = gui;
+    var li = addRow(this, gui.domElement);
+    dom.addClass(li, 'folder');
+    return gui;
+  },
+  removeFolder: function removeFolder(folder) {
+    this.__ul.removeChild(folder.domElement.parentElement);
+    delete this.__folders[folder.name];
+    if (this.load &&
+    this.load.folders &&
+    this.load.folders[folder.name]) {
+      delete this.load.folders[folder.name];
+    }
+    removeListeners(folder);
+    var _this = this;
+    Common.each(folder.__folders, function (subfolder) {
+      folder.removeFolder(subfolder);
+    });
+    Common.defer(function () {
+      _this.onResize();
+    });
+  },
+  open: function open() {
+    this.closed = false;
+  },
+  close: function close() {
+    this.closed = true;
+  },
+  hide: function hide() {
+    this.domElement.style.display = 'none';
+  },
+  show: function show() {
+    this.domElement.style.display = '';
+  },
+  onResize: function onResize() {
+    var root = this.getRoot();
+    if (root.scrollable) {
+      var top = dom.getOffset(root.__ul).top;
+      var h = 0;
+      Common.each(root.__ul.childNodes, function (node) {
+        if (!(root.autoPlace && node === root.__save_row)) {
+          h += dom.getHeight(node);
+        }
+      });
+      if (window.innerHeight - top - CLOSE_BUTTON_HEIGHT < h) {
+        dom.addClass(root.domElement, GUI.CLASS_TOO_TALL);
+        root.__ul.style.height = window.innerHeight - top - CLOSE_BUTTON_HEIGHT + 'px';
+      } else {
+        dom.removeClass(root.domElement, GUI.CLASS_TOO_TALL);
+        root.__ul.style.height = 'auto';
+      }
+    }
+    if (root.__resize_handle) {
+      Common.defer(function () {
+        root.__resize_handle.style.height = root.__ul.offsetHeight + 'px';
+      });
+    }
+    if (root.__closeButton) {
+      root.__closeButton.style.width = root.width + 'px';
+    }
+  },
+  onResizeDebounced: Common.debounce(function () {
+    this.onResize();
+  }, 50),
+  remember: function remember() {
+    if (Common.isUndefined(SAVE_DIALOGUE)) {
+      SAVE_DIALOGUE = new CenteredDiv();
+      SAVE_DIALOGUE.domElement.innerHTML = saveDialogContents;
+    }
+    if (this.parent) {
+      throw new Error('You can only call remember on a top level GUI.');
+    }
+    var _this = this;
+    Common.each(Array.prototype.slice.call(arguments), function (object) {
+      if (_this.__rememberedObjects.length === 0) {
+        addSaveMenu(_this);
+      }
+      if (_this.__rememberedObjects.indexOf(object) === -1) {
+        _this.__rememberedObjects.push(object);
+      }
+    });
+    if (this.autoPlace) {
+      setWidth(this, this.width);
+    }
+  },
+  getRoot: function getRoot() {
+    var gui = this;
+    while (gui.parent) {
+      gui = gui.parent;
+    }
+    return gui;
+  },
+  getSaveObject: function getSaveObject() {
+    var toReturn = this.load;
+    toReturn.closed = this.closed;
+    if (this.__rememberedObjects.length > 0) {
+      toReturn.preset = this.preset;
+      if (!toReturn.remembered) {
+        toReturn.remembered = {};
+      }
+      toReturn.remembered[this.preset] = getCurrentPreset(this);
+    }
+    toReturn.folders = {};
+    Common.each(this.__folders, function (element, key) {
+      toReturn.folders[key] = element.getSaveObject();
+    });
+    return toReturn;
+  },
+  save: function save() {
+    if (!this.load.remembered) {
+      this.load.remembered = {};
+    }
+    this.load.remembered[this.preset] = getCurrentPreset(this);
+    markPresetModified(this, false);
+    this.saveToLocalStorageIfPossible();
+  },
+  saveAs: function saveAs(presetName) {
+    if (!this.load.remembered) {
+      this.load.remembered = {};
+      this.load.remembered[DEFAULT_DEFAULT_PRESET_NAME] = getCurrentPreset(this, true);
+    }
+    this.load.remembered[presetName] = getCurrentPreset(this);
+    this.preset = presetName;
+    addPresetOption(this, presetName, true);
+    this.saveToLocalStorageIfPossible();
+  },
+  revert: function revert(gui) {
+    Common.each(this.__controllers, function (controller) {
+      if (!this.getRoot().load.remembered) {
+        controller.setValue(controller.initialValue);
+      } else {
+        recallSavedValue(gui || this.getRoot(), controller);
+      }
+      if (controller.__onFinishChange) {
+        controller.__onFinishChange.call(controller, controller.getValue());
+      }
+    }, this);
+    Common.each(this.__folders, function (folder) {
+      folder.revert(folder);
+    });
+    if (!gui) {
+      markPresetModified(this.getRoot(), false);
+    }
+  },
+  listen: function listen(controller) {
+    var init = this.__listening.length === 0;
+    this.__listening.push(controller);
+    if (init) {
+      updateDisplays(this.__listening);
+    }
+  },
+  updateDisplay: function updateDisplay() {
+    Common.each(this.__controllers, function (controller) {
+      controller.updateDisplay();
+    });
+    Common.each(this.__folders, function (folder) {
+      folder.updateDisplay();
+    });
+  }
+});
+function addRow(gui, newDom, liBefore) {
+  var li = document.createElement('li');
+  if (newDom) {
+    li.appendChild(newDom);
+  }
+  if (liBefore) {
+    gui.__ul.insertBefore(li, liBefore);
+  } else {
+    gui.__ul.appendChild(li);
+  }
+  gui.onResize();
+  return li;
+}
+function removeListeners(gui) {
+  dom.unbind(window, 'resize', gui.__resizeHandler);
+  if (gui.saveToLocalStorageIfPossible) {
+    dom.unbind(window, 'unload', gui.saveToLocalStorageIfPossible);
+  }
+}
+function markPresetModified(gui, modified) {
+  var opt = gui.__preset_select[gui.__preset_select.selectedIndex];
+  if (modified) {
+    opt.innerHTML = opt.value + '*';
+  } else {
+    opt.innerHTML = opt.value;
+  }
+}
+function augmentController(gui, li, controller) {
+  controller.__li = li;
+  controller.__gui = gui;
+  Common.extend(controller,                                   {
+    options: function options(_options) {
+      if (arguments.length > 1) {
+        var nextSibling = controller.__li.nextElementSibling;
+        controller.remove();
+        return _add(gui, controller.object, controller.property, {
+          before: nextSibling,
+          factoryArgs: [Common.toArray(arguments)]
+        });
+      }
+      if (Common.isArray(_options) || Common.isObject(_options)) {
+        var _nextSibling = controller.__li.nextElementSibling;
+        controller.remove();
+        return _add(gui, controller.object, controller.property, {
+          before: _nextSibling,
+          factoryArgs: [_options]
+        });
+      }
+    },
+    name: function name(_name) {
+      controller.__li.firstElementChild.firstElementChild.innerHTML = _name;
+      return controller;
+    },
+    listen: function listen() {
+      controller.__gui.listen(controller);
+      return controller;
+    },
+    remove: function remove() {
+      controller.__gui.remove(controller);
+      return controller;
+    }
+  });
+  if (controller instanceof NumberControllerSlider) {
+    var box = new NumberControllerBox(controller.object, controller.property, { min: controller.__min, max: controller.__max, step: controller.__step });
+    Common.each(['updateDisplay', 'onChange', 'onFinishChange', 'step', 'min', 'max'], function (method) {
+      var pc = controller[method];
+      var pb = box[method];
+      controller[method] = box[method] = function () {
+        var args = Array.prototype.slice.call(arguments);
+        pb.apply(box, args);
+        return pc.apply(controller, args);
+      };
+    });
+    dom.addClass(li, 'has-slider');
+    controller.domElement.insertBefore(box.domElement, controller.domElement.firstElementChild);
+  } else if (controller instanceof NumberControllerBox) {
+    var r = function r(returned) {
+      if (Common.isNumber(controller.__min) && Common.isNumber(controller.__max)) {
+        var oldName = controller.__li.firstElementChild.firstElementChild.innerHTML;
+        var wasListening = controller.__gui.__listening.indexOf(controller) > -1;
+        controller.remove();
+        var newController = _add(gui, controller.object, controller.property, {
+          before: controller.__li.nextElementSibling,
+          factoryArgs: [controller.__min, controller.__max, controller.__step]
+        });
+        newController.name(oldName);
+        if (wasListening) newController.listen();
+        return newController;
+      }
+      return returned;
+    };
+    controller.min = Common.compose(r, controller.min);
+    controller.max = Common.compose(r, controller.max);
+  } else if (controller instanceof BooleanController) {
+    dom.bind(li, 'click', function () {
+      dom.fakeEvent(controller.__checkbox, 'click');
+    });
+    dom.bind(controller.__checkbox, 'click', function (e) {
+      e.stopPropagation();
+    });
+  } else if (controller instanceof FunctionController) {
+    dom.bind(li, 'click', function () {
+      dom.fakeEvent(controller.__button, 'click');
+    });
+    dom.bind(li, 'mouseover', function () {
+      dom.addClass(controller.__button, 'hover');
+    });
+    dom.bind(li, 'mouseout', function () {
+      dom.removeClass(controller.__button, 'hover');
+    });
+  } else if (controller instanceof ColorController) {
+    dom.addClass(li, 'color');
+    controller.updateDisplay = Common.compose(function (val) {
+      li.style.borderLeftColor = controller.__color.toString();
+      return val;
+    }, controller.updateDisplay);
+    controller.updateDisplay();
+  }
+  controller.setValue = Common.compose(function (val) {
+    if (gui.getRoot().__preset_select && controller.isModified()) {
+      markPresetModified(gui.getRoot(), true);
+    }
+    return val;
+  }, controller.setValue);
+}
+function recallSavedValue(gui, controller) {
+  var root = gui.getRoot();
+  var matchedIndex = root.__rememberedObjects.indexOf(controller.object);
+  if (matchedIndex !== -1) {
+    var controllerMap = root.__rememberedObjectIndecesToControllers[matchedIndex];
+    if (controllerMap === undefined) {
+      controllerMap = {};
+      root.__rememberedObjectIndecesToControllers[matchedIndex] = controllerMap;
+    }
+    controllerMap[controller.property] = controller;
+    if (root.load && root.load.remembered) {
+      var presetMap = root.load.remembered;
+      var preset = void 0;
+      if (presetMap[gui.preset]) {
+        preset = presetMap[gui.preset];
+      } else if (presetMap[DEFAULT_DEFAULT_PRESET_NAME]) {
+        preset = presetMap[DEFAULT_DEFAULT_PRESET_NAME];
+      } else {
+        return;
+      }
+      if (preset[matchedIndex] && preset[matchedIndex][controller.property] !== undefined) {
+        var value = preset[matchedIndex][controller.property];
+        controller.initialValue = value;
+        controller.setValue(value);
+      }
+    }
+  }
+}
+function _add(gui, object, property, params) {
+  if (object[property] === undefined) {
+    throw new Error('Object "' + object + '" has no property "' + property + '"');
+  }
+  var controller = void 0;
+  if (params.color) {
+    controller = new ColorController(object, property);
+  } else {
+    var factoryArgs = [object, property].concat(params.factoryArgs);
+    controller = ControllerFactory.apply(gui, factoryArgs);
+  }
+  if (params.before instanceof Controller) {
+    params.before = params.before.__li;
+  }
+  recallSavedValue(gui, controller);
+  dom.addClass(controller.domElement, 'c');
+  var name = document.createElement('span');
+  dom.addClass(name, 'property-name');
+  name.innerHTML = controller.property;
+  var container = document.createElement('div');
+  container.appendChild(name);
+  container.appendChild(controller.domElement);
+  var li = addRow(gui, container, params.before);
+  dom.addClass(li, GUI.CLASS_CONTROLLER_ROW);
+  if (controller instanceof ColorController) {
+    dom.addClass(li, 'color');
+  } else {
+    dom.addClass(li, _typeof(controller.getValue()));
+  }
+  augmentController(gui, li, controller);
+  gui.__controllers.push(controller);
+  return controller;
+}
+function getLocalStorageHash(gui, key) {
+  return document.location.href + '.' + key;
+}
+function addPresetOption(gui, name, setSelected) {
+  var opt = document.createElement('option');
+  opt.innerHTML = name;
+  opt.value = name;
+  gui.__preset_select.appendChild(opt);
+  if (setSelected) {
+    gui.__preset_select.selectedIndex = gui.__preset_select.length - 1;
+  }
+}
+function showHideExplain(gui, explain) {
+  explain.style.display = gui.useLocalStorage ? 'block' : 'none';
+}
+function addSaveMenu(gui) {
+  var div = gui.__save_row = document.createElement('li');
+  dom.addClass(gui.domElement, 'has-save');
+  gui.__ul.insertBefore(div, gui.__ul.firstChild);
+  dom.addClass(div, 'save-row');
+  var gears = document.createElement('span');
+  gears.innerHTML = '&nbsp;';
+  dom.addClass(gears, 'button gears');
+  var button = document.createElement('span');
+  button.innerHTML = 'Save';
+  dom.addClass(button, 'button');
+  dom.addClass(button, 'save');
+  var button2 = document.createElement('span');
+  button2.innerHTML = 'New';
+  dom.addClass(button2, 'button');
+  dom.addClass(button2, 'save-as');
+  var button3 = document.createElement('span');
+  button3.innerHTML = 'Revert';
+  dom.addClass(button3, 'button');
+  dom.addClass(button3, 'revert');
+  var select = gui.__preset_select = document.createElement('select');
+  if (gui.load && gui.load.remembered) {
+    Common.each(gui.load.remembered, function (value, key) {
+      addPresetOption(gui, key, key === gui.preset);
+    });
+  } else {
+    addPresetOption(gui, DEFAULT_DEFAULT_PRESET_NAME, false);
+  }
+  dom.bind(select, 'change', function () {
+    for (var index = 0; index < gui.__preset_select.length; index++) {
+      gui.__preset_select[index].innerHTML = gui.__preset_select[index].value;
+    }
+    gui.preset = this.value;
+  });
+  div.appendChild(select);
+  div.appendChild(gears);
+  div.appendChild(button);
+  div.appendChild(button2);
+  div.appendChild(button3);
+  if (SUPPORTS_LOCAL_STORAGE) {
+    var explain = document.getElementById('dg-local-explain');
+    var localStorageCheckBox = document.getElementById('dg-local-storage');
+    var saveLocally = document.getElementById('dg-save-locally');
+    saveLocally.style.display = 'block';
+    if (localStorage.getItem(getLocalStorageHash(gui, 'isLocal')) === 'true') {
+      localStorageCheckBox.setAttribute('checked', 'checked');
+    }
+    showHideExplain(gui, explain);
+    dom.bind(localStorageCheckBox, 'change', function () {
+      gui.useLocalStorage = !gui.useLocalStorage;
+      showHideExplain(gui, explain);
+    });
+  }
+  var newConstructorTextArea = document.getElementById('dg-new-constructor');
+  dom.bind(newConstructorTextArea, 'keydown', function (e) {
+    if (e.metaKey && (e.which === 67 || e.keyCode === 67)) {
+      SAVE_DIALOGUE.hide();
+    }
+  });
+  dom.bind(gears, 'click', function () {
+    newConstructorTextArea.innerHTML = JSON.stringify(gui.getSaveObject(), undefined, 2);
+    SAVE_DIALOGUE.show();
+    newConstructorTextArea.focus();
+    newConstructorTextArea.select();
+  });
+  dom.bind(button, 'click', function () {
+    gui.save();
+  });
+  dom.bind(button2, 'click', function () {
+    var presetName = prompt('Enter a new preset name.');
+    if (presetName) {
+      gui.saveAs(presetName);
+    }
+  });
+  dom.bind(button3, 'click', function () {
+    gui.revert();
+  });
+}
+function addResizeHandle(gui) {
+  var pmouseX = void 0;
+  gui.__resize_handle = document.createElement('div');
+  Common.extend(gui.__resize_handle.style, {
+    width: '6px',
+    marginLeft: '-3px',
+    height: '200px',
+    cursor: 'ew-resize',
+    position: 'absolute'
+  });
+  function drag(e) {
+    e.preventDefault();
+    gui.width += pmouseX - e.clientX;
+    gui.onResize();
+    pmouseX = e.clientX;
+    return false;
+  }
+  function dragStop() {
+    dom.removeClass(gui.__closeButton, GUI.CLASS_DRAG);
+    dom.unbind(window, 'mousemove', drag);
+    dom.unbind(window, 'mouseup', dragStop);
+  }
+  function dragStart(e) {
+    e.preventDefault();
+    pmouseX = e.clientX;
+    dom.addClass(gui.__closeButton, GUI.CLASS_DRAG);
+    dom.bind(window, 'mousemove', drag);
+    dom.bind(window, 'mouseup', dragStop);
+    return false;
+  }
+  dom.bind(gui.__resize_handle, 'mousedown', dragStart);
+  dom.bind(gui.__closeButton, 'mousedown', dragStart);
+  gui.domElement.insertBefore(gui.__resize_handle, gui.domElement.firstElementChild);
+}
+function setWidth(gui, w) {
+  gui.domElement.style.width = w + 'px';
+  if (gui.__save_row && gui.autoPlace) {
+    gui.__save_row.style.width = w + 'px';
+  }
+  if (gui.__closeButton) {
+    gui.__closeButton.style.width = w + 'px';
+  }
+}
+function getCurrentPreset(gui, useInitialValues) {
+  var toReturn = {};
+  Common.each(gui.__rememberedObjects, function (val, index) {
+    var savedValues = {};
+    var controllerMap = gui.__rememberedObjectIndecesToControllers[index];
+    Common.each(controllerMap, function (controller, property) {
+      savedValues[property] = useInitialValues ? controller.initialValue : controller.getValue();
+    });
+    toReturn[index] = savedValues;
+  });
+  return toReturn;
+}
+function setPresetSelectIndex(gui) {
+  for (var index = 0; index < gui.__preset_select.length; index++) {
+    if (gui.__preset_select[index].value === gui.preset) {
+      gui.__preset_select.selectedIndex = index;
+    }
+  }
+}
+function updateDisplays(controllerArray) {
+  if (controllerArray.length !== 0) {
+    requestAnimationFrame$1.call(window, function () {
+      updateDisplays(controllerArray);
+    });
+  }
+  Common.each(controllerArray, function (c) {
+    c.updateDisplay();
+  });
+}
+
+var color = {
+  Color: Color,
+  math: ColorMath,
+  interpret: interpret
+};
+var controllers = {
+  Controller: Controller,
+  BooleanController: BooleanController,
+  OptionController: OptionController,
+  StringController: StringController,
+  NumberController: NumberController,
+  NumberControllerBox: NumberControllerBox,
+  NumberControllerSlider: NumberControllerSlider,
+  FunctionController: FunctionController,
+  ColorController: ColorController
+};
+var dom$1 = { dom: dom };
+var gui = { GUI: GUI };
+var GUI$1 = GUI;
+var index = {
+  color: color,
+  controllers: controllers,
+  dom: dom$1,
+  gui: gui,
+  GUI: GUI$1
+};
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (index);
+//# sourceMappingURL=dat.gui.module.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/filtered-vector/fvec.js":
+/*!**********************************************!*\
+  !*** ./node_modules/filtered-vector/fvec.js ***!
+  \**********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+module.exports = createFilteredVector
+
+var cubicHermite = __webpack_require__(/*! cubic-hermite */ "./node_modules/cubic-hermite/hermite.js")
+var bsearch = __webpack_require__(/*! binary-search-bounds */ "./node_modules/binary-search-bounds/search-bounds.js")
+
+function clamp(lo, hi, x) {
+  return Math.min(hi, Math.max(lo, x))
+}
+
+function FilteredVector(state0, velocity0, t0) {
+  this.dimension  = state0.length
+  this.bounds     = [ new Array(this.dimension), new Array(this.dimension) ]
+  for(var i=0; i<this.dimension; ++i) {
+    this.bounds[0][i] = -Infinity
+    this.bounds[1][i] = Infinity
+  }
+  this._state     = state0.slice().reverse()
+  this._velocity  = velocity0.slice().reverse()
+  this._time      = [ t0 ]
+  this._scratch   = [ state0.slice(), state0.slice(), state0.slice(), state0.slice(), state0.slice() ]
+}
+
+var proto = FilteredVector.prototype
+
+proto.flush = function(t) {
+  var idx = bsearch.gt(this._time, t) - 1
+  if(idx <= 0) {
+    return
+  }
+  this._time.splice(0, idx)
+  this._state.splice(0, idx * this.dimension)
+  this._velocity.splice(0, idx * this.dimension)
+}
+
+proto.curve = function(t) {
+  var time      = this._time
+  var n         = time.length
+  var idx       = bsearch.le(time, t)
+  var result    = this._scratch[0]
+  var state     = this._state
+  var velocity  = this._velocity
+  var d         = this.dimension
+  var bounds    = this.bounds
+  if(idx < 0) {
+    var ptr = d-1
+    for(var i=0; i<d; ++i, --ptr) {
+      result[i] = state[ptr]
+    }
+  } else if(idx >= n-1) {
+    var ptr = state.length-1
+    var tf = t - time[n-1]
+    for(var i=0; i<d; ++i, --ptr) {
+      result[i] = state[ptr] + tf * velocity[ptr]
+    }
+  } else {
+    var ptr = d * (idx+1) - 1
+    var t0  = time[idx]
+    var t1  = time[idx+1]
+    var dt  = (t1 - t0) || 1.0
+    var x0  = this._scratch[1]
+    var x1  = this._scratch[2]
+    var v0  = this._scratch[3]
+    var v1  = this._scratch[4]
+    var steady = true
+    for(var i=0; i<d; ++i, --ptr) {
+      x0[i] = state[ptr]
+      v0[i] = velocity[ptr] * dt
+      x1[i] = state[ptr+d]
+      v1[i] = velocity[ptr+d] * dt
+      steady = steady && (x0[i] === x1[i] && v0[i] === v1[i] && v0[i] === 0.0)
+    }
+    if(steady) {
+      for(var i=0; i<d; ++i) {
+        result[i] = x0[i]
+      }
+    } else {
+      cubicHermite(x0, v0, x1, v1, (t-t0)/dt, result)
+    }
+  }
+  var lo = bounds[0]
+  var hi = bounds[1]
+  for(var i=0; i<d; ++i) {
+    result[i] = clamp(lo[i], hi[i], result[i])
+  }
+  return result
+}
+
+proto.dcurve = function(t) {
+  var time     = this._time
+  var n        = time.length
+  var idx      = bsearch.le(time, t)
+  var result   = this._scratch[0]
+  var state    = this._state
+  var velocity = this._velocity
+  var d        = this.dimension
+  if(idx >= n-1) {
+    var ptr = state.length-1
+    var tf = t - time[n-1]
+    for(var i=0; i<d; ++i, --ptr) {
+      result[i] = velocity[ptr]
+    }
+  } else {
+    var ptr = d * (idx+1) - 1
+    var t0 = time[idx]
+    var t1 = time[idx+1]
+    var dt = (t1 - t0) || 1.0
+    var x0 = this._scratch[1]
+    var x1 = this._scratch[2]
+    var v0 = this._scratch[3]
+    var v1 = this._scratch[4]
+    var steady = true
+    for(var i=0; i<d; ++i, --ptr) {
+      x0[i] = state[ptr]
+      v0[i] = velocity[ptr] * dt
+      x1[i] = state[ptr+d]
+      v1[i] = velocity[ptr+d] * dt
+      steady = steady && (x0[i] === x1[i] && v0[i] === v1[i] && v0[i] === 0.0)
+    }
+    if(steady) {
+      for(var i=0; i<d; ++i) {
+        result[i] = 0.0
+      }
+    } else {
+      cubicHermite.derivative(x0, v0, x1, v1, (t-t0)/dt, result)
+      for(var i=0; i<d; ++i) {
+        result[i] /= dt
+      }
+    }
+  }
+  return result
+}
+
+proto.lastT = function() {
+  var time = this._time
+  return time[time.length-1]
+}
+
+proto.stable = function() {
+  var velocity = this._velocity
+  var ptr = velocity.length
+  for(var i=this.dimension-1; i>=0; --i) {
+    if(velocity[--ptr]) {
+      return false
+    }
+  }
+  return true
+}
+
+proto.jump = function(t) {
+  var t0 = this.lastT()
+  var d  = this.dimension
+  if(t < t0 || arguments.length !== d+1) {
+    return
+  }
+  var state     = this._state
+  var velocity  = this._velocity
+  var ptr       = state.length-this.dimension
+  var bounds    = this.bounds
+  var lo        = bounds[0]
+  var hi        = bounds[1]
+  this._time.push(t0, t)
+  for(var j=0; j<2; ++j) {
+    for(var i=0; i<d; ++i) {
+      state.push(state[ptr++])
+      velocity.push(0)
+    }
+  }
+  this._time.push(t)
+  for(var i=d; i>0; --i) {
+    state.push(clamp(lo[i-1], hi[i-1], arguments[i]))
+    velocity.push(0)
+  }
+}
+
+proto.push = function(t) {
+  var t0 = this.lastT()
+  var d  = this.dimension
+  if(t < t0 || arguments.length !== d+1) {
+    return
+  }
+  var state     = this._state
+  var velocity  = this._velocity
+  var ptr       = state.length-this.dimension
+  var dt        = t - t0
+  var bounds    = this.bounds
+  var lo        = bounds[0]
+  var hi        = bounds[1]
+  var sf        = (dt > 1e-6) ? 1/dt : 0
+  this._time.push(t)
+  for(var i=d; i>0; --i) {
+    var xc = clamp(lo[i-1], hi[i-1], arguments[i])
+    state.push(xc)
+    velocity.push((xc - state[ptr++]) * sf)
+  }
+}
+
+proto.set = function(t) {
+  var d = this.dimension
+  if(t < this.lastT() || arguments.length !== d+1) {
+    return
+  }
+  var state     = this._state
+  var velocity  = this._velocity
+  var bounds    = this.bounds
+  var lo        = bounds[0]
+  var hi        = bounds[1]
+  this._time.push(t)
+  for(var i=d; i>0; --i) {
+    state.push(clamp(lo[i-1], hi[i-1], arguments[i]))
+    velocity.push(0)
+  }
+}
+
+proto.move = function(t) {
+  var t0 = this.lastT()
+  var d  = this.dimension
+  if(t <= t0 || arguments.length !== d+1) {
+    return
+  }
+  var state    = this._state
+  var velocity = this._velocity
+  var statePtr = state.length - this.dimension
+  var bounds   = this.bounds
+  var lo       = bounds[0]
+  var hi       = bounds[1]
+  var dt       = t - t0
+  var sf       = (dt > 1e-6) ? 1/dt : 0.0
+  this._time.push(t)
+  for(var i=d; i>0; --i) {
+    var dx = arguments[i]
+    state.push(clamp(lo[i-1], hi[i-1], state[statePtr++] + dx))
+    velocity.push(dx * sf)
+  }
+}
+
+proto.idle = function(t) {
+  var t0 = this.lastT()
+  if(t < t0) {
+    return
+  }
+  var d        = this.dimension
+  var state    = this._state
+  var velocity = this._velocity
+  var statePtr = state.length-d
+  var bounds   = this.bounds
+  var lo       = bounds[0]
+  var hi       = bounds[1]
+  var dt       = t - t0
+  this._time.push(t)
+  for(var i=d-1; i>=0; --i) {
+    state.push(clamp(lo[i], hi[i], state[statePtr] + dt * velocity[statePtr]))
+    velocity.push(0)
+    statePtr += 1
+  }
+}
+
+function getZero(d) {
+  var result = new Array(d)
+  for(var i=0; i<d; ++i) {
+    result[i] = 0.0
+  }
+  return result
+}
+
+function createFilteredVector(initState, initVelocity, initTime) {
+  switch(arguments.length) {
+    case 0:
+      return new FilteredVector([0], [0], 0)
+    case 1:
+      if(typeof initState === 'number') {
+        var zero = getZero(initState)
+        return new FilteredVector(zero, zero, 0)
+      } else {
+        return new FilteredVector(initState, getZero(initState.length), 0)
+      }
+    case 2:
+      if(typeof initVelocity === 'number') {
+        var zero = getZero(initState.length)
+        return new FilteredVector(initState, zero, +initVelocity)
+      } else {
+        initTime = 0
+      }
+    case 3:
+      if(initState.length !== initVelocity.length) {
+        throw new Error('state and velocity lengths must match')
+      }
+      return new FilteredVector(initState, initVelocity, initTime)
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/clone.js":
+/*!***************************************!*\
+  !*** ./node_modules/gl-mat4/clone.js ***!
+  \***************************************/
+/***/ ((module) => {
+
+module.exports = clone;
+
+/**
+ * Creates a new mat4 initialized with values from an existing matrix
+ *
+ * @param {mat4} a matrix to clone
+ * @returns {mat4} a new 4x4 matrix
+ */
+function clone(a) {
+    var out = new Float32Array(16);
+    out[0] = a[0];
+    out[1] = a[1];
+    out[2] = a[2];
+    out[3] = a[3];
+    out[4] = a[4];
+    out[5] = a[5];
+    out[6] = a[6];
+    out[7] = a[7];
+    out[8] = a[8];
+    out[9] = a[9];
+    out[10] = a[10];
+    out[11] = a[11];
+    out[12] = a[12];
+    out[13] = a[13];
+    out[14] = a[14];
+    out[15] = a[15];
+    return out;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/create.js":
+/*!****************************************!*\
+  !*** ./node_modules/gl-mat4/create.js ***!
+  \****************************************/
+/***/ ((module) => {
+
+module.exports = create;
+
+/**
+ * Creates a new identity mat4
+ *
+ * @returns {mat4} a new 4x4 matrix
+ */
+function create() {
+    var out = new Float32Array(16);
+    out[0] = 1;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+    out[4] = 0;
+    out[5] = 1;
+    out[6] = 0;
+    out[7] = 0;
+    out[8] = 0;
+    out[9] = 0;
+    out[10] = 1;
+    out[11] = 0;
+    out[12] = 0;
+    out[13] = 0;
+    out[14] = 0;
+    out[15] = 1;
+    return out;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/determinant.js":
+/*!*********************************************!*\
+  !*** ./node_modules/gl-mat4/determinant.js ***!
+  \*********************************************/
+/***/ ((module) => {
+
+module.exports = determinant;
+
+/**
+ * Calculates the determinant of a mat4
+ *
+ * @param {mat4} a the source matrix
+ * @returns {Number} determinant of a
+ */
+function determinant(a) {
+    var a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3],
+        a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7],
+        a20 = a[8], a21 = a[9], a22 = a[10], a23 = a[11],
+        a30 = a[12], a31 = a[13], a32 = a[14], a33 = a[15],
+
+        b00 = a00 * a11 - a01 * a10,
+        b01 = a00 * a12 - a02 * a10,
+        b02 = a00 * a13 - a03 * a10,
+        b03 = a01 * a12 - a02 * a11,
+        b04 = a01 * a13 - a03 * a11,
+        b05 = a02 * a13 - a03 * a12,
+        b06 = a20 * a31 - a21 * a30,
+        b07 = a20 * a32 - a22 * a30,
+        b08 = a20 * a33 - a23 * a30,
+        b09 = a21 * a32 - a22 * a31,
+        b10 = a21 * a33 - a23 * a31,
+        b11 = a22 * a33 - a23 * a32;
+
+    // Calculate the determinant
+    return b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/fromQuat.js":
+/*!******************************************!*\
+  !*** ./node_modules/gl-mat4/fromQuat.js ***!
+  \******************************************/
+/***/ ((module) => {
+
+module.exports = fromQuat;
+
+/**
+ * Creates a matrix from a quaternion rotation.
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {quat4} q Rotation quaternion
+ * @returns {mat4} out
+ */
+function fromQuat(out, q) {
+    var x = q[0], y = q[1], z = q[2], w = q[3],
+        x2 = x + x,
+        y2 = y + y,
+        z2 = z + z,
+
+        xx = x * x2,
+        yx = y * x2,
+        yy = y * y2,
+        zx = z * x2,
+        zy = z * y2,
+        zz = z * z2,
+        wx = w * x2,
+        wy = w * y2,
+        wz = w * z2;
+
+    out[0] = 1 - yy - zz;
+    out[1] = yx + wz;
+    out[2] = zx - wy;
+    out[3] = 0;
+
+    out[4] = yx - wz;
+    out[5] = 1 - xx - zz;
+    out[6] = zy + wx;
+    out[7] = 0;
+
+    out[8] = zx + wy;
+    out[9] = zy - wx;
+    out[10] = 1 - xx - yy;
+    out[11] = 0;
+
+    out[12] = 0;
+    out[13] = 0;
+    out[14] = 0;
+    out[15] = 1;
+
+    return out;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/fromRotationTranslation.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/gl-mat4/fromRotationTranslation.js ***!
+  \*********************************************************/
+/***/ ((module) => {
+
+module.exports = fromRotationTranslation;
+
+/**
+ * Creates a matrix from a quaternion rotation and vector translation
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.translate(dest, vec);
+ *     var quatMat = mat4.create();
+ *     quat4.toMat4(quat, quatMat);
+ *     mat4.multiply(dest, quatMat);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {quat4} q Rotation quaternion
+ * @param {vec3} v Translation vector
+ * @returns {mat4} out
+ */
+function fromRotationTranslation(out, q, v) {
+    // Quaternion math
+    var x = q[0], y = q[1], z = q[2], w = q[3],
+        x2 = x + x,
+        y2 = y + y,
+        z2 = z + z,
+
+        xx = x * x2,
+        xy = x * y2,
+        xz = x * z2,
+        yy = y * y2,
+        yz = y * z2,
+        zz = z * z2,
+        wx = w * x2,
+        wy = w * y2,
+        wz = w * z2;
+
+    out[0] = 1 - (yy + zz);
+    out[1] = xy + wz;
+    out[2] = xz - wy;
+    out[3] = 0;
+    out[4] = xy - wz;
+    out[5] = 1 - (xx + zz);
+    out[6] = yz + wx;
+    out[7] = 0;
+    out[8] = xz + wy;
+    out[9] = yz - wx;
+    out[10] = 1 - (xx + yy);
+    out[11] = 0;
+    out[12] = v[0];
+    out[13] = v[1];
+    out[14] = v[2];
+    out[15] = 1;
+    
+    return out;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/identity.js":
+/*!******************************************!*\
+  !*** ./node_modules/gl-mat4/identity.js ***!
+  \******************************************/
+/***/ ((module) => {
+
+module.exports = identity;
+
+/**
+ * Set a mat4 to the identity matrix
+ *
+ * @param {mat4} out the receiving matrix
+ * @returns {mat4} out
+ */
+function identity(out) {
+    out[0] = 1;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+    out[4] = 0;
+    out[5] = 1;
+    out[6] = 0;
+    out[7] = 0;
+    out[8] = 0;
+    out[9] = 0;
+    out[10] = 1;
+    out[11] = 0;
+    out[12] = 0;
+    out[13] = 0;
+    out[14] = 0;
+    out[15] = 1;
+    return out;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/invert.js":
+/*!****************************************!*\
+  !*** ./node_modules/gl-mat4/invert.js ***!
+  \****************************************/
+/***/ ((module) => {
+
+module.exports = invert;
+
+/**
+ * Inverts a mat4
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {mat4} a the source matrix
+ * @returns {mat4} out
+ */
+function invert(out, a) {
+    var a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3],
+        a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7],
+        a20 = a[8], a21 = a[9], a22 = a[10], a23 = a[11],
+        a30 = a[12], a31 = a[13], a32 = a[14], a33 = a[15],
+
+        b00 = a00 * a11 - a01 * a10,
+        b01 = a00 * a12 - a02 * a10,
+        b02 = a00 * a13 - a03 * a10,
+        b03 = a01 * a12 - a02 * a11,
+        b04 = a01 * a13 - a03 * a11,
+        b05 = a02 * a13 - a03 * a12,
+        b06 = a20 * a31 - a21 * a30,
+        b07 = a20 * a32 - a22 * a30,
+        b08 = a20 * a33 - a23 * a30,
+        b09 = a21 * a32 - a22 * a31,
+        b10 = a21 * a33 - a23 * a31,
+        b11 = a22 * a33 - a23 * a32,
+
+        // Calculate the determinant
+        det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+
+    if (!det) { 
+        return null; 
+    }
+    det = 1.0 / det;
+
+    out[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det;
+    out[1] = (a02 * b10 - a01 * b11 - a03 * b09) * det;
+    out[2] = (a31 * b05 - a32 * b04 + a33 * b03) * det;
+    out[3] = (a22 * b04 - a21 * b05 - a23 * b03) * det;
+    out[4] = (a12 * b08 - a10 * b11 - a13 * b07) * det;
+    out[5] = (a00 * b11 - a02 * b08 + a03 * b07) * det;
+    out[6] = (a32 * b02 - a30 * b05 - a33 * b01) * det;
+    out[7] = (a20 * b05 - a22 * b02 + a23 * b01) * det;
+    out[8] = (a10 * b10 - a11 * b08 + a13 * b06) * det;
+    out[9] = (a01 * b08 - a00 * b10 - a03 * b06) * det;
+    out[10] = (a30 * b04 - a31 * b02 + a33 * b00) * det;
+    out[11] = (a21 * b02 - a20 * b04 - a23 * b00) * det;
+    out[12] = (a11 * b07 - a10 * b09 - a12 * b06) * det;
+    out[13] = (a00 * b09 - a01 * b07 + a02 * b06) * det;
+    out[14] = (a31 * b01 - a30 * b03 - a32 * b00) * det;
+    out[15] = (a20 * b03 - a21 * b01 + a22 * b00) * det;
+
+    return out;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/lookAt.js":
+/*!****************************************!*\
+  !*** ./node_modules/gl-mat4/lookAt.js ***!
+  \****************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var identity = __webpack_require__(/*! ./identity */ "./node_modules/gl-mat4/identity.js");
+
+module.exports = lookAt;
+
+/**
+ * Generates a look-at matrix with the given eye position, focal point, and up axis
+ *
+ * @param {mat4} out mat4 frustum matrix will be written into
+ * @param {vec3} eye Position of the viewer
+ * @param {vec3} center Point the viewer is looking at
+ * @param {vec3} up vec3 pointing up
+ * @returns {mat4} out
+ */
+function lookAt(out, eye, center, up) {
+    var x0, x1, x2, y0, y1, y2, z0, z1, z2, len,
+        eyex = eye[0],
+        eyey = eye[1],
+        eyez = eye[2],
+        upx = up[0],
+        upy = up[1],
+        upz = up[2],
+        centerx = center[0],
+        centery = center[1],
+        centerz = center[2];
+
+    if (Math.abs(eyex - centerx) < 0.000001 &&
+        Math.abs(eyey - centery) < 0.000001 &&
+        Math.abs(eyez - centerz) < 0.000001) {
+        return identity(out);
+    }
+
+    z0 = eyex - centerx;
+    z1 = eyey - centery;
+    z2 = eyez - centerz;
+
+    len = 1 / Math.sqrt(z0 * z0 + z1 * z1 + z2 * z2);
+    z0 *= len;
+    z1 *= len;
+    z2 *= len;
+
+    x0 = upy * z2 - upz * z1;
+    x1 = upz * z0 - upx * z2;
+    x2 = upx * z1 - upy * z0;
+    len = Math.sqrt(x0 * x0 + x1 * x1 + x2 * x2);
+    if (!len) {
+        x0 = 0;
+        x1 = 0;
+        x2 = 0;
+    } else {
+        len = 1 / len;
+        x0 *= len;
+        x1 *= len;
+        x2 *= len;
+    }
+
+    y0 = z1 * x2 - z2 * x1;
+    y1 = z2 * x0 - z0 * x2;
+    y2 = z0 * x1 - z1 * x0;
+
+    len = Math.sqrt(y0 * y0 + y1 * y1 + y2 * y2);
+    if (!len) {
+        y0 = 0;
+        y1 = 0;
+        y2 = 0;
+    } else {
+        len = 1 / len;
+        y0 *= len;
+        y1 *= len;
+        y2 *= len;
+    }
+
+    out[0] = x0;
+    out[1] = y0;
+    out[2] = z0;
+    out[3] = 0;
+    out[4] = x1;
+    out[5] = y1;
+    out[6] = z1;
+    out[7] = 0;
+    out[8] = x2;
+    out[9] = y2;
+    out[10] = z2;
+    out[11] = 0;
+    out[12] = -(x0 * eyex + x1 * eyey + x2 * eyez);
+    out[13] = -(y0 * eyex + y1 * eyey + y2 * eyez);
+    out[14] = -(z0 * eyex + z1 * eyey + z2 * eyez);
+    out[15] = 1;
+
+    return out;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/multiply.js":
+/*!******************************************!*\
+  !*** ./node_modules/gl-mat4/multiply.js ***!
+  \******************************************/
+/***/ ((module) => {
+
+module.exports = multiply;
+
+/**
+ * Multiplies two mat4's
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {mat4} a the first operand
+ * @param {mat4} b the second operand
+ * @returns {mat4} out
+ */
+function multiply(out, a, b) {
+    var a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3],
+        a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7],
+        a20 = a[8], a21 = a[9], a22 = a[10], a23 = a[11],
+        a30 = a[12], a31 = a[13], a32 = a[14], a33 = a[15];
+
+    // Cache only the current line of the second matrix
+    var b0  = b[0], b1 = b[1], b2 = b[2], b3 = b[3];  
+    out[0] = b0*a00 + b1*a10 + b2*a20 + b3*a30;
+    out[1] = b0*a01 + b1*a11 + b2*a21 + b3*a31;
+    out[2] = b0*a02 + b1*a12 + b2*a22 + b3*a32;
+    out[3] = b0*a03 + b1*a13 + b2*a23 + b3*a33;
+
+    b0 = b[4]; b1 = b[5]; b2 = b[6]; b3 = b[7];
+    out[4] = b0*a00 + b1*a10 + b2*a20 + b3*a30;
+    out[5] = b0*a01 + b1*a11 + b2*a21 + b3*a31;
+    out[6] = b0*a02 + b1*a12 + b2*a22 + b3*a32;
+    out[7] = b0*a03 + b1*a13 + b2*a23 + b3*a33;
+
+    b0 = b[8]; b1 = b[9]; b2 = b[10]; b3 = b[11];
+    out[8] = b0*a00 + b1*a10 + b2*a20 + b3*a30;
+    out[9] = b0*a01 + b1*a11 + b2*a21 + b3*a31;
+    out[10] = b0*a02 + b1*a12 + b2*a22 + b3*a32;
+    out[11] = b0*a03 + b1*a13 + b2*a23 + b3*a33;
+
+    b0 = b[12]; b1 = b[13]; b2 = b[14]; b3 = b[15];
+    out[12] = b0*a00 + b1*a10 + b2*a20 + b3*a30;
+    out[13] = b0*a01 + b1*a11 + b2*a21 + b3*a31;
+    out[14] = b0*a02 + b1*a12 + b2*a22 + b3*a32;
+    out[15] = b0*a03 + b1*a13 + b2*a23 + b3*a33;
+    return out;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/rotate.js":
+/*!****************************************!*\
+  !*** ./node_modules/gl-mat4/rotate.js ***!
+  \****************************************/
+/***/ ((module) => {
+
+module.exports = rotate;
+
+/**
+ * Rotates a mat4 by the given angle
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {mat4} a the matrix to rotate
+ * @param {Number} rad the angle to rotate the matrix by
+ * @param {vec3} axis the axis to rotate around
+ * @returns {mat4} out
+ */
+function rotate(out, a, rad, axis) {
+    var x = axis[0], y = axis[1], z = axis[2],
+        len = Math.sqrt(x * x + y * y + z * z),
+        s, c, t,
+        a00, a01, a02, a03,
+        a10, a11, a12, a13,
+        a20, a21, a22, a23,
+        b00, b01, b02,
+        b10, b11, b12,
+        b20, b21, b22;
+
+    if (Math.abs(len) < 0.000001) { return null; }
+    
+    len = 1 / len;
+    x *= len;
+    y *= len;
+    z *= len;
+
+    s = Math.sin(rad);
+    c = Math.cos(rad);
+    t = 1 - c;
+
+    a00 = a[0]; a01 = a[1]; a02 = a[2]; a03 = a[3];
+    a10 = a[4]; a11 = a[5]; a12 = a[6]; a13 = a[7];
+    a20 = a[8]; a21 = a[9]; a22 = a[10]; a23 = a[11];
+
+    // Construct the elements of the rotation matrix
+    b00 = x * x * t + c; b01 = y * x * t + z * s; b02 = z * x * t - y * s;
+    b10 = x * y * t - z * s; b11 = y * y * t + c; b12 = z * y * t + x * s;
+    b20 = x * z * t + y * s; b21 = y * z * t - x * s; b22 = z * z * t + c;
+
+    // Perform rotation-specific matrix multiplication
+    out[0] = a00 * b00 + a10 * b01 + a20 * b02;
+    out[1] = a01 * b00 + a11 * b01 + a21 * b02;
+    out[2] = a02 * b00 + a12 * b01 + a22 * b02;
+    out[3] = a03 * b00 + a13 * b01 + a23 * b02;
+    out[4] = a00 * b10 + a10 * b11 + a20 * b12;
+    out[5] = a01 * b10 + a11 * b11 + a21 * b12;
+    out[6] = a02 * b10 + a12 * b11 + a22 * b12;
+    out[7] = a03 * b10 + a13 * b11 + a23 * b12;
+    out[8] = a00 * b20 + a10 * b21 + a20 * b22;
+    out[9] = a01 * b20 + a11 * b21 + a21 * b22;
+    out[10] = a02 * b20 + a12 * b21 + a22 * b22;
+    out[11] = a03 * b20 + a13 * b21 + a23 * b22;
+
+    if (a !== out) { // If the source and destination differ, copy the unchanged last row
+        out[12] = a[12];
+        out[13] = a[13];
+        out[14] = a[14];
+        out[15] = a[15];
+    }
+    return out;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/rotateX.js":
+/*!*****************************************!*\
+  !*** ./node_modules/gl-mat4/rotateX.js ***!
+  \*****************************************/
+/***/ ((module) => {
+
+module.exports = rotateX;
+
+/**
+ * Rotates a matrix by the given angle around the X axis
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {mat4} a the matrix to rotate
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat4} out
+ */
+function rotateX(out, a, rad) {
+    var s = Math.sin(rad),
+        c = Math.cos(rad),
+        a10 = a[4],
+        a11 = a[5],
+        a12 = a[6],
+        a13 = a[7],
+        a20 = a[8],
+        a21 = a[9],
+        a22 = a[10],
+        a23 = a[11];
+
+    if (a !== out) { // If the source and destination differ, copy the unchanged rows
+        out[0]  = a[0];
+        out[1]  = a[1];
+        out[2]  = a[2];
+        out[3]  = a[3];
+        out[12] = a[12];
+        out[13] = a[13];
+        out[14] = a[14];
+        out[15] = a[15];
+    }
+
+    // Perform axis-specific matrix multiplication
+    out[4] = a10 * c + a20 * s;
+    out[5] = a11 * c + a21 * s;
+    out[6] = a12 * c + a22 * s;
+    out[7] = a13 * c + a23 * s;
+    out[8] = a20 * c - a10 * s;
+    out[9] = a21 * c - a11 * s;
+    out[10] = a22 * c - a12 * s;
+    out[11] = a23 * c - a13 * s;
+    return out;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/rotateY.js":
+/*!*****************************************!*\
+  !*** ./node_modules/gl-mat4/rotateY.js ***!
+  \*****************************************/
+/***/ ((module) => {
+
+module.exports = rotateY;
+
+/**
+ * Rotates a matrix by the given angle around the Y axis
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {mat4} a the matrix to rotate
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat4} out
+ */
+function rotateY(out, a, rad) {
+    var s = Math.sin(rad),
+        c = Math.cos(rad),
+        a00 = a[0],
+        a01 = a[1],
+        a02 = a[2],
+        a03 = a[3],
+        a20 = a[8],
+        a21 = a[9],
+        a22 = a[10],
+        a23 = a[11];
+
+    if (a !== out) { // If the source and destination differ, copy the unchanged rows
+        out[4]  = a[4];
+        out[5]  = a[5];
+        out[6]  = a[6];
+        out[7]  = a[7];
+        out[12] = a[12];
+        out[13] = a[13];
+        out[14] = a[14];
+        out[15] = a[15];
+    }
+
+    // Perform axis-specific matrix multiplication
+    out[0] = a00 * c - a20 * s;
+    out[1] = a01 * c - a21 * s;
+    out[2] = a02 * c - a22 * s;
+    out[3] = a03 * c - a23 * s;
+    out[8] = a00 * s + a20 * c;
+    out[9] = a01 * s + a21 * c;
+    out[10] = a02 * s + a22 * c;
+    out[11] = a03 * s + a23 * c;
+    return out;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/rotateZ.js":
+/*!*****************************************!*\
+  !*** ./node_modules/gl-mat4/rotateZ.js ***!
+  \*****************************************/
+/***/ ((module) => {
+
+module.exports = rotateZ;
+
+/**
+ * Rotates a matrix by the given angle around the Z axis
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {mat4} a the matrix to rotate
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat4} out
+ */
+function rotateZ(out, a, rad) {
+    var s = Math.sin(rad),
+        c = Math.cos(rad),
+        a00 = a[0],
+        a01 = a[1],
+        a02 = a[2],
+        a03 = a[3],
+        a10 = a[4],
+        a11 = a[5],
+        a12 = a[6],
+        a13 = a[7];
+
+    if (a !== out) { // If the source and destination differ, copy the unchanged last row
+        out[8]  = a[8];
+        out[9]  = a[9];
+        out[10] = a[10];
+        out[11] = a[11];
+        out[12] = a[12];
+        out[13] = a[13];
+        out[14] = a[14];
+        out[15] = a[15];
+    }
+
+    // Perform axis-specific matrix multiplication
+    out[0] = a00 * c + a10 * s;
+    out[1] = a01 * c + a11 * s;
+    out[2] = a02 * c + a12 * s;
+    out[3] = a03 * c + a13 * s;
+    out[4] = a10 * c - a00 * s;
+    out[5] = a11 * c - a01 * s;
+    out[6] = a12 * c - a02 * s;
+    out[7] = a13 * c - a03 * s;
+    return out;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/scale.js":
+/*!***************************************!*\
+  !*** ./node_modules/gl-mat4/scale.js ***!
+  \***************************************/
+/***/ ((module) => {
+
+module.exports = scale;
+
+/**
+ * Scales the mat4 by the dimensions in the given vec3
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {mat4} a the matrix to scale
+ * @param {vec3} v the vec3 to scale the matrix by
+ * @returns {mat4} out
+ **/
+function scale(out, a, v) {
+    var x = v[0], y = v[1], z = v[2];
+
+    out[0] = a[0] * x;
+    out[1] = a[1] * x;
+    out[2] = a[2] * x;
+    out[3] = a[3] * x;
+    out[4] = a[4] * y;
+    out[5] = a[5] * y;
+    out[6] = a[6] * y;
+    out[7] = a[7] * y;
+    out[8] = a[8] * z;
+    out[9] = a[9] * z;
+    out[10] = a[10] * z;
+    out[11] = a[11] * z;
+    out[12] = a[12];
+    out[13] = a[13];
+    out[14] = a[14];
+    out[15] = a[15];
+    return out;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/translate.js":
+/*!*******************************************!*\
+  !*** ./node_modules/gl-mat4/translate.js ***!
+  \*******************************************/
+/***/ ((module) => {
+
+module.exports = translate;
+
+/**
+ * Translate a mat4 by the given vector
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {mat4} a the matrix to translate
+ * @param {vec3} v vector to translate by
+ * @returns {mat4} out
+ */
+function translate(out, a, v) {
+    var x = v[0], y = v[1], z = v[2],
+        a00, a01, a02, a03,
+        a10, a11, a12, a13,
+        a20, a21, a22, a23;
+
+    if (a === out) {
+        out[12] = a[0] * x + a[4] * y + a[8] * z + a[12];
+        out[13] = a[1] * x + a[5] * y + a[9] * z + a[13];
+        out[14] = a[2] * x + a[6] * y + a[10] * z + a[14];
+        out[15] = a[3] * x + a[7] * y + a[11] * z + a[15];
+    } else {
+        a00 = a[0]; a01 = a[1]; a02 = a[2]; a03 = a[3];
+        a10 = a[4]; a11 = a[5]; a12 = a[6]; a13 = a[7];
+        a20 = a[8]; a21 = a[9]; a22 = a[10]; a23 = a[11];
+
+        out[0] = a00; out[1] = a01; out[2] = a02; out[3] = a03;
+        out[4] = a10; out[5] = a11; out[6] = a12; out[7] = a13;
+        out[8] = a20; out[9] = a21; out[10] = a22; out[11] = a23;
+
+        out[12] = a00 * x + a10 * y + a20 * z + a[12];
+        out[13] = a01 * x + a11 * y + a21 * z + a[13];
+        out[14] = a02 * x + a12 * y + a22 * z + a[14];
+        out[15] = a03 * x + a13 * y + a23 * z + a[15];
+    }
+
+    return out;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-mat4/transpose.js":
+/*!*******************************************!*\
+  !*** ./node_modules/gl-mat4/transpose.js ***!
+  \*******************************************/
+/***/ ((module) => {
+
+module.exports = transpose;
+
+/**
+ * Transpose the values of a mat4
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {mat4} a the source matrix
+ * @returns {mat4} out
+ */
+function transpose(out, a) {
+    // If we are transposing ourselves we can skip a few steps but have to cache some values
+    if (out === a) {
+        var a01 = a[1], a02 = a[2], a03 = a[3],
+            a12 = a[6], a13 = a[7],
+            a23 = a[11];
+
+        out[1] = a[4];
+        out[2] = a[8];
+        out[3] = a[12];
+        out[4] = a01;
+        out[6] = a[9];
+        out[7] = a[13];
+        out[8] = a02;
+        out[9] = a12;
+        out[11] = a[14];
+        out[12] = a03;
+        out[13] = a13;
+        out[14] = a23;
+    } else {
+        out[0] = a[0];
+        out[1] = a[4];
+        out[2] = a[8];
+        out[3] = a[12];
+        out[4] = a[1];
+        out[5] = a[5];
+        out[6] = a[9];
+        out[7] = a[13];
+        out[8] = a[2];
+        out[9] = a[6];
+        out[10] = a[10];
+        out[11] = a[14];
+        out[12] = a[3];
+        out[13] = a[7];
+        out[14] = a[11];
+        out[15] = a[15];
+    }
+    
+    return out;
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-matrix/esm/common.js":
+/*!**********************************************!*\
+  !*** ./node_modules/gl-matrix/esm/common.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "EPSILON": () => (/* binding */ EPSILON),
+/* harmony export */   "ARRAY_TYPE": () => (/* binding */ ARRAY_TYPE),
+/* harmony export */   "RANDOM": () => (/* binding */ RANDOM),
+/* harmony export */   "setMatrixArrayType": () => (/* binding */ setMatrixArrayType),
+/* harmony export */   "toRadian": () => (/* binding */ toRadian),
+/* harmony export */   "equals": () => (/* binding */ equals)
+/* harmony export */ });
+/**
+ * Common utilities
+ * @module glMatrix
+ */
+// Configuration Constants
+var EPSILON = 0.000001;
+var ARRAY_TYPE = typeof Float32Array !== 'undefined' ? Float32Array : Array;
+var RANDOM = Math.random;
+/**
+ * Sets the type of array used when creating new vectors and matrices
+ *
+ * @param {Float32ArrayConstructor | ArrayConstructor} type Array type, such as Float32Array or Array
+ */
+
+function setMatrixArrayType(type) {
+  ARRAY_TYPE = type;
+}
+var degree = Math.PI / 180;
+/**
+ * Convert Degree To Radian
+ *
+ * @param {Number} a Angle in Degrees
+ */
+
+function toRadian(a) {
+  return a * degree;
+}
+/**
+ * Tests whether or not the arguments have approximately the same value, within an absolute
+ * or relative tolerance of glMatrix.EPSILON (an absolute tolerance is used for values less
+ * than or equal to 1.0, and a relative tolerance is used for larger values)
+ *
+ * @param {Number} a The first number to test.
+ * @param {Number} b The second number to test.
+ * @returns {Boolean} True if the numbers are approximately equal, false otherwise.
+ */
+
+function equals(a, b) {
+  return Math.abs(a - b) <= EPSILON * Math.max(1.0, Math.abs(a), Math.abs(b));
+}
+if (!Math.hypot) Math.hypot = function () {
+  var y = 0,
+      i = arguments.length;
+
+  while (i--) {
+    y += arguments[i] * arguments[i];
+  }
+
+  return Math.sqrt(y);
+};
+
+/***/ }),
+
+/***/ "./node_modules/gl-matrix/esm/mat4.js":
+/*!********************************************!*\
+  !*** ./node_modules/gl-matrix/esm/mat4.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "create": () => (/* binding */ create),
+/* harmony export */   "clone": () => (/* binding */ clone),
+/* harmony export */   "copy": () => (/* binding */ copy),
+/* harmony export */   "fromValues": () => (/* binding */ fromValues),
+/* harmony export */   "set": () => (/* binding */ set),
+/* harmony export */   "identity": () => (/* binding */ identity),
+/* harmony export */   "transpose": () => (/* binding */ transpose),
+/* harmony export */   "invert": () => (/* binding */ invert),
+/* harmony export */   "adjoint": () => (/* binding */ adjoint),
+/* harmony export */   "determinant": () => (/* binding */ determinant),
+/* harmony export */   "multiply": () => (/* binding */ multiply),
+/* harmony export */   "translate": () => (/* binding */ translate),
+/* harmony export */   "scale": () => (/* binding */ scale),
+/* harmony export */   "rotate": () => (/* binding */ rotate),
+/* harmony export */   "rotateX": () => (/* binding */ rotateX),
+/* harmony export */   "rotateY": () => (/* binding */ rotateY),
+/* harmony export */   "rotateZ": () => (/* binding */ rotateZ),
+/* harmony export */   "fromTranslation": () => (/* binding */ fromTranslation),
+/* harmony export */   "fromScaling": () => (/* binding */ fromScaling),
+/* harmony export */   "fromRotation": () => (/* binding */ fromRotation),
+/* harmony export */   "fromXRotation": () => (/* binding */ fromXRotation),
+/* harmony export */   "fromYRotation": () => (/* binding */ fromYRotation),
+/* harmony export */   "fromZRotation": () => (/* binding */ fromZRotation),
+/* harmony export */   "fromRotationTranslation": () => (/* binding */ fromRotationTranslation),
+/* harmony export */   "fromQuat2": () => (/* binding */ fromQuat2),
+/* harmony export */   "getTranslation": () => (/* binding */ getTranslation),
+/* harmony export */   "getScaling": () => (/* binding */ getScaling),
+/* harmony export */   "getRotation": () => (/* binding */ getRotation),
+/* harmony export */   "fromRotationTranslationScale": () => (/* binding */ fromRotationTranslationScale),
+/* harmony export */   "fromRotationTranslationScaleOrigin": () => (/* binding */ fromRotationTranslationScaleOrigin),
+/* harmony export */   "fromQuat": () => (/* binding */ fromQuat),
+/* harmony export */   "frustum": () => (/* binding */ frustum),
+/* harmony export */   "perspective": () => (/* binding */ perspective),
+/* harmony export */   "perspectiveFromFieldOfView": () => (/* binding */ perspectiveFromFieldOfView),
+/* harmony export */   "ortho": () => (/* binding */ ortho),
+/* harmony export */   "lookAt": () => (/* binding */ lookAt),
+/* harmony export */   "targetTo": () => (/* binding */ targetTo),
+/* harmony export */   "str": () => (/* binding */ str),
+/* harmony export */   "frob": () => (/* binding */ frob),
+/* harmony export */   "add": () => (/* binding */ add),
+/* harmony export */   "subtract": () => (/* binding */ subtract),
+/* harmony export */   "multiplyScalar": () => (/* binding */ multiplyScalar),
+/* harmony export */   "multiplyScalarAndAdd": () => (/* binding */ multiplyScalarAndAdd),
+/* harmony export */   "exactEquals": () => (/* binding */ exactEquals),
+/* harmony export */   "equals": () => (/* binding */ equals),
+/* harmony export */   "mul": () => (/* binding */ mul),
+/* harmony export */   "sub": () => (/* binding */ sub)
+/* harmony export */ });
+/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common.js */ "./node_modules/gl-matrix/esm/common.js");
+
+/**
+ * 4x4 Matrix<br>Format: column-major, when typed out it looks like row-major<br>The matrices are being post multiplied.
+ * @module mat4
+ */
+
+/**
+ * Creates a new identity mat4
+ *
+ * @returns {mat4} a new 4x4 matrix
+ */
+
+function create() {
+  var out = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(16);
+
+  if (_common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE != Float32Array) {
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+    out[4] = 0;
+    out[6] = 0;
+    out[7] = 0;
+    out[8] = 0;
+    out[9] = 0;
+    out[11] = 0;
+    out[12] = 0;
+    out[13] = 0;
+    out[14] = 0;
+  }
+
+  out[0] = 1;
+  out[5] = 1;
+  out[10] = 1;
+  out[15] = 1;
+  return out;
+}
+/**
+ * Creates a new mat4 initialized with values from an existing matrix
+ *
+ * @param {ReadonlyMat4} a matrix to clone
+ * @returns {mat4} a new 4x4 matrix
+ */
+
+function clone(a) {
+  var out = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(16);
+  out[0] = a[0];
+  out[1] = a[1];
+  out[2] = a[2];
+  out[3] = a[3];
+  out[4] = a[4];
+  out[5] = a[5];
+  out[6] = a[6];
+  out[7] = a[7];
+  out[8] = a[8];
+  out[9] = a[9];
+  out[10] = a[10];
+  out[11] = a[11];
+  out[12] = a[12];
+  out[13] = a[13];
+  out[14] = a[14];
+  out[15] = a[15];
+  return out;
+}
+/**
+ * Copy the values from one mat4 to another
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the source matrix
+ * @returns {mat4} out
+ */
+
+function copy(out, a) {
+  out[0] = a[0];
+  out[1] = a[1];
+  out[2] = a[2];
+  out[3] = a[3];
+  out[4] = a[4];
+  out[5] = a[5];
+  out[6] = a[6];
+  out[7] = a[7];
+  out[8] = a[8];
+  out[9] = a[9];
+  out[10] = a[10];
+  out[11] = a[11];
+  out[12] = a[12];
+  out[13] = a[13];
+  out[14] = a[14];
+  out[15] = a[15];
+  return out;
+}
+/**
+ * Create a new mat4 with the given values
+ *
+ * @param {Number} m00 Component in column 0, row 0 position (index 0)
+ * @param {Number} m01 Component in column 0, row 1 position (index 1)
+ * @param {Number} m02 Component in column 0, row 2 position (index 2)
+ * @param {Number} m03 Component in column 0, row 3 position (index 3)
+ * @param {Number} m10 Component in column 1, row 0 position (index 4)
+ * @param {Number} m11 Component in column 1, row 1 position (index 5)
+ * @param {Number} m12 Component in column 1, row 2 position (index 6)
+ * @param {Number} m13 Component in column 1, row 3 position (index 7)
+ * @param {Number} m20 Component in column 2, row 0 position (index 8)
+ * @param {Number} m21 Component in column 2, row 1 position (index 9)
+ * @param {Number} m22 Component in column 2, row 2 position (index 10)
+ * @param {Number} m23 Component in column 2, row 3 position (index 11)
+ * @param {Number} m30 Component in column 3, row 0 position (index 12)
+ * @param {Number} m31 Component in column 3, row 1 position (index 13)
+ * @param {Number} m32 Component in column 3, row 2 position (index 14)
+ * @param {Number} m33 Component in column 3, row 3 position (index 15)
+ * @returns {mat4} A new mat4
+ */
+
+function fromValues(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) {
+  var out = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(16);
+  out[0] = m00;
+  out[1] = m01;
+  out[2] = m02;
+  out[3] = m03;
+  out[4] = m10;
+  out[5] = m11;
+  out[6] = m12;
+  out[7] = m13;
+  out[8] = m20;
+  out[9] = m21;
+  out[10] = m22;
+  out[11] = m23;
+  out[12] = m30;
+  out[13] = m31;
+  out[14] = m32;
+  out[15] = m33;
+  return out;
+}
+/**
+ * Set the components of a mat4 to the given values
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {Number} m00 Component in column 0, row 0 position (index 0)
+ * @param {Number} m01 Component in column 0, row 1 position (index 1)
+ * @param {Number} m02 Component in column 0, row 2 position (index 2)
+ * @param {Number} m03 Component in column 0, row 3 position (index 3)
+ * @param {Number} m10 Component in column 1, row 0 position (index 4)
+ * @param {Number} m11 Component in column 1, row 1 position (index 5)
+ * @param {Number} m12 Component in column 1, row 2 position (index 6)
+ * @param {Number} m13 Component in column 1, row 3 position (index 7)
+ * @param {Number} m20 Component in column 2, row 0 position (index 8)
+ * @param {Number} m21 Component in column 2, row 1 position (index 9)
+ * @param {Number} m22 Component in column 2, row 2 position (index 10)
+ * @param {Number} m23 Component in column 2, row 3 position (index 11)
+ * @param {Number} m30 Component in column 3, row 0 position (index 12)
+ * @param {Number} m31 Component in column 3, row 1 position (index 13)
+ * @param {Number} m32 Component in column 3, row 2 position (index 14)
+ * @param {Number} m33 Component in column 3, row 3 position (index 15)
+ * @returns {mat4} out
+ */
+
+function set(out, m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) {
+  out[0] = m00;
+  out[1] = m01;
+  out[2] = m02;
+  out[3] = m03;
+  out[4] = m10;
+  out[5] = m11;
+  out[6] = m12;
+  out[7] = m13;
+  out[8] = m20;
+  out[9] = m21;
+  out[10] = m22;
+  out[11] = m23;
+  out[12] = m30;
+  out[13] = m31;
+  out[14] = m32;
+  out[15] = m33;
+  return out;
+}
+/**
+ * Set a mat4 to the identity matrix
+ *
+ * @param {mat4} out the receiving matrix
+ * @returns {mat4} out
+ */
+
+function identity(out) {
+  out[0] = 1;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = 1;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[10] = 1;
+  out[11] = 0;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = 0;
+  out[15] = 1;
+  return out;
+}
+/**
+ * Transpose the values of a mat4
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the source matrix
+ * @returns {mat4} out
+ */
+
+function transpose(out, a) {
+  // If we are transposing ourselves we can skip a few steps but have to cache some values
+  if (out === a) {
+    var a01 = a[1],
+        a02 = a[2],
+        a03 = a[3];
+    var a12 = a[6],
+        a13 = a[7];
+    var a23 = a[11];
+    out[1] = a[4];
+    out[2] = a[8];
+    out[3] = a[12];
+    out[4] = a01;
+    out[6] = a[9];
+    out[7] = a[13];
+    out[8] = a02;
+    out[9] = a12;
+    out[11] = a[14];
+    out[12] = a03;
+    out[13] = a13;
+    out[14] = a23;
+  } else {
+    out[0] = a[0];
+    out[1] = a[4];
+    out[2] = a[8];
+    out[3] = a[12];
+    out[4] = a[1];
+    out[5] = a[5];
+    out[6] = a[9];
+    out[7] = a[13];
+    out[8] = a[2];
+    out[9] = a[6];
+    out[10] = a[10];
+    out[11] = a[14];
+    out[12] = a[3];
+    out[13] = a[7];
+    out[14] = a[11];
+    out[15] = a[15];
+  }
+
+  return out;
+}
+/**
+ * Inverts a mat4
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the source matrix
+ * @returns {mat4} out
+ */
+
+function invert(out, a) {
+  var a00 = a[0],
+      a01 = a[1],
+      a02 = a[2],
+      a03 = a[3];
+  var a10 = a[4],
+      a11 = a[5],
+      a12 = a[6],
+      a13 = a[7];
+  var a20 = a[8],
+      a21 = a[9],
+      a22 = a[10],
+      a23 = a[11];
+  var a30 = a[12],
+      a31 = a[13],
+      a32 = a[14],
+      a33 = a[15];
+  var b00 = a00 * a11 - a01 * a10;
+  var b01 = a00 * a12 - a02 * a10;
+  var b02 = a00 * a13 - a03 * a10;
+  var b03 = a01 * a12 - a02 * a11;
+  var b04 = a01 * a13 - a03 * a11;
+  var b05 = a02 * a13 - a03 * a12;
+  var b06 = a20 * a31 - a21 * a30;
+  var b07 = a20 * a32 - a22 * a30;
+  var b08 = a20 * a33 - a23 * a30;
+  var b09 = a21 * a32 - a22 * a31;
+  var b10 = a21 * a33 - a23 * a31;
+  var b11 = a22 * a33 - a23 * a32; // Calculate the determinant
+
+  var det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+
+  if (!det) {
+    return null;
+  }
+
+  det = 1.0 / det;
+  out[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det;
+  out[1] = (a02 * b10 - a01 * b11 - a03 * b09) * det;
+  out[2] = (a31 * b05 - a32 * b04 + a33 * b03) * det;
+  out[3] = (a22 * b04 - a21 * b05 - a23 * b03) * det;
+  out[4] = (a12 * b08 - a10 * b11 - a13 * b07) * det;
+  out[5] = (a00 * b11 - a02 * b08 + a03 * b07) * det;
+  out[6] = (a32 * b02 - a30 * b05 - a33 * b01) * det;
+  out[7] = (a20 * b05 - a22 * b02 + a23 * b01) * det;
+  out[8] = (a10 * b10 - a11 * b08 + a13 * b06) * det;
+  out[9] = (a01 * b08 - a00 * b10 - a03 * b06) * det;
+  out[10] = (a30 * b04 - a31 * b02 + a33 * b00) * det;
+  out[11] = (a21 * b02 - a20 * b04 - a23 * b00) * det;
+  out[12] = (a11 * b07 - a10 * b09 - a12 * b06) * det;
+  out[13] = (a00 * b09 - a01 * b07 + a02 * b06) * det;
+  out[14] = (a31 * b01 - a30 * b03 - a32 * b00) * det;
+  out[15] = (a20 * b03 - a21 * b01 + a22 * b00) * det;
+  return out;
+}
+/**
+ * Calculates the adjugate of a mat4
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the source matrix
+ * @returns {mat4} out
+ */
+
+function adjoint(out, a) {
+  var a00 = a[0],
+      a01 = a[1],
+      a02 = a[2],
+      a03 = a[3];
+  var a10 = a[4],
+      a11 = a[5],
+      a12 = a[6],
+      a13 = a[7];
+  var a20 = a[8],
+      a21 = a[9],
+      a22 = a[10],
+      a23 = a[11];
+  var a30 = a[12],
+      a31 = a[13],
+      a32 = a[14],
+      a33 = a[15];
+  out[0] = a11 * (a22 * a33 - a23 * a32) - a21 * (a12 * a33 - a13 * a32) + a31 * (a12 * a23 - a13 * a22);
+  out[1] = -(a01 * (a22 * a33 - a23 * a32) - a21 * (a02 * a33 - a03 * a32) + a31 * (a02 * a23 - a03 * a22));
+  out[2] = a01 * (a12 * a33 - a13 * a32) - a11 * (a02 * a33 - a03 * a32) + a31 * (a02 * a13 - a03 * a12);
+  out[3] = -(a01 * (a12 * a23 - a13 * a22) - a11 * (a02 * a23 - a03 * a22) + a21 * (a02 * a13 - a03 * a12));
+  out[4] = -(a10 * (a22 * a33 - a23 * a32) - a20 * (a12 * a33 - a13 * a32) + a30 * (a12 * a23 - a13 * a22));
+  out[5] = a00 * (a22 * a33 - a23 * a32) - a20 * (a02 * a33 - a03 * a32) + a30 * (a02 * a23 - a03 * a22);
+  out[6] = -(a00 * (a12 * a33 - a13 * a32) - a10 * (a02 * a33 - a03 * a32) + a30 * (a02 * a13 - a03 * a12));
+  out[7] = a00 * (a12 * a23 - a13 * a22) - a10 * (a02 * a23 - a03 * a22) + a20 * (a02 * a13 - a03 * a12);
+  out[8] = a10 * (a21 * a33 - a23 * a31) - a20 * (a11 * a33 - a13 * a31) + a30 * (a11 * a23 - a13 * a21);
+  out[9] = -(a00 * (a21 * a33 - a23 * a31) - a20 * (a01 * a33 - a03 * a31) + a30 * (a01 * a23 - a03 * a21));
+  out[10] = a00 * (a11 * a33 - a13 * a31) - a10 * (a01 * a33 - a03 * a31) + a30 * (a01 * a13 - a03 * a11);
+  out[11] = -(a00 * (a11 * a23 - a13 * a21) - a10 * (a01 * a23 - a03 * a21) + a20 * (a01 * a13 - a03 * a11));
+  out[12] = -(a10 * (a21 * a32 - a22 * a31) - a20 * (a11 * a32 - a12 * a31) + a30 * (a11 * a22 - a12 * a21));
+  out[13] = a00 * (a21 * a32 - a22 * a31) - a20 * (a01 * a32 - a02 * a31) + a30 * (a01 * a22 - a02 * a21);
+  out[14] = -(a00 * (a11 * a32 - a12 * a31) - a10 * (a01 * a32 - a02 * a31) + a30 * (a01 * a12 - a02 * a11));
+  out[15] = a00 * (a11 * a22 - a12 * a21) - a10 * (a01 * a22 - a02 * a21) + a20 * (a01 * a12 - a02 * a11);
+  return out;
+}
+/**
+ * Calculates the determinant of a mat4
+ *
+ * @param {ReadonlyMat4} a the source matrix
+ * @returns {Number} determinant of a
+ */
+
+function determinant(a) {
+  var a00 = a[0],
+      a01 = a[1],
+      a02 = a[2],
+      a03 = a[3];
+  var a10 = a[4],
+      a11 = a[5],
+      a12 = a[6],
+      a13 = a[7];
+  var a20 = a[8],
+      a21 = a[9],
+      a22 = a[10],
+      a23 = a[11];
+  var a30 = a[12],
+      a31 = a[13],
+      a32 = a[14],
+      a33 = a[15];
+  var b00 = a00 * a11 - a01 * a10;
+  var b01 = a00 * a12 - a02 * a10;
+  var b02 = a00 * a13 - a03 * a10;
+  var b03 = a01 * a12 - a02 * a11;
+  var b04 = a01 * a13 - a03 * a11;
+  var b05 = a02 * a13 - a03 * a12;
+  var b06 = a20 * a31 - a21 * a30;
+  var b07 = a20 * a32 - a22 * a30;
+  var b08 = a20 * a33 - a23 * a30;
+  var b09 = a21 * a32 - a22 * a31;
+  var b10 = a21 * a33 - a23 * a31;
+  var b11 = a22 * a33 - a23 * a32; // Calculate the determinant
+
+  return b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+}
+/**
+ * Multiplies two mat4s
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the first operand
+ * @param {ReadonlyMat4} b the second operand
+ * @returns {mat4} out
+ */
+
+function multiply(out, a, b) {
+  var a00 = a[0],
+      a01 = a[1],
+      a02 = a[2],
+      a03 = a[3];
+  var a10 = a[4],
+      a11 = a[5],
+      a12 = a[6],
+      a13 = a[7];
+  var a20 = a[8],
+      a21 = a[9],
+      a22 = a[10],
+      a23 = a[11];
+  var a30 = a[12],
+      a31 = a[13],
+      a32 = a[14],
+      a33 = a[15]; // Cache only the current line of the second matrix
+
+  var b0 = b[0],
+      b1 = b[1],
+      b2 = b[2],
+      b3 = b[3];
+  out[0] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+  out[1] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+  out[2] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+  out[3] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+  b0 = b[4];
+  b1 = b[5];
+  b2 = b[6];
+  b3 = b[7];
+  out[4] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+  out[5] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+  out[6] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+  out[7] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+  b0 = b[8];
+  b1 = b[9];
+  b2 = b[10];
+  b3 = b[11];
+  out[8] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+  out[9] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+  out[10] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+  out[11] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+  b0 = b[12];
+  b1 = b[13];
+  b2 = b[14];
+  b3 = b[15];
+  out[12] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+  out[13] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+  out[14] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+  out[15] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+  return out;
+}
+/**
+ * Translate a mat4 by the given vector
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the matrix to translate
+ * @param {ReadonlyVec3} v vector to translate by
+ * @returns {mat4} out
+ */
+
+function translate(out, a, v) {
+  var x = v[0],
+      y = v[1],
+      z = v[2];
+  var a00, a01, a02, a03;
+  var a10, a11, a12, a13;
+  var a20, a21, a22, a23;
+
+  if (a === out) {
+    out[12] = a[0] * x + a[4] * y + a[8] * z + a[12];
+    out[13] = a[1] * x + a[5] * y + a[9] * z + a[13];
+    out[14] = a[2] * x + a[6] * y + a[10] * z + a[14];
+    out[15] = a[3] * x + a[7] * y + a[11] * z + a[15];
+  } else {
+    a00 = a[0];
+    a01 = a[1];
+    a02 = a[2];
+    a03 = a[3];
+    a10 = a[4];
+    a11 = a[5];
+    a12 = a[6];
+    a13 = a[7];
+    a20 = a[8];
+    a21 = a[9];
+    a22 = a[10];
+    a23 = a[11];
+    out[0] = a00;
+    out[1] = a01;
+    out[2] = a02;
+    out[3] = a03;
+    out[4] = a10;
+    out[5] = a11;
+    out[6] = a12;
+    out[7] = a13;
+    out[8] = a20;
+    out[9] = a21;
+    out[10] = a22;
+    out[11] = a23;
+    out[12] = a00 * x + a10 * y + a20 * z + a[12];
+    out[13] = a01 * x + a11 * y + a21 * z + a[13];
+    out[14] = a02 * x + a12 * y + a22 * z + a[14];
+    out[15] = a03 * x + a13 * y + a23 * z + a[15];
+  }
+
+  return out;
+}
+/**
+ * Scales the mat4 by the dimensions in the given vec3 not using vectorization
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the matrix to scale
+ * @param {ReadonlyVec3} v the vec3 to scale the matrix by
+ * @returns {mat4} out
+ **/
+
+function scale(out, a, v) {
+  var x = v[0],
+      y = v[1],
+      z = v[2];
+  out[0] = a[0] * x;
+  out[1] = a[1] * x;
+  out[2] = a[2] * x;
+  out[3] = a[3] * x;
+  out[4] = a[4] * y;
+  out[5] = a[5] * y;
+  out[6] = a[6] * y;
+  out[7] = a[7] * y;
+  out[8] = a[8] * z;
+  out[9] = a[9] * z;
+  out[10] = a[10] * z;
+  out[11] = a[11] * z;
+  out[12] = a[12];
+  out[13] = a[13];
+  out[14] = a[14];
+  out[15] = a[15];
+  return out;
+}
+/**
+ * Rotates a mat4 by the given angle around the given axis
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the matrix to rotate
+ * @param {Number} rad the angle to rotate the matrix by
+ * @param {ReadonlyVec3} axis the axis to rotate around
+ * @returns {mat4} out
+ */
+
+function rotate(out, a, rad, axis) {
+  var x = axis[0],
+      y = axis[1],
+      z = axis[2];
+  var len = Math.hypot(x, y, z);
+  var s, c, t;
+  var a00, a01, a02, a03;
+  var a10, a11, a12, a13;
+  var a20, a21, a22, a23;
+  var b00, b01, b02;
+  var b10, b11, b12;
+  var b20, b21, b22;
+
+  if (len < _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON) {
+    return null;
+  }
+
+  len = 1 / len;
+  x *= len;
+  y *= len;
+  z *= len;
+  s = Math.sin(rad);
+  c = Math.cos(rad);
+  t = 1 - c;
+  a00 = a[0];
+  a01 = a[1];
+  a02 = a[2];
+  a03 = a[3];
+  a10 = a[4];
+  a11 = a[5];
+  a12 = a[6];
+  a13 = a[7];
+  a20 = a[8];
+  a21 = a[9];
+  a22 = a[10];
+  a23 = a[11]; // Construct the elements of the rotation matrix
+
+  b00 = x * x * t + c;
+  b01 = y * x * t + z * s;
+  b02 = z * x * t - y * s;
+  b10 = x * y * t - z * s;
+  b11 = y * y * t + c;
+  b12 = z * y * t + x * s;
+  b20 = x * z * t + y * s;
+  b21 = y * z * t - x * s;
+  b22 = z * z * t + c; // Perform rotation-specific matrix multiplication
+
+  out[0] = a00 * b00 + a10 * b01 + a20 * b02;
+  out[1] = a01 * b00 + a11 * b01 + a21 * b02;
+  out[2] = a02 * b00 + a12 * b01 + a22 * b02;
+  out[3] = a03 * b00 + a13 * b01 + a23 * b02;
+  out[4] = a00 * b10 + a10 * b11 + a20 * b12;
+  out[5] = a01 * b10 + a11 * b11 + a21 * b12;
+  out[6] = a02 * b10 + a12 * b11 + a22 * b12;
+  out[7] = a03 * b10 + a13 * b11 + a23 * b12;
+  out[8] = a00 * b20 + a10 * b21 + a20 * b22;
+  out[9] = a01 * b20 + a11 * b21 + a21 * b22;
+  out[10] = a02 * b20 + a12 * b21 + a22 * b22;
+  out[11] = a03 * b20 + a13 * b21 + a23 * b22;
+
+  if (a !== out) {
+    // If the source and destination differ, copy the unchanged last row
+    out[12] = a[12];
+    out[13] = a[13];
+    out[14] = a[14];
+    out[15] = a[15];
+  }
+
+  return out;
+}
+/**
+ * Rotates a matrix by the given angle around the X axis
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the matrix to rotate
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat4} out
+ */
+
+function rotateX(out, a, rad) {
+  var s = Math.sin(rad);
+  var c = Math.cos(rad);
+  var a10 = a[4];
+  var a11 = a[5];
+  var a12 = a[6];
+  var a13 = a[7];
+  var a20 = a[8];
+  var a21 = a[9];
+  var a22 = a[10];
+  var a23 = a[11];
+
+  if (a !== out) {
+    // If the source and destination differ, copy the unchanged rows
+    out[0] = a[0];
+    out[1] = a[1];
+    out[2] = a[2];
+    out[3] = a[3];
+    out[12] = a[12];
+    out[13] = a[13];
+    out[14] = a[14];
+    out[15] = a[15];
+  } // Perform axis-specific matrix multiplication
+
+
+  out[4] = a10 * c + a20 * s;
+  out[5] = a11 * c + a21 * s;
+  out[6] = a12 * c + a22 * s;
+  out[7] = a13 * c + a23 * s;
+  out[8] = a20 * c - a10 * s;
+  out[9] = a21 * c - a11 * s;
+  out[10] = a22 * c - a12 * s;
+  out[11] = a23 * c - a13 * s;
+  return out;
+}
+/**
+ * Rotates a matrix by the given angle around the Y axis
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the matrix to rotate
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat4} out
+ */
+
+function rotateY(out, a, rad) {
+  var s = Math.sin(rad);
+  var c = Math.cos(rad);
+  var a00 = a[0];
+  var a01 = a[1];
+  var a02 = a[2];
+  var a03 = a[3];
+  var a20 = a[8];
+  var a21 = a[9];
+  var a22 = a[10];
+  var a23 = a[11];
+
+  if (a !== out) {
+    // If the source and destination differ, copy the unchanged rows
+    out[4] = a[4];
+    out[5] = a[5];
+    out[6] = a[6];
+    out[7] = a[7];
+    out[12] = a[12];
+    out[13] = a[13];
+    out[14] = a[14];
+    out[15] = a[15];
+  } // Perform axis-specific matrix multiplication
+
+
+  out[0] = a00 * c - a20 * s;
+  out[1] = a01 * c - a21 * s;
+  out[2] = a02 * c - a22 * s;
+  out[3] = a03 * c - a23 * s;
+  out[8] = a00 * s + a20 * c;
+  out[9] = a01 * s + a21 * c;
+  out[10] = a02 * s + a22 * c;
+  out[11] = a03 * s + a23 * c;
+  return out;
+}
+/**
+ * Rotates a matrix by the given angle around the Z axis
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the matrix to rotate
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat4} out
+ */
+
+function rotateZ(out, a, rad) {
+  var s = Math.sin(rad);
+  var c = Math.cos(rad);
+  var a00 = a[0];
+  var a01 = a[1];
+  var a02 = a[2];
+  var a03 = a[3];
+  var a10 = a[4];
+  var a11 = a[5];
+  var a12 = a[6];
+  var a13 = a[7];
+
+  if (a !== out) {
+    // If the source and destination differ, copy the unchanged last row
+    out[8] = a[8];
+    out[9] = a[9];
+    out[10] = a[10];
+    out[11] = a[11];
+    out[12] = a[12];
+    out[13] = a[13];
+    out[14] = a[14];
+    out[15] = a[15];
+  } // Perform axis-specific matrix multiplication
+
+
+  out[0] = a00 * c + a10 * s;
+  out[1] = a01 * c + a11 * s;
+  out[2] = a02 * c + a12 * s;
+  out[3] = a03 * c + a13 * s;
+  out[4] = a10 * c - a00 * s;
+  out[5] = a11 * c - a01 * s;
+  out[6] = a12 * c - a02 * s;
+  out[7] = a13 * c - a03 * s;
+  return out;
+}
+/**
+ * Creates a matrix from a vector translation
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.translate(dest, dest, vec);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {ReadonlyVec3} v Translation vector
+ * @returns {mat4} out
+ */
+
+function fromTranslation(out, v) {
+  out[0] = 1;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = 1;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[10] = 1;
+  out[11] = 0;
+  out[12] = v[0];
+  out[13] = v[1];
+  out[14] = v[2];
+  out[15] = 1;
+  return out;
+}
+/**
+ * Creates a matrix from a vector scaling
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.scale(dest, dest, vec);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {ReadonlyVec3} v Scaling vector
+ * @returns {mat4} out
+ */
+
+function fromScaling(out, v) {
+  out[0] = v[0];
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = v[1];
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[10] = v[2];
+  out[11] = 0;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = 0;
+  out[15] = 1;
+  return out;
+}
+/**
+ * Creates a matrix from a given angle around a given axis
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.rotate(dest, dest, rad, axis);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {Number} rad the angle to rotate the matrix by
+ * @param {ReadonlyVec3} axis the axis to rotate around
+ * @returns {mat4} out
+ */
+
+function fromRotation(out, rad, axis) {
+  var x = axis[0],
+      y = axis[1],
+      z = axis[2];
+  var len = Math.hypot(x, y, z);
+  var s, c, t;
+
+  if (len < _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON) {
+    return null;
+  }
+
+  len = 1 / len;
+  x *= len;
+  y *= len;
+  z *= len;
+  s = Math.sin(rad);
+  c = Math.cos(rad);
+  t = 1 - c; // Perform rotation-specific matrix multiplication
+
+  out[0] = x * x * t + c;
+  out[1] = y * x * t + z * s;
+  out[2] = z * x * t - y * s;
+  out[3] = 0;
+  out[4] = x * y * t - z * s;
+  out[5] = y * y * t + c;
+  out[6] = z * y * t + x * s;
+  out[7] = 0;
+  out[8] = x * z * t + y * s;
+  out[9] = y * z * t - x * s;
+  out[10] = z * z * t + c;
+  out[11] = 0;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = 0;
+  out[15] = 1;
+  return out;
+}
+/**
+ * Creates a matrix from the given angle around the X axis
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.rotateX(dest, dest, rad);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat4} out
+ */
+
+function fromXRotation(out, rad) {
+  var s = Math.sin(rad);
+  var c = Math.cos(rad); // Perform axis-specific matrix multiplication
+
+  out[0] = 1;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = c;
+  out[6] = s;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = -s;
+  out[10] = c;
+  out[11] = 0;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = 0;
+  out[15] = 1;
+  return out;
+}
+/**
+ * Creates a matrix from the given angle around the Y axis
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.rotateY(dest, dest, rad);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat4} out
+ */
+
+function fromYRotation(out, rad) {
+  var s = Math.sin(rad);
+  var c = Math.cos(rad); // Perform axis-specific matrix multiplication
+
+  out[0] = c;
+  out[1] = 0;
+  out[2] = -s;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = 1;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = s;
+  out[9] = 0;
+  out[10] = c;
+  out[11] = 0;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = 0;
+  out[15] = 1;
+  return out;
+}
+/**
+ * Creates a matrix from the given angle around the Z axis
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.rotateZ(dest, dest, rad);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat4} out
+ */
+
+function fromZRotation(out, rad) {
+  var s = Math.sin(rad);
+  var c = Math.cos(rad); // Perform axis-specific matrix multiplication
+
+  out[0] = c;
+  out[1] = s;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = -s;
+  out[5] = c;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[10] = 1;
+  out[11] = 0;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = 0;
+  out[15] = 1;
+  return out;
+}
+/**
+ * Creates a matrix from a quaternion rotation and vector translation
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.translate(dest, vec);
+ *     let quatMat = mat4.create();
+ *     quat4.toMat4(quat, quatMat);
+ *     mat4.multiply(dest, quatMat);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {quat4} q Rotation quaternion
+ * @param {ReadonlyVec3} v Translation vector
+ * @returns {mat4} out
+ */
+
+function fromRotationTranslation(out, q, v) {
+  // Quaternion math
+  var x = q[0],
+      y = q[1],
+      z = q[2],
+      w = q[3];
+  var x2 = x + x;
+  var y2 = y + y;
+  var z2 = z + z;
+  var xx = x * x2;
+  var xy = x * y2;
+  var xz = x * z2;
+  var yy = y * y2;
+  var yz = y * z2;
+  var zz = z * z2;
+  var wx = w * x2;
+  var wy = w * y2;
+  var wz = w * z2;
+  out[0] = 1 - (yy + zz);
+  out[1] = xy + wz;
+  out[2] = xz - wy;
+  out[3] = 0;
+  out[4] = xy - wz;
+  out[5] = 1 - (xx + zz);
+  out[6] = yz + wx;
+  out[7] = 0;
+  out[8] = xz + wy;
+  out[9] = yz - wx;
+  out[10] = 1 - (xx + yy);
+  out[11] = 0;
+  out[12] = v[0];
+  out[13] = v[1];
+  out[14] = v[2];
+  out[15] = 1;
+  return out;
+}
+/**
+ * Creates a new mat4 from a dual quat.
+ *
+ * @param {mat4} out Matrix
+ * @param {ReadonlyQuat2} a Dual Quaternion
+ * @returns {mat4} mat4 receiving operation result
+ */
+
+function fromQuat2(out, a) {
+  var translation = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(3);
+  var bx = -a[0],
+      by = -a[1],
+      bz = -a[2],
+      bw = a[3],
+      ax = a[4],
+      ay = a[5],
+      az = a[6],
+      aw = a[7];
+  var magnitude = bx * bx + by * by + bz * bz + bw * bw; //Only scale if it makes sense
+
+  if (magnitude > 0) {
+    translation[0] = (ax * bw + aw * bx + ay * bz - az * by) * 2 / magnitude;
+    translation[1] = (ay * bw + aw * by + az * bx - ax * bz) * 2 / magnitude;
+    translation[2] = (az * bw + aw * bz + ax * by - ay * bx) * 2 / magnitude;
+  } else {
+    translation[0] = (ax * bw + aw * bx + ay * bz - az * by) * 2;
+    translation[1] = (ay * bw + aw * by + az * bx - ax * bz) * 2;
+    translation[2] = (az * bw + aw * bz + ax * by - ay * bx) * 2;
+  }
+
+  fromRotationTranslation(out, a, translation);
+  return out;
+}
+/**
+ * Returns the translation vector component of a transformation
+ *  matrix. If a matrix is built with fromRotationTranslation,
+ *  the returned vector will be the same as the translation vector
+ *  originally supplied.
+ * @param  {vec3} out Vector to receive translation component
+ * @param  {ReadonlyMat4} mat Matrix to be decomposed (input)
+ * @return {vec3} out
+ */
+
+function getTranslation(out, mat) {
+  out[0] = mat[12];
+  out[1] = mat[13];
+  out[2] = mat[14];
+  return out;
+}
+/**
+ * Returns the scaling factor component of a transformation
+ *  matrix. If a matrix is built with fromRotationTranslationScale
+ *  with a normalized Quaternion paramter, the returned vector will be
+ *  the same as the scaling vector
+ *  originally supplied.
+ * @param  {vec3} out Vector to receive scaling factor component
+ * @param  {ReadonlyMat4} mat Matrix to be decomposed (input)
+ * @return {vec3} out
+ */
+
+function getScaling(out, mat) {
+  var m11 = mat[0];
+  var m12 = mat[1];
+  var m13 = mat[2];
+  var m21 = mat[4];
+  var m22 = mat[5];
+  var m23 = mat[6];
+  var m31 = mat[8];
+  var m32 = mat[9];
+  var m33 = mat[10];
+  out[0] = Math.hypot(m11, m12, m13);
+  out[1] = Math.hypot(m21, m22, m23);
+  out[2] = Math.hypot(m31, m32, m33);
+  return out;
+}
+/**
+ * Returns a quaternion representing the rotational component
+ *  of a transformation matrix. If a matrix is built with
+ *  fromRotationTranslation, the returned quaternion will be the
+ *  same as the quaternion originally supplied.
+ * @param {quat} out Quaternion to receive the rotation component
+ * @param {ReadonlyMat4} mat Matrix to be decomposed (input)
+ * @return {quat} out
+ */
+
+function getRotation(out, mat) {
+  var scaling = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(3);
+  getScaling(scaling, mat);
+  var is1 = 1 / scaling[0];
+  var is2 = 1 / scaling[1];
+  var is3 = 1 / scaling[2];
+  var sm11 = mat[0] * is1;
+  var sm12 = mat[1] * is2;
+  var sm13 = mat[2] * is3;
+  var sm21 = mat[4] * is1;
+  var sm22 = mat[5] * is2;
+  var sm23 = mat[6] * is3;
+  var sm31 = mat[8] * is1;
+  var sm32 = mat[9] * is2;
+  var sm33 = mat[10] * is3;
+  var trace = sm11 + sm22 + sm33;
+  var S = 0;
+
+  if (trace > 0) {
+    S = Math.sqrt(trace + 1.0) * 2;
+    out[3] = 0.25 * S;
+    out[0] = (sm23 - sm32) / S;
+    out[1] = (sm31 - sm13) / S;
+    out[2] = (sm12 - sm21) / S;
+  } else if (sm11 > sm22 && sm11 > sm33) {
+    S = Math.sqrt(1.0 + sm11 - sm22 - sm33) * 2;
+    out[3] = (sm23 - sm32) / S;
+    out[0] = 0.25 * S;
+    out[1] = (sm12 + sm21) / S;
+    out[2] = (sm31 + sm13) / S;
+  } else if (sm22 > sm33) {
+    S = Math.sqrt(1.0 + sm22 - sm11 - sm33) * 2;
+    out[3] = (sm31 - sm13) / S;
+    out[0] = (sm12 + sm21) / S;
+    out[1] = 0.25 * S;
+    out[2] = (sm23 + sm32) / S;
+  } else {
+    S = Math.sqrt(1.0 + sm33 - sm11 - sm22) * 2;
+    out[3] = (sm12 - sm21) / S;
+    out[0] = (sm31 + sm13) / S;
+    out[1] = (sm23 + sm32) / S;
+    out[2] = 0.25 * S;
+  }
+
+  return out;
+}
+/**
+ * Creates a matrix from a quaternion rotation, vector translation and vector scale
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.translate(dest, vec);
+ *     let quatMat = mat4.create();
+ *     quat4.toMat4(quat, quatMat);
+ *     mat4.multiply(dest, quatMat);
+ *     mat4.scale(dest, scale)
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {quat4} q Rotation quaternion
+ * @param {ReadonlyVec3} v Translation vector
+ * @param {ReadonlyVec3} s Scaling vector
+ * @returns {mat4} out
+ */
+
+function fromRotationTranslationScale(out, q, v, s) {
+  // Quaternion math
+  var x = q[0],
+      y = q[1],
+      z = q[2],
+      w = q[3];
+  var x2 = x + x;
+  var y2 = y + y;
+  var z2 = z + z;
+  var xx = x * x2;
+  var xy = x * y2;
+  var xz = x * z2;
+  var yy = y * y2;
+  var yz = y * z2;
+  var zz = z * z2;
+  var wx = w * x2;
+  var wy = w * y2;
+  var wz = w * z2;
+  var sx = s[0];
+  var sy = s[1];
+  var sz = s[2];
+  out[0] = (1 - (yy + zz)) * sx;
+  out[1] = (xy + wz) * sx;
+  out[2] = (xz - wy) * sx;
+  out[3] = 0;
+  out[4] = (xy - wz) * sy;
+  out[5] = (1 - (xx + zz)) * sy;
+  out[6] = (yz + wx) * sy;
+  out[7] = 0;
+  out[8] = (xz + wy) * sz;
+  out[9] = (yz - wx) * sz;
+  out[10] = (1 - (xx + yy)) * sz;
+  out[11] = 0;
+  out[12] = v[0];
+  out[13] = v[1];
+  out[14] = v[2];
+  out[15] = 1;
+  return out;
+}
+/**
+ * Creates a matrix from a quaternion rotation, vector translation and vector scale, rotating and scaling around the given origin
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.translate(dest, vec);
+ *     mat4.translate(dest, origin);
+ *     let quatMat = mat4.create();
+ *     quat4.toMat4(quat, quatMat);
+ *     mat4.multiply(dest, quatMat);
+ *     mat4.scale(dest, scale)
+ *     mat4.translate(dest, negativeOrigin);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {quat4} q Rotation quaternion
+ * @param {ReadonlyVec3} v Translation vector
+ * @param {ReadonlyVec3} s Scaling vector
+ * @param {ReadonlyVec3} o The origin vector around which to scale and rotate
+ * @returns {mat4} out
+ */
+
+function fromRotationTranslationScaleOrigin(out, q, v, s, o) {
+  // Quaternion math
+  var x = q[0],
+      y = q[1],
+      z = q[2],
+      w = q[3];
+  var x2 = x + x;
+  var y2 = y + y;
+  var z2 = z + z;
+  var xx = x * x2;
+  var xy = x * y2;
+  var xz = x * z2;
+  var yy = y * y2;
+  var yz = y * z2;
+  var zz = z * z2;
+  var wx = w * x2;
+  var wy = w * y2;
+  var wz = w * z2;
+  var sx = s[0];
+  var sy = s[1];
+  var sz = s[2];
+  var ox = o[0];
+  var oy = o[1];
+  var oz = o[2];
+  var out0 = (1 - (yy + zz)) * sx;
+  var out1 = (xy + wz) * sx;
+  var out2 = (xz - wy) * sx;
+  var out4 = (xy - wz) * sy;
+  var out5 = (1 - (xx + zz)) * sy;
+  var out6 = (yz + wx) * sy;
+  var out8 = (xz + wy) * sz;
+  var out9 = (yz - wx) * sz;
+  var out10 = (1 - (xx + yy)) * sz;
+  out[0] = out0;
+  out[1] = out1;
+  out[2] = out2;
+  out[3] = 0;
+  out[4] = out4;
+  out[5] = out5;
+  out[6] = out6;
+  out[7] = 0;
+  out[8] = out8;
+  out[9] = out9;
+  out[10] = out10;
+  out[11] = 0;
+  out[12] = v[0] + ox - (out0 * ox + out4 * oy + out8 * oz);
+  out[13] = v[1] + oy - (out1 * ox + out5 * oy + out9 * oz);
+  out[14] = v[2] + oz - (out2 * ox + out6 * oy + out10 * oz);
+  out[15] = 1;
+  return out;
+}
+/**
+ * Calculates a 4x4 matrix from the given quaternion
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {ReadonlyQuat} q Quaternion to create matrix from
+ *
+ * @returns {mat4} out
+ */
+
+function fromQuat(out, q) {
+  var x = q[0],
+      y = q[1],
+      z = q[2],
+      w = q[3];
+  var x2 = x + x;
+  var y2 = y + y;
+  var z2 = z + z;
+  var xx = x * x2;
+  var yx = y * x2;
+  var yy = y * y2;
+  var zx = z * x2;
+  var zy = z * y2;
+  var zz = z * z2;
+  var wx = w * x2;
+  var wy = w * y2;
+  var wz = w * z2;
+  out[0] = 1 - yy - zz;
+  out[1] = yx + wz;
+  out[2] = zx - wy;
+  out[3] = 0;
+  out[4] = yx - wz;
+  out[5] = 1 - xx - zz;
+  out[6] = zy + wx;
+  out[7] = 0;
+  out[8] = zx + wy;
+  out[9] = zy - wx;
+  out[10] = 1 - xx - yy;
+  out[11] = 0;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = 0;
+  out[15] = 1;
+  return out;
+}
+/**
+ * Generates a frustum matrix with the given bounds
+ *
+ * @param {mat4} out mat4 frustum matrix will be written into
+ * @param {Number} left Left bound of the frustum
+ * @param {Number} right Right bound of the frustum
+ * @param {Number} bottom Bottom bound of the frustum
+ * @param {Number} top Top bound of the frustum
+ * @param {Number} near Near bound of the frustum
+ * @param {Number} far Far bound of the frustum
+ * @returns {mat4} out
+ */
+
+function frustum(out, left, right, bottom, top, near, far) {
+  var rl = 1 / (right - left);
+  var tb = 1 / (top - bottom);
+  var nf = 1 / (near - far);
+  out[0] = near * 2 * rl;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = near * 2 * tb;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = (right + left) * rl;
+  out[9] = (top + bottom) * tb;
+  out[10] = (far + near) * nf;
+  out[11] = -1;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = far * near * 2 * nf;
+  out[15] = 0;
+  return out;
+}
+/**
+ * Generates a perspective projection matrix with the given bounds.
+ * Passing null/undefined/no value for far will generate infinite projection matrix.
+ *
+ * @param {mat4} out mat4 frustum matrix will be written into
+ * @param {number} fovy Vertical field of view in radians
+ * @param {number} aspect Aspect ratio. typically viewport width/height
+ * @param {number} near Near bound of the frustum
+ * @param {number} far Far bound of the frustum, can be null or Infinity
+ * @returns {mat4} out
+ */
+
+function perspective(out, fovy, aspect, near, far) {
+  var f = 1.0 / Math.tan(fovy / 2),
+      nf;
+  out[0] = f / aspect;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = f;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[11] = -1;
+  out[12] = 0;
+  out[13] = 0;
+  out[15] = 0;
+
+  if (far != null && far !== Infinity) {
+    nf = 1 / (near - far);
+    out[10] = (far + near) * nf;
+    out[14] = 2 * far * near * nf;
+  } else {
+    out[10] = -1;
+    out[14] = -2 * near;
+  }
+
+  return out;
+}
+/**
+ * Generates a perspective projection matrix with the given field of view.
+ * This is primarily useful for generating projection matrices to be used
+ * with the still experiemental WebVR API.
+ *
+ * @param {mat4} out mat4 frustum matrix will be written into
+ * @param {Object} fov Object containing the following values: upDegrees, downDegrees, leftDegrees, rightDegrees
+ * @param {number} near Near bound of the frustum
+ * @param {number} far Far bound of the frustum
+ * @returns {mat4} out
+ */
+
+function perspectiveFromFieldOfView(out, fov, near, far) {
+  var upTan = Math.tan(fov.upDegrees * Math.PI / 180.0);
+  var downTan = Math.tan(fov.downDegrees * Math.PI / 180.0);
+  var leftTan = Math.tan(fov.leftDegrees * Math.PI / 180.0);
+  var rightTan = Math.tan(fov.rightDegrees * Math.PI / 180.0);
+  var xScale = 2.0 / (leftTan + rightTan);
+  var yScale = 2.0 / (upTan + downTan);
+  out[0] = xScale;
+  out[1] = 0.0;
+  out[2] = 0.0;
+  out[3] = 0.0;
+  out[4] = 0.0;
+  out[5] = yScale;
+  out[6] = 0.0;
+  out[7] = 0.0;
+  out[8] = -((leftTan - rightTan) * xScale * 0.5);
+  out[9] = (upTan - downTan) * yScale * 0.5;
+  out[10] = far / (near - far);
+  out[11] = -1.0;
+  out[12] = 0.0;
+  out[13] = 0.0;
+  out[14] = far * near / (near - far);
+  out[15] = 0.0;
+  return out;
+}
+/**
+ * Generates a orthogonal projection matrix with the given bounds
+ *
+ * @param {mat4} out mat4 frustum matrix will be written into
+ * @param {number} left Left bound of the frustum
+ * @param {number} right Right bound of the frustum
+ * @param {number} bottom Bottom bound of the frustum
+ * @param {number} top Top bound of the frustum
+ * @param {number} near Near bound of the frustum
+ * @param {number} far Far bound of the frustum
+ * @returns {mat4} out
+ */
+
+function ortho(out, left, right, bottom, top, near, far) {
+  var lr = 1 / (left - right);
+  var bt = 1 / (bottom - top);
+  var nf = 1 / (near - far);
+  out[0] = -2 * lr;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = -2 * bt;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[10] = 2 * nf;
+  out[11] = 0;
+  out[12] = (left + right) * lr;
+  out[13] = (top + bottom) * bt;
+  out[14] = (far + near) * nf;
+  out[15] = 1;
+  return out;
+}
+/**
+ * Generates a look-at matrix with the given eye position, focal point, and up axis.
+ * If you want a matrix that actually makes an object look at another object, you should use targetTo instead.
+ *
+ * @param {mat4} out mat4 frustum matrix will be written into
+ * @param {ReadonlyVec3} eye Position of the viewer
+ * @param {ReadonlyVec3} center Point the viewer is looking at
+ * @param {ReadonlyVec3} up vec3 pointing up
+ * @returns {mat4} out
+ */
+
+function lookAt(out, eye, center, up) {
+  var x0, x1, x2, y0, y1, y2, z0, z1, z2, len;
+  var eyex = eye[0];
+  var eyey = eye[1];
+  var eyez = eye[2];
+  var upx = up[0];
+  var upy = up[1];
+  var upz = up[2];
+  var centerx = center[0];
+  var centery = center[1];
+  var centerz = center[2];
+
+  if (Math.abs(eyex - centerx) < _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON && Math.abs(eyey - centery) < _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON && Math.abs(eyez - centerz) < _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON) {
+    return identity(out);
+  }
+
+  z0 = eyex - centerx;
+  z1 = eyey - centery;
+  z2 = eyez - centerz;
+  len = 1 / Math.hypot(z0, z1, z2);
+  z0 *= len;
+  z1 *= len;
+  z2 *= len;
+  x0 = upy * z2 - upz * z1;
+  x1 = upz * z0 - upx * z2;
+  x2 = upx * z1 - upy * z0;
+  len = Math.hypot(x0, x1, x2);
+
+  if (!len) {
+    x0 = 0;
+    x1 = 0;
+    x2 = 0;
+  } else {
+    len = 1 / len;
+    x0 *= len;
+    x1 *= len;
+    x2 *= len;
+  }
+
+  y0 = z1 * x2 - z2 * x1;
+  y1 = z2 * x0 - z0 * x2;
+  y2 = z0 * x1 - z1 * x0;
+  len = Math.hypot(y0, y1, y2);
+
+  if (!len) {
+    y0 = 0;
+    y1 = 0;
+    y2 = 0;
+  } else {
+    len = 1 / len;
+    y0 *= len;
+    y1 *= len;
+    y2 *= len;
+  }
+
+  out[0] = x0;
+  out[1] = y0;
+  out[2] = z0;
+  out[3] = 0;
+  out[4] = x1;
+  out[5] = y1;
+  out[6] = z1;
+  out[7] = 0;
+  out[8] = x2;
+  out[9] = y2;
+  out[10] = z2;
+  out[11] = 0;
+  out[12] = -(x0 * eyex + x1 * eyey + x2 * eyez);
+  out[13] = -(y0 * eyex + y1 * eyey + y2 * eyez);
+  out[14] = -(z0 * eyex + z1 * eyey + z2 * eyez);
+  out[15] = 1;
+  return out;
+}
+/**
+ * Generates a matrix that makes something look at something else.
+ *
+ * @param {mat4} out mat4 frustum matrix will be written into
+ * @param {ReadonlyVec3} eye Position of the viewer
+ * @param {ReadonlyVec3} center Point the viewer is looking at
+ * @param {ReadonlyVec3} up vec3 pointing up
+ * @returns {mat4} out
+ */
+
+function targetTo(out, eye, target, up) {
+  var eyex = eye[0],
+      eyey = eye[1],
+      eyez = eye[2],
+      upx = up[0],
+      upy = up[1],
+      upz = up[2];
+  var z0 = eyex - target[0],
+      z1 = eyey - target[1],
+      z2 = eyez - target[2];
+  var len = z0 * z0 + z1 * z1 + z2 * z2;
+
+  if (len > 0) {
+    len = 1 / Math.sqrt(len);
+    z0 *= len;
+    z1 *= len;
+    z2 *= len;
+  }
+
+  var x0 = upy * z2 - upz * z1,
+      x1 = upz * z0 - upx * z2,
+      x2 = upx * z1 - upy * z0;
+  len = x0 * x0 + x1 * x1 + x2 * x2;
+
+  if (len > 0) {
+    len = 1 / Math.sqrt(len);
+    x0 *= len;
+    x1 *= len;
+    x2 *= len;
+  }
+
+  out[0] = x0;
+  out[1] = x1;
+  out[2] = x2;
+  out[3] = 0;
+  out[4] = z1 * x2 - z2 * x1;
+  out[5] = z2 * x0 - z0 * x2;
+  out[6] = z0 * x1 - z1 * x0;
+  out[7] = 0;
+  out[8] = z0;
+  out[9] = z1;
+  out[10] = z2;
+  out[11] = 0;
+  out[12] = eyex;
+  out[13] = eyey;
+  out[14] = eyez;
+  out[15] = 1;
+  return out;
+}
+/**
+ * Returns a string representation of a mat4
+ *
+ * @param {ReadonlyMat4} a matrix to represent as a string
+ * @returns {String} string representation of the matrix
+ */
+
+function str(a) {
+  return "mat4(" + a[0] + ", " + a[1] + ", " + a[2] + ", " + a[3] + ", " + a[4] + ", " + a[5] + ", " + a[6] + ", " + a[7] + ", " + a[8] + ", " + a[9] + ", " + a[10] + ", " + a[11] + ", " + a[12] + ", " + a[13] + ", " + a[14] + ", " + a[15] + ")";
+}
+/**
+ * Returns Frobenius norm of a mat4
+ *
+ * @param {ReadonlyMat4} a the matrix to calculate Frobenius norm of
+ * @returns {Number} Frobenius norm
+ */
+
+function frob(a) {
+  return Math.hypot(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10], a[11], a[12], a[13], a[14], a[15]);
+}
+/**
+ * Adds two mat4's
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the first operand
+ * @param {ReadonlyMat4} b the second operand
+ * @returns {mat4} out
+ */
+
+function add(out, a, b) {
+  out[0] = a[0] + b[0];
+  out[1] = a[1] + b[1];
+  out[2] = a[2] + b[2];
+  out[3] = a[3] + b[3];
+  out[4] = a[4] + b[4];
+  out[5] = a[5] + b[5];
+  out[6] = a[6] + b[6];
+  out[7] = a[7] + b[7];
+  out[8] = a[8] + b[8];
+  out[9] = a[9] + b[9];
+  out[10] = a[10] + b[10];
+  out[11] = a[11] + b[11];
+  out[12] = a[12] + b[12];
+  out[13] = a[13] + b[13];
+  out[14] = a[14] + b[14];
+  out[15] = a[15] + b[15];
+  return out;
+}
+/**
+ * Subtracts matrix b from matrix a
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the first operand
+ * @param {ReadonlyMat4} b the second operand
+ * @returns {mat4} out
+ */
+
+function subtract(out, a, b) {
+  out[0] = a[0] - b[0];
+  out[1] = a[1] - b[1];
+  out[2] = a[2] - b[2];
+  out[3] = a[3] - b[3];
+  out[4] = a[4] - b[4];
+  out[5] = a[5] - b[5];
+  out[6] = a[6] - b[6];
+  out[7] = a[7] - b[7];
+  out[8] = a[8] - b[8];
+  out[9] = a[9] - b[9];
+  out[10] = a[10] - b[10];
+  out[11] = a[11] - b[11];
+  out[12] = a[12] - b[12];
+  out[13] = a[13] - b[13];
+  out[14] = a[14] - b[14];
+  out[15] = a[15] - b[15];
+  return out;
+}
+/**
+ * Multiply each element of the matrix by a scalar.
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the matrix to scale
+ * @param {Number} b amount to scale the matrix's elements by
+ * @returns {mat4} out
+ */
+
+function multiplyScalar(out, a, b) {
+  out[0] = a[0] * b;
+  out[1] = a[1] * b;
+  out[2] = a[2] * b;
+  out[3] = a[3] * b;
+  out[4] = a[4] * b;
+  out[5] = a[5] * b;
+  out[6] = a[6] * b;
+  out[7] = a[7] * b;
+  out[8] = a[8] * b;
+  out[9] = a[9] * b;
+  out[10] = a[10] * b;
+  out[11] = a[11] * b;
+  out[12] = a[12] * b;
+  out[13] = a[13] * b;
+  out[14] = a[14] * b;
+  out[15] = a[15] * b;
+  return out;
+}
+/**
+ * Adds two mat4's after multiplying each element of the second operand by a scalar value.
+ *
+ * @param {mat4} out the receiving vector
+ * @param {ReadonlyMat4} a the first operand
+ * @param {ReadonlyMat4} b the second operand
+ * @param {Number} scale the amount to scale b's elements by before adding
+ * @returns {mat4} out
+ */
+
+function multiplyScalarAndAdd(out, a, b, scale) {
+  out[0] = a[0] + b[0] * scale;
+  out[1] = a[1] + b[1] * scale;
+  out[2] = a[2] + b[2] * scale;
+  out[3] = a[3] + b[3] * scale;
+  out[4] = a[4] + b[4] * scale;
+  out[5] = a[5] + b[5] * scale;
+  out[6] = a[6] + b[6] * scale;
+  out[7] = a[7] + b[7] * scale;
+  out[8] = a[8] + b[8] * scale;
+  out[9] = a[9] + b[9] * scale;
+  out[10] = a[10] + b[10] * scale;
+  out[11] = a[11] + b[11] * scale;
+  out[12] = a[12] + b[12] * scale;
+  out[13] = a[13] + b[13] * scale;
+  out[14] = a[14] + b[14] * scale;
+  out[15] = a[15] + b[15] * scale;
+  return out;
+}
+/**
+ * Returns whether or not the matrices have exactly the same elements in the same position (when compared with ===)
+ *
+ * @param {ReadonlyMat4} a The first matrix.
+ * @param {ReadonlyMat4} b The second matrix.
+ * @returns {Boolean} True if the matrices are equal, false otherwise.
+ */
+
+function exactEquals(a, b) {
+  return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3] && a[4] === b[4] && a[5] === b[5] && a[6] === b[6] && a[7] === b[7] && a[8] === b[8] && a[9] === b[9] && a[10] === b[10] && a[11] === b[11] && a[12] === b[12] && a[13] === b[13] && a[14] === b[14] && a[15] === b[15];
+}
+/**
+ * Returns whether or not the matrices have approximately the same elements in the same position.
+ *
+ * @param {ReadonlyMat4} a The first matrix.
+ * @param {ReadonlyMat4} b The second matrix.
+ * @returns {Boolean} True if the matrices are equal, false otherwise.
+ */
+
+function equals(a, b) {
+  var a0 = a[0],
+      a1 = a[1],
+      a2 = a[2],
+      a3 = a[3];
+  var a4 = a[4],
+      a5 = a[5],
+      a6 = a[6],
+      a7 = a[7];
+  var a8 = a[8],
+      a9 = a[9],
+      a10 = a[10],
+      a11 = a[11];
+  var a12 = a[12],
+      a13 = a[13],
+      a14 = a[14],
+      a15 = a[15];
+  var b0 = b[0],
+      b1 = b[1],
+      b2 = b[2],
+      b3 = b[3];
+  var b4 = b[4],
+      b5 = b[5],
+      b6 = b[6],
+      b7 = b[7];
+  var b8 = b[8],
+      b9 = b[9],
+      b10 = b[10],
+      b11 = b[11];
+  var b12 = b[12],
+      b13 = b[13],
+      b14 = b[14],
+      b15 = b[15];
+  return Math.abs(a0 - b0) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) && Math.abs(a1 - b1) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) && Math.abs(a2 - b2) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) && Math.abs(a3 - b3) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) && Math.abs(a4 - b4) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) && Math.abs(a5 - b5) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5)) && Math.abs(a6 - b6) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a6), Math.abs(b6)) && Math.abs(a7 - b7) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a7), Math.abs(b7)) && Math.abs(a8 - b8) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a8), Math.abs(b8)) && Math.abs(a9 - b9) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a9), Math.abs(b9)) && Math.abs(a10 - b10) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a10), Math.abs(b10)) && Math.abs(a11 - b11) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a11), Math.abs(b11)) && Math.abs(a12 - b12) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a12), Math.abs(b12)) && Math.abs(a13 - b13) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a13), Math.abs(b13)) && Math.abs(a14 - b14) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a14), Math.abs(b14)) && Math.abs(a15 - b15) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a15), Math.abs(b15));
+}
+/**
+ * Alias for {@link mat4.multiply}
+ * @function
+ */
+
+var mul = multiply;
+/**
+ * Alias for {@link mat4.subtract}
+ * @function
+ */
+
+var sub = subtract;
+
+/***/ }),
+
+/***/ "./node_modules/gl-matrix/esm/vec3.js":
+/*!********************************************!*\
+  !*** ./node_modules/gl-matrix/esm/vec3.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "create": () => (/* binding */ create),
+/* harmony export */   "clone": () => (/* binding */ clone),
+/* harmony export */   "length": () => (/* binding */ length),
+/* harmony export */   "fromValues": () => (/* binding */ fromValues),
+/* harmony export */   "copy": () => (/* binding */ copy),
+/* harmony export */   "set": () => (/* binding */ set),
+/* harmony export */   "add": () => (/* binding */ add),
+/* harmony export */   "subtract": () => (/* binding */ subtract),
+/* harmony export */   "multiply": () => (/* binding */ multiply),
+/* harmony export */   "divide": () => (/* binding */ divide),
+/* harmony export */   "ceil": () => (/* binding */ ceil),
+/* harmony export */   "floor": () => (/* binding */ floor),
+/* harmony export */   "min": () => (/* binding */ min),
+/* harmony export */   "max": () => (/* binding */ max),
+/* harmony export */   "round": () => (/* binding */ round),
+/* harmony export */   "scale": () => (/* binding */ scale),
+/* harmony export */   "scaleAndAdd": () => (/* binding */ scaleAndAdd),
+/* harmony export */   "distance": () => (/* binding */ distance),
+/* harmony export */   "squaredDistance": () => (/* binding */ squaredDistance),
+/* harmony export */   "squaredLength": () => (/* binding */ squaredLength),
+/* harmony export */   "negate": () => (/* binding */ negate),
+/* harmony export */   "inverse": () => (/* binding */ inverse),
+/* harmony export */   "normalize": () => (/* binding */ normalize),
+/* harmony export */   "dot": () => (/* binding */ dot),
+/* harmony export */   "cross": () => (/* binding */ cross),
+/* harmony export */   "lerp": () => (/* binding */ lerp),
+/* harmony export */   "hermite": () => (/* binding */ hermite),
+/* harmony export */   "bezier": () => (/* binding */ bezier),
+/* harmony export */   "random": () => (/* binding */ random),
+/* harmony export */   "transformMat4": () => (/* binding */ transformMat4),
+/* harmony export */   "transformMat3": () => (/* binding */ transformMat3),
+/* harmony export */   "transformQuat": () => (/* binding */ transformQuat),
+/* harmony export */   "rotateX": () => (/* binding */ rotateX),
+/* harmony export */   "rotateY": () => (/* binding */ rotateY),
+/* harmony export */   "rotateZ": () => (/* binding */ rotateZ),
+/* harmony export */   "angle": () => (/* binding */ angle),
+/* harmony export */   "zero": () => (/* binding */ zero),
+/* harmony export */   "str": () => (/* binding */ str),
+/* harmony export */   "exactEquals": () => (/* binding */ exactEquals),
+/* harmony export */   "equals": () => (/* binding */ equals),
+/* harmony export */   "sub": () => (/* binding */ sub),
+/* harmony export */   "mul": () => (/* binding */ mul),
+/* harmony export */   "div": () => (/* binding */ div),
+/* harmony export */   "dist": () => (/* binding */ dist),
+/* harmony export */   "sqrDist": () => (/* binding */ sqrDist),
+/* harmony export */   "len": () => (/* binding */ len),
+/* harmony export */   "sqrLen": () => (/* binding */ sqrLen),
+/* harmony export */   "forEach": () => (/* binding */ forEach)
+/* harmony export */ });
+/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common.js */ "./node_modules/gl-matrix/esm/common.js");
+
+/**
+ * 3 Dimensional Vector
+ * @module vec3
+ */
+
+/**
+ * Creates a new, empty vec3
+ *
+ * @returns {vec3} a new 3D vector
+ */
+
+function create() {
+  var out = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(3);
+
+  if (_common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE != Float32Array) {
+    out[0] = 0;
+    out[1] = 0;
+    out[2] = 0;
+  }
+
+  return out;
+}
+/**
+ * Creates a new vec3 initialized with values from an existing vector
+ *
+ * @param {ReadonlyVec3} a vector to clone
+ * @returns {vec3} a new 3D vector
+ */
+
+function clone(a) {
+  var out = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(3);
+  out[0] = a[0];
+  out[1] = a[1];
+  out[2] = a[2];
+  return out;
+}
+/**
+ * Calculates the length of a vec3
+ *
+ * @param {ReadonlyVec3} a vector to calculate length of
+ * @returns {Number} length of a
+ */
+
+function length(a) {
+  var x = a[0];
+  var y = a[1];
+  var z = a[2];
+  return Math.hypot(x, y, z);
+}
+/**
+ * Creates a new vec3 initialized with the given values
+ *
+ * @param {Number} x X component
+ * @param {Number} y Y component
+ * @param {Number} z Z component
+ * @returns {vec3} a new 3D vector
+ */
+
+function fromValues(x, y, z) {
+  var out = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(3);
+  out[0] = x;
+  out[1] = y;
+  out[2] = z;
+  return out;
+}
+/**
+ * Copy the values from one vec3 to another
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the source vector
+ * @returns {vec3} out
+ */
+
+function copy(out, a) {
+  out[0] = a[0];
+  out[1] = a[1];
+  out[2] = a[2];
+  return out;
+}
+/**
+ * Set the components of a vec3 to the given values
+ *
+ * @param {vec3} out the receiving vector
+ * @param {Number} x X component
+ * @param {Number} y Y component
+ * @param {Number} z Z component
+ * @returns {vec3} out
+ */
+
+function set(out, x, y, z) {
+  out[0] = x;
+  out[1] = y;
+  out[2] = z;
+  return out;
+}
+/**
+ * Adds two vec3's
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the first operand
+ * @param {ReadonlyVec3} b the second operand
+ * @returns {vec3} out
+ */
+
+function add(out, a, b) {
+  out[0] = a[0] + b[0];
+  out[1] = a[1] + b[1];
+  out[2] = a[2] + b[2];
+  return out;
+}
+/**
+ * Subtracts vector b from vector a
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the first operand
+ * @param {ReadonlyVec3} b the second operand
+ * @returns {vec3} out
+ */
+
+function subtract(out, a, b) {
+  out[0] = a[0] - b[0];
+  out[1] = a[1] - b[1];
+  out[2] = a[2] - b[2];
+  return out;
+}
+/**
+ * Multiplies two vec3's
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the first operand
+ * @param {ReadonlyVec3} b the second operand
+ * @returns {vec3} out
+ */
+
+function multiply(out, a, b) {
+  out[0] = a[0] * b[0];
+  out[1] = a[1] * b[1];
+  out[2] = a[2] * b[2];
+  return out;
+}
+/**
+ * Divides two vec3's
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the first operand
+ * @param {ReadonlyVec3} b the second operand
+ * @returns {vec3} out
+ */
+
+function divide(out, a, b) {
+  out[0] = a[0] / b[0];
+  out[1] = a[1] / b[1];
+  out[2] = a[2] / b[2];
+  return out;
+}
+/**
+ * Math.ceil the components of a vec3
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a vector to ceil
+ * @returns {vec3} out
+ */
+
+function ceil(out, a) {
+  out[0] = Math.ceil(a[0]);
+  out[1] = Math.ceil(a[1]);
+  out[2] = Math.ceil(a[2]);
+  return out;
+}
+/**
+ * Math.floor the components of a vec3
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a vector to floor
+ * @returns {vec3} out
+ */
+
+function floor(out, a) {
+  out[0] = Math.floor(a[0]);
+  out[1] = Math.floor(a[1]);
+  out[2] = Math.floor(a[2]);
+  return out;
+}
+/**
+ * Returns the minimum of two vec3's
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the first operand
+ * @param {ReadonlyVec3} b the second operand
+ * @returns {vec3} out
+ */
+
+function min(out, a, b) {
+  out[0] = Math.min(a[0], b[0]);
+  out[1] = Math.min(a[1], b[1]);
+  out[2] = Math.min(a[2], b[2]);
+  return out;
+}
+/**
+ * Returns the maximum of two vec3's
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the first operand
+ * @param {ReadonlyVec3} b the second operand
+ * @returns {vec3} out
+ */
+
+function max(out, a, b) {
+  out[0] = Math.max(a[0], b[0]);
+  out[1] = Math.max(a[1], b[1]);
+  out[2] = Math.max(a[2], b[2]);
+  return out;
+}
+/**
+ * Math.round the components of a vec3
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a vector to round
+ * @returns {vec3} out
+ */
+
+function round(out, a) {
+  out[0] = Math.round(a[0]);
+  out[1] = Math.round(a[1]);
+  out[2] = Math.round(a[2]);
+  return out;
+}
+/**
+ * Scales a vec3 by a scalar number
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the vector to scale
+ * @param {Number} b amount to scale the vector by
+ * @returns {vec3} out
+ */
+
+function scale(out, a, b) {
+  out[0] = a[0] * b;
+  out[1] = a[1] * b;
+  out[2] = a[2] * b;
+  return out;
+}
+/**
+ * Adds two vec3's after scaling the second operand by a scalar value
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the first operand
+ * @param {ReadonlyVec3} b the second operand
+ * @param {Number} scale the amount to scale b by before adding
+ * @returns {vec3} out
+ */
+
+function scaleAndAdd(out, a, b, scale) {
+  out[0] = a[0] + b[0] * scale;
+  out[1] = a[1] + b[1] * scale;
+  out[2] = a[2] + b[2] * scale;
+  return out;
+}
+/**
+ * Calculates the euclidian distance between two vec3's
+ *
+ * @param {ReadonlyVec3} a the first operand
+ * @param {ReadonlyVec3} b the second operand
+ * @returns {Number} distance between a and b
+ */
+
+function distance(a, b) {
+  var x = b[0] - a[0];
+  var y = b[1] - a[1];
+  var z = b[2] - a[2];
+  return Math.hypot(x, y, z);
+}
+/**
+ * Calculates the squared euclidian distance between two vec3's
+ *
+ * @param {ReadonlyVec3} a the first operand
+ * @param {ReadonlyVec3} b the second operand
+ * @returns {Number} squared distance between a and b
+ */
+
+function squaredDistance(a, b) {
+  var x = b[0] - a[0];
+  var y = b[1] - a[1];
+  var z = b[2] - a[2];
+  return x * x + y * y + z * z;
+}
+/**
+ * Calculates the squared length of a vec3
+ *
+ * @param {ReadonlyVec3} a vector to calculate squared length of
+ * @returns {Number} squared length of a
+ */
+
+function squaredLength(a) {
+  var x = a[0];
+  var y = a[1];
+  var z = a[2];
+  return x * x + y * y + z * z;
+}
+/**
+ * Negates the components of a vec3
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a vector to negate
+ * @returns {vec3} out
+ */
+
+function negate(out, a) {
+  out[0] = -a[0];
+  out[1] = -a[1];
+  out[2] = -a[2];
+  return out;
+}
+/**
+ * Returns the inverse of the components of a vec3
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a vector to invert
+ * @returns {vec3} out
+ */
+
+function inverse(out, a) {
+  out[0] = 1.0 / a[0];
+  out[1] = 1.0 / a[1];
+  out[2] = 1.0 / a[2];
+  return out;
+}
+/**
+ * Normalize a vec3
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a vector to normalize
+ * @returns {vec3} out
+ */
+
+function normalize(out, a) {
+  var x = a[0];
+  var y = a[1];
+  var z = a[2];
+  var len = x * x + y * y + z * z;
+
+  if (len > 0) {
+    //TODO: evaluate use of glm_invsqrt here?
+    len = 1 / Math.sqrt(len);
+  }
+
+  out[0] = a[0] * len;
+  out[1] = a[1] * len;
+  out[2] = a[2] * len;
+  return out;
+}
+/**
+ * Calculates the dot product of two vec3's
+ *
+ * @param {ReadonlyVec3} a the first operand
+ * @param {ReadonlyVec3} b the second operand
+ * @returns {Number} dot product of a and b
+ */
+
+function dot(a, b) {
+  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+}
+/**
+ * Computes the cross product of two vec3's
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the first operand
+ * @param {ReadonlyVec3} b the second operand
+ * @returns {vec3} out
+ */
+
+function cross(out, a, b) {
+  var ax = a[0],
+      ay = a[1],
+      az = a[2];
+  var bx = b[0],
+      by = b[1],
+      bz = b[2];
+  out[0] = ay * bz - az * by;
+  out[1] = az * bx - ax * bz;
+  out[2] = ax * by - ay * bx;
+  return out;
+}
+/**
+ * Performs a linear interpolation between two vec3's
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the first operand
+ * @param {ReadonlyVec3} b the second operand
+ * @param {Number} t interpolation amount, in the range [0-1], between the two inputs
+ * @returns {vec3} out
+ */
+
+function lerp(out, a, b, t) {
+  var ax = a[0];
+  var ay = a[1];
+  var az = a[2];
+  out[0] = ax + t * (b[0] - ax);
+  out[1] = ay + t * (b[1] - ay);
+  out[2] = az + t * (b[2] - az);
+  return out;
+}
+/**
+ * Performs a hermite interpolation with two control points
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the first operand
+ * @param {ReadonlyVec3} b the second operand
+ * @param {ReadonlyVec3} c the third operand
+ * @param {ReadonlyVec3} d the fourth operand
+ * @param {Number} t interpolation amount, in the range [0-1], between the two inputs
+ * @returns {vec3} out
+ */
+
+function hermite(out, a, b, c, d, t) {
+  var factorTimes2 = t * t;
+  var factor1 = factorTimes2 * (2 * t - 3) + 1;
+  var factor2 = factorTimes2 * (t - 2) + t;
+  var factor3 = factorTimes2 * (t - 1);
+  var factor4 = factorTimes2 * (3 - 2 * t);
+  out[0] = a[0] * factor1 + b[0] * factor2 + c[0] * factor3 + d[0] * factor4;
+  out[1] = a[1] * factor1 + b[1] * factor2 + c[1] * factor3 + d[1] * factor4;
+  out[2] = a[2] * factor1 + b[2] * factor2 + c[2] * factor3 + d[2] * factor4;
+  return out;
+}
+/**
+ * Performs a bezier interpolation with two control points
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the first operand
+ * @param {ReadonlyVec3} b the second operand
+ * @param {ReadonlyVec3} c the third operand
+ * @param {ReadonlyVec3} d the fourth operand
+ * @param {Number} t interpolation amount, in the range [0-1], between the two inputs
+ * @returns {vec3} out
+ */
+
+function bezier(out, a, b, c, d, t) {
+  var inverseFactor = 1 - t;
+  var inverseFactorTimesTwo = inverseFactor * inverseFactor;
+  var factorTimes2 = t * t;
+  var factor1 = inverseFactorTimesTwo * inverseFactor;
+  var factor2 = 3 * t * inverseFactorTimesTwo;
+  var factor3 = 3 * factorTimes2 * inverseFactor;
+  var factor4 = factorTimes2 * t;
+  out[0] = a[0] * factor1 + b[0] * factor2 + c[0] * factor3 + d[0] * factor4;
+  out[1] = a[1] * factor1 + b[1] * factor2 + c[1] * factor3 + d[1] * factor4;
+  out[2] = a[2] * factor1 + b[2] * factor2 + c[2] * factor3 + d[2] * factor4;
+  return out;
+}
+/**
+ * Generates a random vector with the given scale
+ *
+ * @param {vec3} out the receiving vector
+ * @param {Number} [scale] Length of the resulting vector. If ommitted, a unit vector will be returned
+ * @returns {vec3} out
+ */
+
+function random(out, scale) {
+  scale = scale || 1.0;
+  var r = _common_js__WEBPACK_IMPORTED_MODULE_0__.RANDOM() * 2.0 * Math.PI;
+  var z = _common_js__WEBPACK_IMPORTED_MODULE_0__.RANDOM() * 2.0 - 1.0;
+  var zScale = Math.sqrt(1.0 - z * z) * scale;
+  out[0] = Math.cos(r) * zScale;
+  out[1] = Math.sin(r) * zScale;
+  out[2] = z * scale;
+  return out;
+}
+/**
+ * Transforms the vec3 with a mat4.
+ * 4th vector component is implicitly '1'
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the vector to transform
+ * @param {ReadonlyMat4} m matrix to transform with
+ * @returns {vec3} out
+ */
+
+function transformMat4(out, a, m) {
+  var x = a[0],
+      y = a[1],
+      z = a[2];
+  var w = m[3] * x + m[7] * y + m[11] * z + m[15];
+  w = w || 1.0;
+  out[0] = (m[0] * x + m[4] * y + m[8] * z + m[12]) / w;
+  out[1] = (m[1] * x + m[5] * y + m[9] * z + m[13]) / w;
+  out[2] = (m[2] * x + m[6] * y + m[10] * z + m[14]) / w;
+  return out;
+}
+/**
+ * Transforms the vec3 with a mat3.
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the vector to transform
+ * @param {ReadonlyMat3} m the 3x3 matrix to transform with
+ * @returns {vec3} out
+ */
+
+function transformMat3(out, a, m) {
+  var x = a[0],
+      y = a[1],
+      z = a[2];
+  out[0] = x * m[0] + y * m[3] + z * m[6];
+  out[1] = x * m[1] + y * m[4] + z * m[7];
+  out[2] = x * m[2] + y * m[5] + z * m[8];
+  return out;
+}
+/**
+ * Transforms the vec3 with a quat
+ * Can also be used for dual quaternions. (Multiply it with the real part)
+ *
+ * @param {vec3} out the receiving vector
+ * @param {ReadonlyVec3} a the vector to transform
+ * @param {ReadonlyQuat} q quaternion to transform with
+ * @returns {vec3} out
+ */
+
+function transformQuat(out, a, q) {
+  // benchmarks: https://jsperf.com/quaternion-transform-vec3-implementations-fixed
+  var qx = q[0],
+      qy = q[1],
+      qz = q[2],
+      qw = q[3];
+  var x = a[0],
+      y = a[1],
+      z = a[2]; // var qvec = [qx, qy, qz];
+  // var uv = vec3.cross([], qvec, a);
+
+  var uvx = qy * z - qz * y,
+      uvy = qz * x - qx * z,
+      uvz = qx * y - qy * x; // var uuv = vec3.cross([], qvec, uv);
+
+  var uuvx = qy * uvz - qz * uvy,
+      uuvy = qz * uvx - qx * uvz,
+      uuvz = qx * uvy - qy * uvx; // vec3.scale(uv, uv, 2 * w);
+
+  var w2 = qw * 2;
+  uvx *= w2;
+  uvy *= w2;
+  uvz *= w2; // vec3.scale(uuv, uuv, 2);
+
+  uuvx *= 2;
+  uuvy *= 2;
+  uuvz *= 2; // return vec3.add(out, a, vec3.add(out, uv, uuv));
+
+  out[0] = x + uvx + uuvx;
+  out[1] = y + uvy + uuvy;
+  out[2] = z + uvz + uuvz;
+  return out;
+}
+/**
+ * Rotate a 3D vector around the x-axis
+ * @param {vec3} out The receiving vec3
+ * @param {ReadonlyVec3} a The vec3 point to rotate
+ * @param {ReadonlyVec3} b The origin of the rotation
+ * @param {Number} rad The angle of rotation in radians
+ * @returns {vec3} out
+ */
+
+function rotateX(out, a, b, rad) {
+  var p = [],
+      r = []; //Translate point to the origin
+
+  p[0] = a[0] - b[0];
+  p[1] = a[1] - b[1];
+  p[2] = a[2] - b[2]; //perform rotation
+
+  r[0] = p[0];
+  r[1] = p[1] * Math.cos(rad) - p[2] * Math.sin(rad);
+  r[2] = p[1] * Math.sin(rad) + p[2] * Math.cos(rad); //translate to correct position
+
+  out[0] = r[0] + b[0];
+  out[1] = r[1] + b[1];
+  out[2] = r[2] + b[2];
+  return out;
+}
+/**
+ * Rotate a 3D vector around the y-axis
+ * @param {vec3} out The receiving vec3
+ * @param {ReadonlyVec3} a The vec3 point to rotate
+ * @param {ReadonlyVec3} b The origin of the rotation
+ * @param {Number} rad The angle of rotation in radians
+ * @returns {vec3} out
+ */
+
+function rotateY(out, a, b, rad) {
+  var p = [],
+      r = []; //Translate point to the origin
+
+  p[0] = a[0] - b[0];
+  p[1] = a[1] - b[1];
+  p[2] = a[2] - b[2]; //perform rotation
+
+  r[0] = p[2] * Math.sin(rad) + p[0] * Math.cos(rad);
+  r[1] = p[1];
+  r[2] = p[2] * Math.cos(rad) - p[0] * Math.sin(rad); //translate to correct position
+
+  out[0] = r[0] + b[0];
+  out[1] = r[1] + b[1];
+  out[2] = r[2] + b[2];
+  return out;
+}
+/**
+ * Rotate a 3D vector around the z-axis
+ * @param {vec3} out The receiving vec3
+ * @param {ReadonlyVec3} a The vec3 point to rotate
+ * @param {ReadonlyVec3} b The origin of the rotation
+ * @param {Number} rad The angle of rotation in radians
+ * @returns {vec3} out
+ */
+
+function rotateZ(out, a, b, rad) {
+  var p = [],
+      r = []; //Translate point to the origin
+
+  p[0] = a[0] - b[0];
+  p[1] = a[1] - b[1];
+  p[2] = a[2] - b[2]; //perform rotation
+
+  r[0] = p[0] * Math.cos(rad) - p[1] * Math.sin(rad);
+  r[1] = p[0] * Math.sin(rad) + p[1] * Math.cos(rad);
+  r[2] = p[2]; //translate to correct position
+
+  out[0] = r[0] + b[0];
+  out[1] = r[1] + b[1];
+  out[2] = r[2] + b[2];
+  return out;
+}
+/**
+ * Get the angle between two 3D vectors
+ * @param {ReadonlyVec3} a The first operand
+ * @param {ReadonlyVec3} b The second operand
+ * @returns {Number} The angle in radians
+ */
+
+function angle(a, b) {
+  var ax = a[0],
+      ay = a[1],
+      az = a[2],
+      bx = b[0],
+      by = b[1],
+      bz = b[2],
+      mag1 = Math.sqrt(ax * ax + ay * ay + az * az),
+      mag2 = Math.sqrt(bx * bx + by * by + bz * bz),
+      mag = mag1 * mag2,
+      cosine = mag && dot(a, b) / mag;
+  return Math.acos(Math.min(Math.max(cosine, -1), 1));
+}
+/**
+ * Set the components of a vec3 to zero
+ *
+ * @param {vec3} out the receiving vector
+ * @returns {vec3} out
+ */
+
+function zero(out) {
+  out[0] = 0.0;
+  out[1] = 0.0;
+  out[2] = 0.0;
+  return out;
+}
+/**
+ * Returns a string representation of a vector
+ *
+ * @param {ReadonlyVec3} a vector to represent as a string
+ * @returns {String} string representation of the vector
+ */
+
+function str(a) {
+  return "vec3(" + a[0] + ", " + a[1] + ", " + a[2] + ")";
+}
+/**
+ * Returns whether or not the vectors have exactly the same elements in the same position (when compared with ===)
+ *
+ * @param {ReadonlyVec3} a The first vector.
+ * @param {ReadonlyVec3} b The second vector.
+ * @returns {Boolean} True if the vectors are equal, false otherwise.
+ */
+
+function exactEquals(a, b) {
+  return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
+}
+/**
+ * Returns whether or not the vectors have approximately the same elements in the same position.
+ *
+ * @param {ReadonlyVec3} a The first vector.
+ * @param {ReadonlyVec3} b The second vector.
+ * @returns {Boolean} True if the vectors are equal, false otherwise.
+ */
+
+function equals(a, b) {
+  var a0 = a[0],
+      a1 = a[1],
+      a2 = a[2];
+  var b0 = b[0],
+      b1 = b[1],
+      b2 = b[2];
+  return Math.abs(a0 - b0) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) && Math.abs(a1 - b1) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) && Math.abs(a2 - b2) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2));
+}
+/**
+ * Alias for {@link vec3.subtract}
+ * @function
+ */
+
+var sub = subtract;
+/**
+ * Alias for {@link vec3.multiply}
+ * @function
+ */
+
+var mul = multiply;
+/**
+ * Alias for {@link vec3.divide}
+ * @function
+ */
+
+var div = divide;
+/**
+ * Alias for {@link vec3.distance}
+ * @function
+ */
+
+var dist = distance;
+/**
+ * Alias for {@link vec3.squaredDistance}
+ * @function
+ */
+
+var sqrDist = squaredDistance;
+/**
+ * Alias for {@link vec3.length}
+ * @function
+ */
+
+var len = length;
+/**
+ * Alias for {@link vec3.squaredLength}
+ * @function
+ */
+
+var sqrLen = squaredLength;
+/**
+ * Perform some operation over an array of vec3s.
+ *
+ * @param {Array} a the array of vectors to iterate over
+ * @param {Number} stride Number of elements between the start of each vec3. If 0 assumes tightly packed
+ * @param {Number} offset Number of elements to skip at the beginning of the array
+ * @param {Number} count Number of vec3s to iterate over. If 0 iterates over entire array
+ * @param {Function} fn Function to call for each vector in the array
+ * @param {Object} [arg] additional argument to pass to fn
+ * @returns {Array} a
+ * @function
+ */
+
+var forEach = function () {
+  var vec = create();
+  return function (a, stride, offset, count, fn, arg) {
+    var i, l;
+
+    if (!stride) {
+      stride = 3;
+    }
+
+    if (!offset) {
+      offset = 0;
+    }
+
+    if (count) {
+      l = Math.min(count * stride + offset, a.length);
+    } else {
+      l = a.length;
+    }
+
+    for (i = offset; i < l; i += stride) {
+      vec[0] = a[i];
+      vec[1] = a[i + 1];
+      vec[2] = a[i + 2];
+      fn(vec, vec, arg);
+      a[i] = vec[0];
+      a[i + 1] = vec[1];
+      a[i + 2] = vec[2];
+    }
+
+    return a;
+  };
+}();
+
+/***/ }),
+
+/***/ "./node_modules/gl-matrix/esm/vec4.js":
+/*!********************************************!*\
+  !*** ./node_modules/gl-matrix/esm/vec4.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "create": () => (/* binding */ create),
+/* harmony export */   "clone": () => (/* binding */ clone),
+/* harmony export */   "fromValues": () => (/* binding */ fromValues),
+/* harmony export */   "copy": () => (/* binding */ copy),
+/* harmony export */   "set": () => (/* binding */ set),
+/* harmony export */   "add": () => (/* binding */ add),
+/* harmony export */   "subtract": () => (/* binding */ subtract),
+/* harmony export */   "multiply": () => (/* binding */ multiply),
+/* harmony export */   "divide": () => (/* binding */ divide),
+/* harmony export */   "ceil": () => (/* binding */ ceil),
+/* harmony export */   "floor": () => (/* binding */ floor),
+/* harmony export */   "min": () => (/* binding */ min),
+/* harmony export */   "max": () => (/* binding */ max),
+/* harmony export */   "round": () => (/* binding */ round),
+/* harmony export */   "scale": () => (/* binding */ scale),
+/* harmony export */   "scaleAndAdd": () => (/* binding */ scaleAndAdd),
+/* harmony export */   "distance": () => (/* binding */ distance),
+/* harmony export */   "squaredDistance": () => (/* binding */ squaredDistance),
+/* harmony export */   "length": () => (/* binding */ length),
+/* harmony export */   "squaredLength": () => (/* binding */ squaredLength),
+/* harmony export */   "negate": () => (/* binding */ negate),
+/* harmony export */   "inverse": () => (/* binding */ inverse),
+/* harmony export */   "normalize": () => (/* binding */ normalize),
+/* harmony export */   "dot": () => (/* binding */ dot),
+/* harmony export */   "cross": () => (/* binding */ cross),
+/* harmony export */   "lerp": () => (/* binding */ lerp),
+/* harmony export */   "random": () => (/* binding */ random),
+/* harmony export */   "transformMat4": () => (/* binding */ transformMat4),
+/* harmony export */   "transformQuat": () => (/* binding */ transformQuat),
+/* harmony export */   "zero": () => (/* binding */ zero),
+/* harmony export */   "str": () => (/* binding */ str),
+/* harmony export */   "exactEquals": () => (/* binding */ exactEquals),
+/* harmony export */   "equals": () => (/* binding */ equals),
+/* harmony export */   "sub": () => (/* binding */ sub),
+/* harmony export */   "mul": () => (/* binding */ mul),
+/* harmony export */   "div": () => (/* binding */ div),
+/* harmony export */   "dist": () => (/* binding */ dist),
+/* harmony export */   "sqrDist": () => (/* binding */ sqrDist),
+/* harmony export */   "len": () => (/* binding */ len),
+/* harmony export */   "sqrLen": () => (/* binding */ sqrLen),
+/* harmony export */   "forEach": () => (/* binding */ forEach)
+/* harmony export */ });
+/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common.js */ "./node_modules/gl-matrix/esm/common.js");
+
+/**
+ * 4 Dimensional Vector
+ * @module vec4
+ */
+
+/**
+ * Creates a new, empty vec4
+ *
+ * @returns {vec4} a new 4D vector
+ */
+
+function create() {
+  var out = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(4);
+
+  if (_common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE != Float32Array) {
+    out[0] = 0;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+  }
+
+  return out;
+}
+/**
+ * Creates a new vec4 initialized with values from an existing vector
+ *
+ * @param {ReadonlyVec4} a vector to clone
+ * @returns {vec4} a new 4D vector
+ */
+
+function clone(a) {
+  var out = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(4);
+  out[0] = a[0];
+  out[1] = a[1];
+  out[2] = a[2];
+  out[3] = a[3];
+  return out;
+}
+/**
+ * Creates a new vec4 initialized with the given values
+ *
+ * @param {Number} x X component
+ * @param {Number} y Y component
+ * @param {Number} z Z component
+ * @param {Number} w W component
+ * @returns {vec4} a new 4D vector
+ */
+
+function fromValues(x, y, z, w) {
+  var out = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(4);
+  out[0] = x;
+  out[1] = y;
+  out[2] = z;
+  out[3] = w;
+  return out;
+}
+/**
+ * Copy the values from one vec4 to another
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a the source vector
+ * @returns {vec4} out
+ */
+
+function copy(out, a) {
+  out[0] = a[0];
+  out[1] = a[1];
+  out[2] = a[2];
+  out[3] = a[3];
+  return out;
+}
+/**
+ * Set the components of a vec4 to the given values
+ *
+ * @param {vec4} out the receiving vector
+ * @param {Number} x X component
+ * @param {Number} y Y component
+ * @param {Number} z Z component
+ * @param {Number} w W component
+ * @returns {vec4} out
+ */
+
+function set(out, x, y, z, w) {
+  out[0] = x;
+  out[1] = y;
+  out[2] = z;
+  out[3] = w;
+  return out;
+}
+/**
+ * Adds two vec4's
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a the first operand
+ * @param {ReadonlyVec4} b the second operand
+ * @returns {vec4} out
+ */
+
+function add(out, a, b) {
+  out[0] = a[0] + b[0];
+  out[1] = a[1] + b[1];
+  out[2] = a[2] + b[2];
+  out[3] = a[3] + b[3];
+  return out;
+}
+/**
+ * Subtracts vector b from vector a
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a the first operand
+ * @param {ReadonlyVec4} b the second operand
+ * @returns {vec4} out
+ */
+
+function subtract(out, a, b) {
+  out[0] = a[0] - b[0];
+  out[1] = a[1] - b[1];
+  out[2] = a[2] - b[2];
+  out[3] = a[3] - b[3];
+  return out;
+}
+/**
+ * Multiplies two vec4's
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a the first operand
+ * @param {ReadonlyVec4} b the second operand
+ * @returns {vec4} out
+ */
+
+function multiply(out, a, b) {
+  out[0] = a[0] * b[0];
+  out[1] = a[1] * b[1];
+  out[2] = a[2] * b[2];
+  out[3] = a[3] * b[3];
+  return out;
+}
+/**
+ * Divides two vec4's
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a the first operand
+ * @param {ReadonlyVec4} b the second operand
+ * @returns {vec4} out
+ */
+
+function divide(out, a, b) {
+  out[0] = a[0] / b[0];
+  out[1] = a[1] / b[1];
+  out[2] = a[2] / b[2];
+  out[3] = a[3] / b[3];
+  return out;
+}
+/**
+ * Math.ceil the components of a vec4
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a vector to ceil
+ * @returns {vec4} out
+ */
+
+function ceil(out, a) {
+  out[0] = Math.ceil(a[0]);
+  out[1] = Math.ceil(a[1]);
+  out[2] = Math.ceil(a[2]);
+  out[3] = Math.ceil(a[3]);
+  return out;
+}
+/**
+ * Math.floor the components of a vec4
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a vector to floor
+ * @returns {vec4} out
+ */
+
+function floor(out, a) {
+  out[0] = Math.floor(a[0]);
+  out[1] = Math.floor(a[1]);
+  out[2] = Math.floor(a[2]);
+  out[3] = Math.floor(a[3]);
+  return out;
+}
+/**
+ * Returns the minimum of two vec4's
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a the first operand
+ * @param {ReadonlyVec4} b the second operand
+ * @returns {vec4} out
+ */
+
+function min(out, a, b) {
+  out[0] = Math.min(a[0], b[0]);
+  out[1] = Math.min(a[1], b[1]);
+  out[2] = Math.min(a[2], b[2]);
+  out[3] = Math.min(a[3], b[3]);
+  return out;
+}
+/**
+ * Returns the maximum of two vec4's
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a the first operand
+ * @param {ReadonlyVec4} b the second operand
+ * @returns {vec4} out
+ */
+
+function max(out, a, b) {
+  out[0] = Math.max(a[0], b[0]);
+  out[1] = Math.max(a[1], b[1]);
+  out[2] = Math.max(a[2], b[2]);
+  out[3] = Math.max(a[3], b[3]);
+  return out;
+}
+/**
+ * Math.round the components of a vec4
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a vector to round
+ * @returns {vec4} out
+ */
+
+function round(out, a) {
+  out[0] = Math.round(a[0]);
+  out[1] = Math.round(a[1]);
+  out[2] = Math.round(a[2]);
+  out[3] = Math.round(a[3]);
+  return out;
+}
+/**
+ * Scales a vec4 by a scalar number
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a the vector to scale
+ * @param {Number} b amount to scale the vector by
+ * @returns {vec4} out
+ */
+
+function scale(out, a, b) {
+  out[0] = a[0] * b;
+  out[1] = a[1] * b;
+  out[2] = a[2] * b;
+  out[3] = a[3] * b;
+  return out;
+}
+/**
+ * Adds two vec4's after scaling the second operand by a scalar value
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a the first operand
+ * @param {ReadonlyVec4} b the second operand
+ * @param {Number} scale the amount to scale b by before adding
+ * @returns {vec4} out
+ */
+
+function scaleAndAdd(out, a, b, scale) {
+  out[0] = a[0] + b[0] * scale;
+  out[1] = a[1] + b[1] * scale;
+  out[2] = a[2] + b[2] * scale;
+  out[3] = a[3] + b[3] * scale;
+  return out;
+}
+/**
+ * Calculates the euclidian distance between two vec4's
+ *
+ * @param {ReadonlyVec4} a the first operand
+ * @param {ReadonlyVec4} b the second operand
+ * @returns {Number} distance between a and b
+ */
+
+function distance(a, b) {
+  var x = b[0] - a[0];
+  var y = b[1] - a[1];
+  var z = b[2] - a[2];
+  var w = b[3] - a[3];
+  return Math.hypot(x, y, z, w);
+}
+/**
+ * Calculates the squared euclidian distance between two vec4's
+ *
+ * @param {ReadonlyVec4} a the first operand
+ * @param {ReadonlyVec4} b the second operand
+ * @returns {Number} squared distance between a and b
+ */
+
+function squaredDistance(a, b) {
+  var x = b[0] - a[0];
+  var y = b[1] - a[1];
+  var z = b[2] - a[2];
+  var w = b[3] - a[3];
+  return x * x + y * y + z * z + w * w;
+}
+/**
+ * Calculates the length of a vec4
+ *
+ * @param {ReadonlyVec4} a vector to calculate length of
+ * @returns {Number} length of a
+ */
+
+function length(a) {
+  var x = a[0];
+  var y = a[1];
+  var z = a[2];
+  var w = a[3];
+  return Math.hypot(x, y, z, w);
+}
+/**
+ * Calculates the squared length of a vec4
+ *
+ * @param {ReadonlyVec4} a vector to calculate squared length of
+ * @returns {Number} squared length of a
+ */
+
+function squaredLength(a) {
+  var x = a[0];
+  var y = a[1];
+  var z = a[2];
+  var w = a[3];
+  return x * x + y * y + z * z + w * w;
+}
+/**
+ * Negates the components of a vec4
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a vector to negate
+ * @returns {vec4} out
+ */
+
+function negate(out, a) {
+  out[0] = -a[0];
+  out[1] = -a[1];
+  out[2] = -a[2];
+  out[3] = -a[3];
+  return out;
+}
+/**
+ * Returns the inverse of the components of a vec4
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a vector to invert
+ * @returns {vec4} out
+ */
+
+function inverse(out, a) {
+  out[0] = 1.0 / a[0];
+  out[1] = 1.0 / a[1];
+  out[2] = 1.0 / a[2];
+  out[3] = 1.0 / a[3];
+  return out;
+}
+/**
+ * Normalize a vec4
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a vector to normalize
+ * @returns {vec4} out
+ */
+
+function normalize(out, a) {
+  var x = a[0];
+  var y = a[1];
+  var z = a[2];
+  var w = a[3];
+  var len = x * x + y * y + z * z + w * w;
+
+  if (len > 0) {
+    len = 1 / Math.sqrt(len);
+  }
+
+  out[0] = x * len;
+  out[1] = y * len;
+  out[2] = z * len;
+  out[3] = w * len;
+  return out;
+}
+/**
+ * Calculates the dot product of two vec4's
+ *
+ * @param {ReadonlyVec4} a the first operand
+ * @param {ReadonlyVec4} b the second operand
+ * @returns {Number} dot product of a and b
+ */
+
+function dot(a, b) {
+  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
+}
+/**
+ * Returns the cross-product of three vectors in a 4-dimensional space
+ *
+ * @param {ReadonlyVec4} result the receiving vector
+ * @param {ReadonlyVec4} U the first vector
+ * @param {ReadonlyVec4} V the second vector
+ * @param {ReadonlyVec4} W the third vector
+ * @returns {vec4} result
+ */
+
+function cross(out, u, v, w) {
+  var A = v[0] * w[1] - v[1] * w[0],
+      B = v[0] * w[2] - v[2] * w[0],
+      C = v[0] * w[3] - v[3] * w[0],
+      D = v[1] * w[2] - v[2] * w[1],
+      E = v[1] * w[3] - v[3] * w[1],
+      F = v[2] * w[3] - v[3] * w[2];
+  var G = u[0];
+  var H = u[1];
+  var I = u[2];
+  var J = u[3];
+  out[0] = H * F - I * E + J * D;
+  out[1] = -(G * F) + I * C - J * B;
+  out[2] = G * E - H * C + J * A;
+  out[3] = -(G * D) + H * B - I * A;
+  return out;
+}
+/**
+ * Performs a linear interpolation between two vec4's
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a the first operand
+ * @param {ReadonlyVec4} b the second operand
+ * @param {Number} t interpolation amount, in the range [0-1], between the two inputs
+ * @returns {vec4} out
+ */
+
+function lerp(out, a, b, t) {
+  var ax = a[0];
+  var ay = a[1];
+  var az = a[2];
+  var aw = a[3];
+  out[0] = ax + t * (b[0] - ax);
+  out[1] = ay + t * (b[1] - ay);
+  out[2] = az + t * (b[2] - az);
+  out[3] = aw + t * (b[3] - aw);
+  return out;
+}
+/**
+ * Generates a random vector with the given scale
+ *
+ * @param {vec4} out the receiving vector
+ * @param {Number} [scale] Length of the resulting vector. If ommitted, a unit vector will be returned
+ * @returns {vec4} out
+ */
+
+function random(out, scale) {
+  scale = scale || 1.0; // Marsaglia, George. Choosing a Point from the Surface of a
+  // Sphere. Ann. Math. Statist. 43 (1972), no. 2, 645--646.
+  // http://projecteuclid.org/euclid.aoms/1177692644;
+
+  var v1, v2, v3, v4;
+  var s1, s2;
+
+  do {
+    v1 = _common_js__WEBPACK_IMPORTED_MODULE_0__.RANDOM() * 2 - 1;
+    v2 = _common_js__WEBPACK_IMPORTED_MODULE_0__.RANDOM() * 2 - 1;
+    s1 = v1 * v1 + v2 * v2;
+  } while (s1 >= 1);
+
+  do {
+    v3 = _common_js__WEBPACK_IMPORTED_MODULE_0__.RANDOM() * 2 - 1;
+    v4 = _common_js__WEBPACK_IMPORTED_MODULE_0__.RANDOM() * 2 - 1;
+    s2 = v3 * v3 + v4 * v4;
+  } while (s2 >= 1);
+
+  var d = Math.sqrt((1 - s1) / s2);
+  out[0] = scale * v1;
+  out[1] = scale * v2;
+  out[2] = scale * v3 * d;
+  out[3] = scale * v4 * d;
+  return out;
+}
+/**
+ * Transforms the vec4 with a mat4.
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a the vector to transform
+ * @param {ReadonlyMat4} m matrix to transform with
+ * @returns {vec4} out
+ */
+
+function transformMat4(out, a, m) {
+  var x = a[0],
+      y = a[1],
+      z = a[2],
+      w = a[3];
+  out[0] = m[0] * x + m[4] * y + m[8] * z + m[12] * w;
+  out[1] = m[1] * x + m[5] * y + m[9] * z + m[13] * w;
+  out[2] = m[2] * x + m[6] * y + m[10] * z + m[14] * w;
+  out[3] = m[3] * x + m[7] * y + m[11] * z + m[15] * w;
+  return out;
+}
+/**
+ * Transforms the vec4 with a quat
+ *
+ * @param {vec4} out the receiving vector
+ * @param {ReadonlyVec4} a the vector to transform
+ * @param {ReadonlyQuat} q quaternion to transform with
+ * @returns {vec4} out
+ */
+
+function transformQuat(out, a, q) {
+  var x = a[0],
+      y = a[1],
+      z = a[2];
+  var qx = q[0],
+      qy = q[1],
+      qz = q[2],
+      qw = q[3]; // calculate quat * vec
+
+  var ix = qw * x + qy * z - qz * y;
+  var iy = qw * y + qz * x - qx * z;
+  var iz = qw * z + qx * y - qy * x;
+  var iw = -qx * x - qy * y - qz * z; // calculate result * inverse quat
+
+  out[0] = ix * qw + iw * -qx + iy * -qz - iz * -qy;
+  out[1] = iy * qw + iw * -qy + iz * -qx - ix * -qz;
+  out[2] = iz * qw + iw * -qz + ix * -qy - iy * -qx;
+  out[3] = a[3];
+  return out;
+}
+/**
+ * Set the components of a vec4 to zero
+ *
+ * @param {vec4} out the receiving vector
+ * @returns {vec4} out
+ */
+
+function zero(out) {
+  out[0] = 0.0;
+  out[1] = 0.0;
+  out[2] = 0.0;
+  out[3] = 0.0;
+  return out;
+}
+/**
+ * Returns a string representation of a vector
+ *
+ * @param {ReadonlyVec4} a vector to represent as a string
+ * @returns {String} string representation of the vector
+ */
+
+function str(a) {
+  return "vec4(" + a[0] + ", " + a[1] + ", " + a[2] + ", " + a[3] + ")";
+}
+/**
+ * Returns whether or not the vectors have exactly the same elements in the same position (when compared with ===)
+ *
+ * @param {ReadonlyVec4} a The first vector.
+ * @param {ReadonlyVec4} b The second vector.
+ * @returns {Boolean} True if the vectors are equal, false otherwise.
+ */
+
+function exactEquals(a, b) {
+  return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
+}
+/**
+ * Returns whether or not the vectors have approximately the same elements in the same position.
+ *
+ * @param {ReadonlyVec4} a The first vector.
+ * @param {ReadonlyVec4} b The second vector.
+ * @returns {Boolean} True if the vectors are equal, false otherwise.
+ */
+
+function equals(a, b) {
+  var a0 = a[0],
+      a1 = a[1],
+      a2 = a[2],
+      a3 = a[3];
+  var b0 = b[0],
+      b1 = b[1],
+      b2 = b[2],
+      b3 = b[3];
+  return Math.abs(a0 - b0) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) && Math.abs(a1 - b1) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) && Math.abs(a2 - b2) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) && Math.abs(a3 - b3) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3));
+}
+/**
+ * Alias for {@link vec4.subtract}
+ * @function
+ */
+
+var sub = subtract;
+/**
+ * Alias for {@link vec4.multiply}
+ * @function
+ */
+
+var mul = multiply;
+/**
+ * Alias for {@link vec4.divide}
+ * @function
+ */
+
+var div = divide;
+/**
+ * Alias for {@link vec4.distance}
+ * @function
+ */
+
+var dist = distance;
+/**
+ * Alias for {@link vec4.squaredDistance}
+ * @function
+ */
+
+var sqrDist = squaredDistance;
+/**
+ * Alias for {@link vec4.length}
+ * @function
+ */
+
+var len = length;
+/**
+ * Alias for {@link vec4.squaredLength}
+ * @function
+ */
+
+var sqrLen = squaredLength;
+/**
+ * Perform some operation over an array of vec4s.
+ *
+ * @param {Array} a the array of vectors to iterate over
+ * @param {Number} stride Number of elements between the start of each vec4. If 0 assumes tightly packed
+ * @param {Number} offset Number of elements to skip at the beginning of the array
+ * @param {Number} count Number of vec4s to iterate over. If 0 iterates over entire array
+ * @param {Function} fn Function to call for each vector in the array
+ * @param {Object} [arg] additional argument to pass to fn
+ * @returns {Array} a
+ * @function
+ */
+
+var forEach = function () {
+  var vec = create();
+  return function (a, stride, offset, count, fn, arg) {
+    var i, l;
+
+    if (!stride) {
+      stride = 4;
+    }
+
+    if (!offset) {
+      offset = 0;
+    }
+
+    if (count) {
+      l = Math.min(count * stride + offset, a.length);
+    } else {
+      l = a.length;
+    }
+
+    for (i = offset; i < l; i += stride) {
+      vec[0] = a[i];
+      vec[1] = a[i + 1];
+      vec[2] = a[i + 2];
+      vec[3] = a[i + 3];
+      fn(vec, vec, arg);
+      a[i] = vec[0];
+      a[i + 1] = vec[1];
+      a[i + 2] = vec[2];
+      a[i + 3] = vec[3];
+    }
+
+    return a;
+  };
+}();
+
+/***/ }),
+
+/***/ "./node_modules/gl-quat/slerp.js":
+/*!***************************************!*\
+  !*** ./node_modules/gl-quat/slerp.js ***!
+  \***************************************/
+/***/ ((module) => {
+
+module.exports = slerp
+
+/**
+ * Performs a spherical linear interpolation between two quat
+ *
+ * @param {quat} out the receiving quaternion
+ * @param {quat} a the first operand
+ * @param {quat} b the second operand
+ * @param {Number} t interpolation amount between the two inputs
+ * @returns {quat} out
+ */
+function slerp (out, a, b, t) {
+  // benchmarks:
+  //    http://jsperf.com/quaternion-slerp-implementations
+
+  var ax = a[0], ay = a[1], az = a[2], aw = a[3],
+    bx = b[0], by = b[1], bz = b[2], bw = b[3]
+
+  var omega, cosom, sinom, scale0, scale1
+
+  // calc cosine
+  cosom = ax * bx + ay * by + az * bz + aw * bw
+  // adjust signs (if necessary)
+  if (cosom < 0.0) {
+    cosom = -cosom
+    bx = -bx
+    by = -by
+    bz = -bz
+    bw = -bw
+  }
+  // calculate coefficients
+  if ((1.0 - cosom) > 0.000001) {
+    // standard case (slerp)
+    omega = Math.acos(cosom)
+    sinom = Math.sin(omega)
+    scale0 = Math.sin((1.0 - t) * omega) / sinom
+    scale1 = Math.sin(t * omega) / sinom
+  } else {
+    // "from" and "to" quaternions are very close
+    //  ... so we can do a linear interpolation
+    scale0 = 1.0 - t
+    scale1 = t
+  }
+  // calculate final values
+  out[0] = scale0 * ax + scale1 * bx
+  out[1] = scale0 * ay + scale1 * by
+  out[2] = scale0 * az + scale1 * bz
+  out[3] = scale0 * aw + scale1 * bw
+
+  return out
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/gl-vec3/cross.js":
+/*!***************************************!*\
+  !*** ./node_modules/gl-vec3/cross.js ***!
+  \***************************************/
+/***/ ((module) => {
+
+module.exports = cross;
+
+/**
+ * Computes the cross product of two vec3's
+ *
+ * @param {vec3} out the receiving vector
+ * @param {vec3} a the first operand
+ * @param {vec3} b the second operand
+ * @returns {vec3} out
+ */
+function cross(out, a, b) {
+    var ax = a[0], ay = a[1], az = a[2],
+        bx = b[0], by = b[1], bz = b[2]
+
+    out[0] = ay * bz - az * by
+    out[1] = az * bx - ax * bz
+    out[2] = ax * by - ay * bx
+    return out
+}
+
+/***/ }),
+
+/***/ "./node_modules/gl-vec3/dot.js":
+/*!*************************************!*\
+  !*** ./node_modules/gl-vec3/dot.js ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = dot;
+
+/**
+ * Calculates the dot product of two vec3's
+ *
+ * @param {vec3} a the first operand
+ * @param {vec3} b the second operand
+ * @returns {Number} dot product of a and b
+ */
+function dot(a, b) {
+    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
+}
+
+/***/ }),
+
+/***/ "./node_modules/gl-vec3/length.js":
+/*!****************************************!*\
+  !*** ./node_modules/gl-vec3/length.js ***!
+  \****************************************/
+/***/ ((module) => {
+
+module.exports = length;
+
+/**
+ * Calculates the length of a vec3
+ *
+ * @param {vec3} a vector to calculate length of
+ * @returns {Number} length of a
+ */
+function length(a) {
+    var x = a[0],
+        y = a[1],
+        z = a[2]
+    return Math.sqrt(x*x + y*y + z*z)
+}
+
+/***/ }),
+
+/***/ "./node_modules/gl-vec3/lerp.js":
+/*!**************************************!*\
+  !*** ./node_modules/gl-vec3/lerp.js ***!
+  \**************************************/
+/***/ ((module) => {
+
+module.exports = lerp;
+
+/**
+ * Performs a linear interpolation between two vec3's
+ *
+ * @param {vec3} out the receiving vector
+ * @param {vec3} a the first operand
+ * @param {vec3} b the second operand
+ * @param {Number} t interpolation amount between the two inputs
+ * @returns {vec3} out
+ */
+function lerp(out, a, b, t) {
+    var ax = a[0],
+        ay = a[1],
+        az = a[2]
+    out[0] = ax + t * (b[0] - ax)
+    out[1] = ay + t * (b[1] - ay)
+    out[2] = az + t * (b[2] - az)
+    return out
+}
+
+/***/ }),
+
+/***/ "./node_modules/gl-vec3/normalize.js":
+/*!*******************************************!*\
+  !*** ./node_modules/gl-vec3/normalize.js ***!
+  \*******************************************/
+/***/ ((module) => {
+
+module.exports = normalize;
+
+/**
+ * Normalize a vec3
+ *
+ * @param {vec3} out the receiving vector
+ * @param {vec3} a vector to normalize
+ * @returns {vec3} out
+ */
+function normalize(out, a) {
+    var x = a[0],
+        y = a[1],
+        z = a[2]
+    var len = x*x + y*y + z*z
+    if (len > 0) {
+        //TODO: evaluate use of glm_invsqrt here?
+        len = 1 / Math.sqrt(len)
+        out[0] = a[0] * len
+        out[1] = a[1] * len
+        out[2] = a[2] * len
+    }
+    return out
+}
+
+/***/ }),
+
+/***/ "./node_modules/has-passive-events/index.js":
+/*!**************************************************!*\
+  !*** ./node_modules/has-passive-events/index.js ***!
+  \**************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var isBrowser = __webpack_require__(/*! is-browser */ "./node_modules/is-browser/client.js")
+
+function detect() {
+	var supported = false
+
+	try {
+		var opts = Object.defineProperty({}, 'passive', {
+			get: function() {
+				supported = true
+			}
+		})
+
+		window.addEventListener('test', null, opts)
+		window.removeEventListener('test', null, opts)
+	} catch(e) {
+		supported = false
+	}
+
+	return supported
+}
+
+module.exports = isBrowser && detect()
+
+
+/***/ }),
+
+/***/ "./node_modules/is-browser/client.js":
+/*!*******************************************!*\
+  !*** ./node_modules/is-browser/client.js ***!
+  \*******************************************/
+/***/ ((module) => {
+
+module.exports = true;
+
+/***/ }),
+
+/***/ "./node_modules/mat4-decompose/index.js":
+/*!**********************************************!*\
+  !*** ./node_modules/mat4-decompose/index.js ***!
+  \**********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+/*jshint unused:true*/
+/*
+Input:  matrix      ; a 4x4 matrix
+Output: translation ; a 3 component vector
+        scale       ; a 3 component vector
+        skew        ; skew factors XY,XZ,YZ represented as a 3 component vector
+        perspective ; a 4 component vector
+        quaternion  ; a 4 component vector
+Returns false if the matrix cannot be decomposed, true if it can
+
+
+References:
+https://github.com/kamicane/matrix3d/blob/master/lib/Matrix3d.js
+https://github.com/ChromiumWebApps/chromium/blob/master/ui/gfx/transform_util.cc
+http://www.w3.org/TR/css3-transforms/#decomposing-a-3d-matrix
+*/
+
+var normalize = __webpack_require__(/*! ./normalize */ "./node_modules/mat4-decompose/normalize.js")
+
+var create = __webpack_require__(/*! gl-mat4/create */ "./node_modules/gl-mat4/create.js")
+var clone = __webpack_require__(/*! gl-mat4/clone */ "./node_modules/gl-mat4/clone.js")
+var determinant = __webpack_require__(/*! gl-mat4/determinant */ "./node_modules/gl-mat4/determinant.js")
+var invert = __webpack_require__(/*! gl-mat4/invert */ "./node_modules/gl-mat4/invert.js")
+var transpose = __webpack_require__(/*! gl-mat4/transpose */ "./node_modules/gl-mat4/transpose.js")
+var vec3 = {
+    length: __webpack_require__(/*! gl-vec3/length */ "./node_modules/gl-vec3/length.js"),
+    normalize: __webpack_require__(/*! gl-vec3/normalize */ "./node_modules/gl-vec3/normalize.js"),
+    dot: __webpack_require__(/*! gl-vec3/dot */ "./node_modules/gl-vec3/dot.js"),
+    cross: __webpack_require__(/*! gl-vec3/cross */ "./node_modules/gl-vec3/cross.js")
+}
+
+var tmp = create()
+var perspectiveMatrix = create()
+var tmpVec4 = [0, 0, 0, 0]
+var row = [ [0,0,0], [0,0,0], [0,0,0] ]
+var pdum3 = [0,0,0]
+
+module.exports = function decomposeMat4(matrix, translation, scale, skew, perspective, quaternion) {
+    if (!translation) translation = [0,0,0]
+    if (!scale) scale = [0,0,0]
+    if (!skew) skew = [0,0,0]
+    if (!perspective) perspective = [0,0,0,1]
+    if (!quaternion) quaternion = [0,0,0,1]
+
+    //normalize, if not possible then bail out early
+    if (!normalize(tmp, matrix))
+        return false
+
+    // perspectiveMatrix is used to solve for perspective, but it also provides
+    // an easy way to test for singularity of the upper 3x3 component.
+    clone(perspectiveMatrix, tmp)
+
+    perspectiveMatrix[3] = 0
+    perspectiveMatrix[7] = 0
+    perspectiveMatrix[11] = 0
+    perspectiveMatrix[15] = 1
+
+    // If the perspectiveMatrix is not invertible, we are also unable to
+    // decompose, so we'll bail early. Constant taken from SkMatrix44::invert.
+    if (Math.abs(determinant(perspectiveMatrix) < 1e-8))
+        return false
+
+    var a03 = tmp[3], a13 = tmp[7], a23 = tmp[11],
+            a30 = tmp[12], a31 = tmp[13], a32 = tmp[14], a33 = tmp[15]
+
+    // First, isolate perspective.
+    if (a03 !== 0 || a13 !== 0 || a23 !== 0) {
+        tmpVec4[0] = a03
+        tmpVec4[1] = a13
+        tmpVec4[2] = a23
+        tmpVec4[3] = a33
+
+        // Solve the equation by inverting perspectiveMatrix and multiplying
+        // rightHandSide by the inverse.
+        // resuing the perspectiveMatrix here since it's no longer needed
+        var ret = invert(perspectiveMatrix, perspectiveMatrix)
+        if (!ret) return false
+        transpose(perspectiveMatrix, perspectiveMatrix)
+
+        //multiply by transposed inverse perspective matrix, into perspective vec4
+        vec4multMat4(perspective, tmpVec4, perspectiveMatrix)
+    } else { 
+        //no perspective
+        perspective[0] = perspective[1] = perspective[2] = 0
+        perspective[3] = 1
+    }
+
+    // Next take care of translation
+    translation[0] = a30
+    translation[1] = a31
+    translation[2] = a32
+
+    // Now get scale and shear. 'row' is a 3 element array of 3 component vectors
+    mat3from4(row, tmp)
+
+    // Compute X scale factor and normalize first row.
+    scale[0] = vec3.length(row[0])
+    vec3.normalize(row[0], row[0])
+
+    // Compute XY shear factor and make 2nd row orthogonal to 1st.
+    skew[0] = vec3.dot(row[0], row[1])
+    combine(row[1], row[1], row[0], 1.0, -skew[0])
+
+    // Now, compute Y scale and normalize 2nd row.
+    scale[1] = vec3.length(row[1])
+    vec3.normalize(row[1], row[1])
+    skew[0] /= scale[1]
+
+    // Compute XZ and YZ shears, orthogonalize 3rd row
+    skew[1] = vec3.dot(row[0], row[2])
+    combine(row[2], row[2], row[0], 1.0, -skew[1])
+    skew[2] = vec3.dot(row[1], row[2])
+    combine(row[2], row[2], row[1], 1.0, -skew[2])
+
+    // Next, get Z scale and normalize 3rd row.
+    scale[2] = vec3.length(row[2])
+    vec3.normalize(row[2], row[2])
+    skew[1] /= scale[2]
+    skew[2] /= scale[2]
+
+
+    // At this point, the matrix (in rows) is orthonormal.
+    // Check for a coordinate system flip.  If the determinant
+    // is -1, then negate the matrix and the scaling factors.
+    vec3.cross(pdum3, row[1], row[2])
+    if (vec3.dot(row[0], pdum3) < 0) {
+        for (var i = 0; i < 3; i++) {
+            scale[i] *= -1;
+            row[i][0] *= -1
+            row[i][1] *= -1
+            row[i][2] *= -1
+        }
+    }
+
+    // Now, get the rotations out
+    quaternion[0] = 0.5 * Math.sqrt(Math.max(1 + row[0][0] - row[1][1] - row[2][2], 0))
+    quaternion[1] = 0.5 * Math.sqrt(Math.max(1 - row[0][0] + row[1][1] - row[2][2], 0))
+    quaternion[2] = 0.5 * Math.sqrt(Math.max(1 - row[0][0] - row[1][1] + row[2][2], 0))
+    quaternion[3] = 0.5 * Math.sqrt(Math.max(1 + row[0][0] + row[1][1] + row[2][2], 0))
+
+    if (row[2][1] > row[1][2])
+        quaternion[0] = -quaternion[0]
+    if (row[0][2] > row[2][0])
+        quaternion[1] = -quaternion[1]
+    if (row[1][0] > row[0][1])
+        quaternion[2] = -quaternion[2]
+    return true
+}
+
+//will be replaced by gl-vec4 eventually
+function vec4multMat4(out, a, m) {
+    var x = a[0], y = a[1], z = a[2], w = a[3];
+    out[0] = m[0] * x + m[4] * y + m[8] * z + m[12] * w;
+    out[1] = m[1] * x + m[5] * y + m[9] * z + m[13] * w;
+    out[2] = m[2] * x + m[6] * y + m[10] * z + m[14] * w;
+    out[3] = m[3] * x + m[7] * y + m[11] * z + m[15] * w;
+    return out;
+}
+
+//gets upper-left of a 4x4 matrix into a 3x3 of vectors
+function mat3from4(out, mat4x4) {
+    out[0][0] = mat4x4[0]
+    out[0][1] = mat4x4[1]
+    out[0][2] = mat4x4[2]
+    
+    out[1][0] = mat4x4[4]
+    out[1][1] = mat4x4[5]
+    out[1][2] = mat4x4[6]
+
+    out[2][0] = mat4x4[8]
+    out[2][1] = mat4x4[9]
+    out[2][2] = mat4x4[10]
+}
+
+function combine(out, a, b, scale1, scale2) {
+    out[0] = a[0] * scale1 + b[0] * scale2
+    out[1] = a[1] * scale1 + b[1] * scale2
+    out[2] = a[2] * scale1 + b[2] * scale2
+}
+
+/***/ }),
+
+/***/ "./node_modules/mat4-decompose/normalize.js":
+/*!**************************************************!*\
+  !*** ./node_modules/mat4-decompose/normalize.js ***!
+  \**************************************************/
+/***/ ((module) => {
+
+module.exports = function normalize(out, mat) {
+    var m44 = mat[15]
+    // Cannot normalize.
+    if (m44 === 0) 
+        return false
+    var scale = 1 / m44
+    for (var i=0; i<16; i++)
+        out[i] = mat[i] * scale
+    return true
+}
+
+/***/ }),
+
+/***/ "./node_modules/mat4-interpolate/index.js":
+/*!************************************************!*\
+  !*** ./node_modules/mat4-interpolate/index.js ***!
+  \************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var lerp = __webpack_require__(/*! gl-vec3/lerp */ "./node_modules/gl-vec3/lerp.js")
+
+var recompose = __webpack_require__(/*! mat4-recompose */ "./node_modules/mat4-recompose/index.js")
+var decompose = __webpack_require__(/*! mat4-decompose */ "./node_modules/mat4-decompose/index.js")
+var determinant = __webpack_require__(/*! gl-mat4/determinant */ "./node_modules/gl-mat4/determinant.js")
+var slerp = __webpack_require__(/*! quat-slerp */ "./node_modules/quat-slerp/index.js")
+
+var state0 = state()
+var state1 = state()
+var tmp = state()
+
+module.exports = interpolate
+function interpolate(out, start, end, alpha) {
+    if (determinant(start) === 0 || determinant(end) === 0)
+        return false
+
+    //decompose the start and end matrices into individual components
+    var r0 = decompose(start, state0.translate, state0.scale, state0.skew, state0.perspective, state0.quaternion)
+    var r1 = decompose(end, state1.translate, state1.scale, state1.skew, state1.perspective, state1.quaternion)
+    if (!r0 || !r1)
+        return false    
+
+
+    //now lerp/slerp the start and end components into a temporary     lerp(tmptranslate, state0.translate, state1.translate, alpha)
+    lerp(tmp.translate, state0.translate, state1.translate, alpha)
+    lerp(tmp.skew, state0.skew, state1.skew, alpha)
+    lerp(tmp.scale, state0.scale, state1.scale, alpha)
+    lerp(tmp.perspective, state0.perspective, state1.perspective, alpha)
+    slerp(tmp.quaternion, state0.quaternion, state1.quaternion, alpha)
+
+    //and recompose into our 'out' matrix
+    recompose(out, tmp.translate, tmp.scale, tmp.skew, tmp.perspective, tmp.quaternion)
+    return true
+}
+
+function state() {
+    return {
+        translate: vec3(),
+        scale: vec3(1),
+        skew: vec3(),
+        perspective: vec4(),
+        quaternion: vec4()
+    }
+}
+
+function vec3(n) {
+    return [n||0,n||0,n||0]
+}
+
+function vec4() {
+    return [0,0,0,1]
+}
+
+/***/ }),
+
+/***/ "./node_modules/mat4-recompose/index.js":
+/*!**********************************************!*\
+  !*** ./node_modules/mat4-recompose/index.js ***!
+  \**********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+/*
+Input:  translation ; a 3 component vector
+        scale       ; a 3 component vector
+        skew        ; skew factors XY,XZ,YZ represented as a 3 component vector
+        perspective ; a 4 component vector
+        quaternion  ; a 4 component vector
+Output: matrix      ; a 4x4 matrix
+
+From: http://www.w3.org/TR/css3-transforms/#recomposing-to-a-3d-matrix
+*/
+
+var mat4 = {
+    identity: __webpack_require__(/*! gl-mat4/identity */ "./node_modules/gl-mat4/identity.js"),
+    translate: __webpack_require__(/*! gl-mat4/translate */ "./node_modules/gl-mat4/translate.js"),
+    multiply: __webpack_require__(/*! gl-mat4/multiply */ "./node_modules/gl-mat4/multiply.js"),
+    create: __webpack_require__(/*! gl-mat4/create */ "./node_modules/gl-mat4/create.js"),
+    scale: __webpack_require__(/*! gl-mat4/scale */ "./node_modules/gl-mat4/scale.js"),
+    fromRotationTranslation: __webpack_require__(/*! gl-mat4/fromRotationTranslation */ "./node_modules/gl-mat4/fromRotationTranslation.js")
+}
+
+var rotationMatrix = mat4.create()
+var temp = mat4.create()
+
+module.exports = function recomposeMat4(matrix, translation, scale, skew, perspective, quaternion) {
+    mat4.identity(matrix)
+
+    //apply translation & rotation
+    mat4.fromRotationTranslation(matrix, quaternion, translation)
+
+    //apply perspective
+    matrix[3] = perspective[0]
+    matrix[7] = perspective[1]
+    matrix[11] = perspective[2]
+    matrix[15] = perspective[3]
+        
+    // apply skew
+    // temp is a identity 4x4 matrix initially
+    mat4.identity(temp)
+
+    if (skew[2] !== 0) {
+        temp[9] = skew[2]
+        mat4.multiply(matrix, matrix, temp)
+    }
+
+    if (skew[1] !== 0) {
+        temp[9] = 0
+        temp[8] = skew[1]
+        mat4.multiply(matrix, matrix, temp)
+    }
+
+    if (skew[0] !== 0) {
+        temp[8] = 0
+        temp[4] = skew[0]
+        mat4.multiply(matrix, matrix, temp)
+    }
+
+    //apply scale
+    mat4.scale(matrix, matrix, scale)
+    return matrix
+}
+
+/***/ }),
+
+/***/ "./node_modules/matrix-camera-controller/matrix.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/matrix-camera-controller/matrix.js ***!
+  \*********************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var bsearch   = __webpack_require__(/*! binary-search-bounds */ "./node_modules/binary-search-bounds/search-bounds.js")
+var m4interp  = __webpack_require__(/*! mat4-interpolate */ "./node_modules/mat4-interpolate/index.js")
+var invert44  = __webpack_require__(/*! gl-mat4/invert */ "./node_modules/gl-mat4/invert.js")
+var rotateX   = __webpack_require__(/*! gl-mat4/rotateX */ "./node_modules/gl-mat4/rotateX.js")
+var rotateY   = __webpack_require__(/*! gl-mat4/rotateY */ "./node_modules/gl-mat4/rotateY.js")
+var rotateZ   = __webpack_require__(/*! gl-mat4/rotateZ */ "./node_modules/gl-mat4/rotateZ.js")
+var lookAt    = __webpack_require__(/*! gl-mat4/lookAt */ "./node_modules/gl-mat4/lookAt.js")
+var translate = __webpack_require__(/*! gl-mat4/translate */ "./node_modules/gl-mat4/translate.js")
+var scale     = __webpack_require__(/*! gl-mat4/scale */ "./node_modules/gl-mat4/scale.js")
+var normalize = __webpack_require__(/*! gl-vec3/normalize */ "./node_modules/gl-vec3/normalize.js")
+
+var DEFAULT_CENTER = [0,0,0]
+
+module.exports = createMatrixCameraController
+
+function MatrixCameraController(initialMatrix) {
+  this._components    = initialMatrix.slice()
+  this._time          = [0]
+  this.prevMatrix     = initialMatrix.slice()
+  this.nextMatrix     = initialMatrix.slice()
+  this.computedMatrix = initialMatrix.slice()
+  this.computedInverse = initialMatrix.slice()
+  this.computedEye    = [0,0,0]
+  this.computedUp     = [0,0,0]
+  this.computedCenter = [0,0,0]
+  this.computedRadius = [0]
+  this._limits        = [-Infinity, Infinity]
+}
+
+var proto = MatrixCameraController.prototype
+
+proto.recalcMatrix = function(t) {
+  var time = this._time
+  var tidx = bsearch.le(time, t)
+  var mat = this.computedMatrix
+  if(tidx < 0) {
+    return
+  }
+  var comps = this._components
+  if(tidx === time.length-1) {
+    var ptr = 16*tidx
+    for(var i=0; i<16; ++i) {
+      mat[i] = comps[ptr++]
+    }
+  } else {
+    var dt = (time[tidx+1] - time[tidx])
+    var ptr = 16*tidx
+    var prev = this.prevMatrix
+    var allEqual = true
+    for(var i=0; i<16; ++i) {
+      prev[i] = comps[ptr++]
+    }
+    var next = this.nextMatrix
+    for(var i=0; i<16; ++i) {
+      next[i] = comps[ptr++]
+      allEqual = allEqual && (prev[i] === next[i])
+    }
+    if(dt < 1e-6 || allEqual) {
+      for(var i=0; i<16; ++i) {
+        mat[i] = prev[i]
+      }
+    } else {
+      m4interp(mat, prev, next, (t - time[tidx])/dt)
+    }
+  }
+
+  var up = this.computedUp
+  up[0] = mat[1]
+  up[1] = mat[5]
+  up[2] = mat[9]
+  normalize(up, up)
+
+  var imat = this.computedInverse
+  invert44(imat, mat)
+  var eye = this.computedEye
+  var w = imat[15]
+  eye[0] = imat[12]/w
+  eye[1] = imat[13]/w
+  eye[2] = imat[14]/w
+
+  var center = this.computedCenter
+  var radius = Math.exp(this.computedRadius[0])
+  for(var i=0; i<3; ++i) {
+    center[i] = eye[i] - mat[2+4*i] * radius
+  }
+}
+
+proto.idle = function(t) {
+  if(t < this.lastT()) {
+    return
+  }
+  var mc = this._components
+  var ptr = mc.length-16
+  for(var i=0; i<16; ++i) {
+    mc.push(mc[ptr++])
+  }
+  this._time.push(t)
+}
+
+proto.flush = function(t) {
+  var idx = bsearch.gt(this._time, t) - 2
+  if(idx < 0) {
+    return
+  }
+  this._time.splice(0, idx)
+  this._components.splice(0, 16*idx)
+}
+
+proto.lastT = function() {
+  return this._time[this._time.length-1]
+}
+
+proto.lookAt = function(t, eye, center, up) {
+  this.recalcMatrix(t)
+  eye    = eye || this.computedEye
+  center = center || DEFAULT_CENTER
+  up     = up || this.computedUp
+  this.setMatrix(t, lookAt(this.computedMatrix, eye, center, up))
+  var d2 = 0.0
+  for(var i=0; i<3; ++i) {
+    d2 += Math.pow(center[i] - eye[i], 2)
+  }
+  d2 = Math.log(Math.sqrt(d2))
+  this.computedRadius[0] = d2
+}
+
+proto.rotate = function(t, yaw, pitch, roll) {
+  this.recalcMatrix(t)
+  var mat = this.computedInverse
+  if(yaw)   rotateY(mat, mat, yaw)
+  if(pitch) rotateX(mat, mat, pitch)
+  if(roll)  rotateZ(mat, mat, roll)
+  this.setMatrix(t, invert44(this.computedMatrix, mat))
+}
+
+var tvec = [0,0,0]
+
+proto.pan = function(t, dx, dy, dz) {
+  tvec[0] = -(dx || 0.0)
+  tvec[1] = -(dy || 0.0)
+  tvec[2] = -(dz || 0.0)
+  this.recalcMatrix(t)
+  var mat = this.computedInverse
+  translate(mat, mat, tvec)
+  this.setMatrix(t, invert44(mat, mat))
+}
+
+proto.translate = function(t, dx, dy, dz) {
+  tvec[0] = dx || 0.0
+  tvec[1] = dy || 0.0
+  tvec[2] = dz || 0.0
+  this.recalcMatrix(t)
+  var mat = this.computedMatrix
+  translate(mat, mat, tvec)
+  this.setMatrix(t, mat)
+}
+
+proto.setMatrix = function(t, mat) {
+  if(t < this.lastT()) {
+    return
+  }
+  this._time.push(t)
+  for(var i=0; i<16; ++i) {
+    this._components.push(mat[i])
+  }
+}
+
+proto.setDistance = function(t, d) {
+  this.computedRadius[0] = d
+}
+
+proto.setDistanceLimits = function(a,b) {
+  var lim = this._limits
+  lim[0] = a
+  lim[1] = b
+}
+
+proto.getDistanceLimits = function(out) {
+  var lim = this._limits
+  if(out) {
+    out[0] = lim[0]
+    out[1] = lim[1]
+    return out
+  }
+  return lim
+}
+
+function createMatrixCameraController(options) {
+  options = options || {}
+  var matrix = options.matrix || 
+              [1,0,0,0,
+               0,1,0,0,
+               0,0,1,0,
+               0,0,0,1]
+  return new MatrixCameraController(matrix)
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/mouse-change/mouse-listen.js":
+/*!***************************************************!*\
+  !*** ./node_modules/mouse-change/mouse-listen.js ***!
+  \***************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+module.exports = mouseListen
+
+var mouse = __webpack_require__(/*! mouse-event */ "./node_modules/mouse-event/mouse.js")
+
+function mouseListen (element, callback) {
+  if (!callback) {
+    callback = element
+    element = window
+  }
+
+  var buttonState = 0
+  var x = 0
+  var y = 0
+  var mods = {
+    shift: false,
+    alt: false,
+    control: false,
+    meta: false
+  }
+  var attached = false
+
+  function updateMods (ev) {
+    var changed = false
+    if ('altKey' in ev) {
+      changed = changed || ev.altKey !== mods.alt
+      mods.alt = !!ev.altKey
+    }
+    if ('shiftKey' in ev) {
+      changed = changed || ev.shiftKey !== mods.shift
+      mods.shift = !!ev.shiftKey
+    }
+    if ('ctrlKey' in ev) {
+      changed = changed || ev.ctrlKey !== mods.control
+      mods.control = !!ev.ctrlKey
+    }
+    if ('metaKey' in ev) {
+      changed = changed || ev.metaKey !== mods.meta
+      mods.meta = !!ev.metaKey
+    }
+    return changed
+  }
+
+  function handleEvent (nextButtons, ev) {
+    var nextX = mouse.x(ev)
+    var nextY = mouse.y(ev)
+    if ('buttons' in ev) {
+      nextButtons = ev.buttons | 0
+    }
+    if (nextButtons !== buttonState ||
+      nextX !== x ||
+      nextY !== y ||
+      updateMods(ev)) {
+      buttonState = nextButtons | 0
+      x = nextX || 0
+      y = nextY || 0
+      callback && callback(buttonState, x, y, mods)
+    }
+  }
+
+  function clearState (ev) {
+    handleEvent(0, ev)
+  }
+
+  function handleBlur () {
+    if (buttonState ||
+      x ||
+      y ||
+      mods.shift ||
+      mods.alt ||
+      mods.meta ||
+      mods.control) {
+      x = y = 0
+      buttonState = 0
+      mods.shift = mods.alt = mods.control = mods.meta = false
+      callback && callback(0, 0, 0, mods)
+    }
+  }
+
+  function handleMods (ev) {
+    if (updateMods(ev)) {
+      callback && callback(buttonState, x, y, mods)
+    }
+  }
+
+  function handleMouseMove (ev) {
+    if (mouse.buttons(ev) === 0) {
+      handleEvent(0, ev)
+    } else {
+      handleEvent(buttonState, ev)
+    }
+  }
+
+  function handleMouseDown (ev) {
+    handleEvent(buttonState | mouse.buttons(ev), ev)
+  }
+
+  function handleMouseUp (ev) {
+    handleEvent(buttonState & ~mouse.buttons(ev), ev)
+  }
+
+  function attachListeners () {
+    if (attached) {
+      return
+    }
+    attached = true
+
+    element.addEventListener('mousemove', handleMouseMove)
+
+    element.addEventListener('mousedown', handleMouseDown)
+
+    element.addEventListener('mouseup', handleMouseUp)
+
+    element.addEventListener('mouseleave', clearState)
+    element.addEventListener('mouseenter', clearState)
+    element.addEventListener('mouseout', clearState)
+    element.addEventListener('mouseover', clearState)
+
+    element.addEventListener('blur', handleBlur)
+
+    element.addEventListener('keyup', handleMods)
+    element.addEventListener('keydown', handleMods)
+    element.addEventListener('keypress', handleMods)
+
+    if (element !== window) {
+      window.addEventListener('blur', handleBlur)
+
+      window.addEventListener('keyup', handleMods)
+      window.addEventListener('keydown', handleMods)
+      window.addEventListener('keypress', handleMods)
+    }
+  }
+
+  function detachListeners () {
+    if (!attached) {
+      return
+    }
+    attached = false
+
+    element.removeEventListener('mousemove', handleMouseMove)
+
+    element.removeEventListener('mousedown', handleMouseDown)
+
+    element.removeEventListener('mouseup', handleMouseUp)
+
+    element.removeEventListener('mouseleave', clearState)
+    element.removeEventListener('mouseenter', clearState)
+    element.removeEventListener('mouseout', clearState)
+    element.removeEventListener('mouseover', clearState)
+
+    element.removeEventListener('blur', handleBlur)
+
+    element.removeEventListener('keyup', handleMods)
+    element.removeEventListener('keydown', handleMods)
+    element.removeEventListener('keypress', handleMods)
+
+    if (element !== window) {
+      window.removeEventListener('blur', handleBlur)
+
+      window.removeEventListener('keyup', handleMods)
+      window.removeEventListener('keydown', handleMods)
+      window.removeEventListener('keypress', handleMods)
+    }
+  }
+
+  // Attach listeners
+  attachListeners()
+
+  var result = {
+    element: element
+  }
+
+  Object.defineProperties(result, {
+    enabled: {
+      get: function () { return attached },
+      set: function (f) {
+        if (f) {
+          attachListeners()
+        } else {
+          detachListeners()
+        }
+      },
+      enumerable: true
+    },
+    buttons: {
+      get: function () { return buttonState },
+      enumerable: true
+    },
+    x: {
+      get: function () { return x },
+      enumerable: true
+    },
+    y: {
+      get: function () { return y },
+      enumerable: true
+    },
+    mods: {
+      get: function () { return mods },
+      enumerable: true
+    }
+  })
+
+  return result
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/mouse-event-offset/index.js":
+/*!**************************************************!*\
+  !*** ./node_modules/mouse-event-offset/index.js ***!
+  \**************************************************/
+/***/ ((module) => {
+
+var rootPosition = { left: 0, top: 0 }
+
+module.exports = mouseEventOffset
+function mouseEventOffset (ev, target, out) {
+  target = target || ev.currentTarget || ev.srcElement
+  if (!Array.isArray(out)) {
+    out = [ 0, 0 ]
+  }
+  var cx = ev.clientX || 0
+  var cy = ev.clientY || 0
+  var rect = getBoundingClientOffset(target)
+  out[0] = cx - rect.left
+  out[1] = cy - rect.top
+  return out
+}
+
+function getBoundingClientOffset (element) {
+  if (element === window ||
+      element === document ||
+      element === document.body) {
+    return rootPosition
+  } else {
+    return element.getBoundingClientRect()
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/mouse-event/mouse.js":
+/*!*******************************************!*\
+  !*** ./node_modules/mouse-event/mouse.js ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+function mouseButtons(ev) {
+  if(typeof ev === 'object') {
+    if('buttons' in ev) {
+      return ev.buttons
+    } else if('which' in ev) {
+      var b = ev.which
+      if(b === 2) {
+        return 4
+      } else if(b === 3) {
+        return 2
+      } else if(b > 0) {
+        return 1<<(b-1)
+      }
+    } else if('button' in ev) {
+      var b = ev.button
+      if(b === 1) {
+        return 4
+      } else if(b === 2) {
+        return 2
+      } else if(b >= 0) {
+        return 1<<b
+      }
+    }
+  }
+  return 0
+}
+exports.buttons = mouseButtons
+
+function mouseElement(ev) {
+  return ev.target || ev.srcElement || window
+}
+exports.element = mouseElement
+
+function mouseRelativeX(ev) {
+  if(typeof ev === 'object') {
+    if('offsetX' in ev) {
+      return ev.offsetX
+    }
+    var target = mouseElement(ev)
+    var bounds = target.getBoundingClientRect()
+    return ev.clientX - bounds.left
+  }
+  return 0
+}
+exports.x = mouseRelativeX
+
+function mouseRelativeY(ev) {
+  if(typeof ev === 'object') {
+    if('offsetY' in ev) {
+      return ev.offsetY
+    }
+    var target = mouseElement(ev)
+    var bounds = target.getBoundingClientRect()
+    return ev.clientY - bounds.top
+  }
+  return 0
+}
+exports.y = mouseRelativeY
+
+
+/***/ }),
+
+/***/ "./node_modules/mouse-wheel/wheel.js":
+/*!*******************************************!*\
+  !*** ./node_modules/mouse-wheel/wheel.js ***!
+  \*******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var toPX = __webpack_require__(/*! to-px */ "./node_modules/to-px/browser.js")
+
+module.exports = mouseWheelListen
+
+function mouseWheelListen(element, callback, noScroll) {
+  if(typeof element === 'function') {
+    noScroll = !!callback
+    callback = element
+    element = window
+  }
+  var lineHeight = toPX('ex', element)
+  var listener = function(ev) {
+    if(noScroll) {
+      ev.preventDefault()
+    }
+    var dx = ev.deltaX || 0
+    var dy = ev.deltaY || 0
+    var dz = ev.deltaZ || 0
+    var mode = ev.deltaMode
+    var scale = 1
+    switch(mode) {
+      case 1:
+        scale = lineHeight
+      break
+      case 2:
+        scale = window.innerHeight
+      break
+    }
+    dx *= scale
+    dy *= scale
+    dz *= scale
+    if(dx || dy || dz) {
+      return callback(dx, dy, dz, ev)
+    }
+  }
+  element.addEventListener('wheel', listener)
+  return listener
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/orbit-camera-controller/lib/quatFromFrame.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/orbit-camera-controller/lib/quatFromFrame.js ***!
+  \*******************************************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+module.exports = quatFromFrame
+
+function quatFromFrame(
+  out,
+  rx, ry, rz,
+  ux, uy, uz,
+  fx, fy, fz) {
+  var tr = rx + uy + fz
+  if(l > 0) {
+    var l = Math.sqrt(tr + 1.0)
+    out[0] = 0.5 * (uz - fy) / l
+    out[1] = 0.5 * (fx - rz) / l
+    out[2] = 0.5 * (ry - uy) / l
+    out[3] = 0.5 * l
+  } else {
+    var tf = Math.max(rx, uy, fz)
+    var l = Math.sqrt(2 * tf - tr + 1.0)
+    if(rx >= tf) {
+      //x y z  order
+      out[0] = 0.5 * l
+      out[1] = 0.5 * (ux + ry) / l
+      out[2] = 0.5 * (fx + rz) / l
+      out[3] = 0.5 * (uz - fy) / l
+    } else if(uy >= tf) {
+      //y z x  order
+      out[0] = 0.5 * (ry + ux) / l
+      out[1] = 0.5 * l
+      out[2] = 0.5 * (fy + uz) / l
+      out[3] = 0.5 * (fx - rz) / l
+    } else {
+      //z x y  order
+      out[0] = 0.5 * (rz + fx) / l
+      out[1] = 0.5 * (uz + fy) / l
+      out[2] = 0.5 * l
+      out[3] = 0.5 * (ry - ux) / l
+    }
+  }
+  return out
+}
+
+/***/ }),
+
+/***/ "./node_modules/orbit-camera-controller/orbit.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/orbit-camera-controller/orbit.js ***!
+  \*******************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+module.exports = createOrbitController
+
+var filterVector  = __webpack_require__(/*! filtered-vector */ "./node_modules/filtered-vector/fvec.js")
+var lookAt        = __webpack_require__(/*! gl-mat4/lookAt */ "./node_modules/gl-mat4/lookAt.js")
+var mat4FromQuat  = __webpack_require__(/*! gl-mat4/fromQuat */ "./node_modules/gl-mat4/fromQuat.js")
+var invert44      = __webpack_require__(/*! gl-mat4/invert */ "./node_modules/gl-mat4/invert.js")
+var quatFromFrame = __webpack_require__(/*! ./lib/quatFromFrame */ "./node_modules/orbit-camera-controller/lib/quatFromFrame.js")
+
+function len3(x,y,z) {
+  return Math.sqrt(Math.pow(x,2) + Math.pow(y,2) + Math.pow(z,2))
+}
+
+function len4(w,x,y,z) {
+  return Math.sqrt(Math.pow(w,2) + Math.pow(x,2) + Math.pow(y,2) + Math.pow(z,2))
+}
+
+function normalize4(out, a) {
+  var ax = a[0]
+  var ay = a[1]
+  var az = a[2]
+  var aw = a[3]
+  var al = len4(ax, ay, az, aw)
+  if(al > 1e-6) {
+    out[0] = ax/al
+    out[1] = ay/al
+    out[2] = az/al
+    out[3] = aw/al
+  } else {
+    out[0] = out[1] = out[2] = 0.0
+    out[3] = 1.0
+  }
+}
+
+function OrbitCameraController(initQuat, initCenter, initRadius) {
+  this.radius    = filterVector([initRadius])
+  this.center    = filterVector(initCenter)
+  this.rotation  = filterVector(initQuat)
+
+  this.computedRadius   = this.radius.curve(0)
+  this.computedCenter   = this.center.curve(0)
+  this.computedRotation = this.rotation.curve(0)
+  this.computedUp       = [0.1,0,0]
+  this.computedEye      = [0.1,0,0]
+  this.computedMatrix   = [0.1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+  this.recalcMatrix(0)
+}
+
+var proto = OrbitCameraController.prototype
+
+proto.lastT = function() {
+  return Math.max(
+    this.radius.lastT(),
+    this.center.lastT(),
+    this.rotation.lastT())
+}
+
+proto.recalcMatrix = function(t) {
+  this.radius.curve(t)
+  this.center.curve(t)
+  this.rotation.curve(t)
+
+  var quat = this.computedRotation
+  normalize4(quat, quat)
+
+  var mat = this.computedMatrix
+  mat4FromQuat(mat, quat)
+
+  var center = this.computedCenter
+  var eye    = this.computedEye
+  var up     = this.computedUp
+  var radius = Math.exp(this.computedRadius[0])
+
+  eye[0] = center[0] + radius * mat[2]
+  eye[1] = center[1] + radius * mat[6]
+  eye[2] = center[2] + radius * mat[10]
+  up[0] = mat[1]
+  up[1] = mat[5]
+  up[2] = mat[9]
+
+  for(var i=0; i<3; ++i) {
+    var rr = 0.0
+    for(var j=0; j<3; ++j) {
+      rr += mat[i+4*j] * eye[j]
+    }
+    mat[12+i] = -rr
+  }
+}
+
+proto.getMatrix = function(t, result) {
+  this.recalcMatrix(t)
+  var m = this.computedMatrix
+  if(result) {
+    for(var i=0; i<16; ++i) {
+      result[i] = m[i]
+    }
+    return result
+  }
+  return m
+}
+
+proto.idle = function(t) {
+  this.center.idle(t)
+  this.radius.idle(t)
+  this.rotation.idle(t)
+}
+
+proto.flush = function(t) {
+  this.center.flush(t)
+  this.radius.flush(t)
+  this.rotation.flush(t)
+}
+
+proto.pan = function(t, dx, dy, dz) {
+  dx = dx || 0.0
+  dy = dy || 0.0
+  dz = dz || 0.0
+
+  this.recalcMatrix(t)
+  var mat = this.computedMatrix
+
+  var ux = mat[1]
+  var uy = mat[5]
+  var uz = mat[9]
+  var ul = len3(ux, uy, uz)
+  ux /= ul
+  uy /= ul
+  uz /= ul
+
+  var rx = mat[0]
+  var ry = mat[4]
+  var rz = mat[8]
+  var ru = rx * ux + ry * uy + rz * uz
+  rx -= ux * ru
+  ry -= uy * ru
+  rz -= uz * ru
+  var rl = len3(rx, ry, rz)
+  rx /= rl
+  ry /= rl
+  rz /= rl
+
+  var fx = mat[2]
+  var fy = mat[6]
+  var fz = mat[10]
+  var fu = fx * ux + fy * uy + fz * uz
+  var fr = fx * rx + fy * ry + fz * rz
+  fx -= fu * ux + fr * rx
+  fy -= fu * uy + fr * ry
+  fz -= fu * uz + fr * rz
+  var fl = len3(fx, fy, fz)
+  fx /= fl
+  fy /= fl
+  fz /= fl
+
+  var vx = rx * dx + ux * dy
+  var vy = ry * dx + uy * dy
+  var vz = rz * dx + uz * dy
+
+  this.center.move(t, vx, vy, vz)
+
+  //Update z-component of radius
+  var radius = Math.exp(this.computedRadius[0])
+  radius = Math.max(1e-4, radius + dz)
+  this.radius.set(t, Math.log(radius))
+}
+
+proto.rotate = function(t, dx, dy, dz) {
+  this.recalcMatrix(t)
+
+  dx = dx||0.0
+  dy = dy||0.0
+
+  var mat = this.computedMatrix
+
+  var rx = mat[0]
+  var ry = mat[4]
+  var rz = mat[8]
+
+  var ux = mat[1]
+  var uy = mat[5]
+  var uz = mat[9]
+
+  var fx = mat[2]
+  var fy = mat[6]
+  var fz = mat[10]
+
+  var qx = dx * rx + dy * ux
+  var qy = dx * ry + dy * uy
+  var qz = dx * rz + dy * uz
+
+  var bx = -(fy * qz - fz * qy)
+  var by = -(fz * qx - fx * qz)
+  var bz = -(fx * qy - fy * qx)  
+  var bw = Math.sqrt(Math.max(0.0, 1.0 - Math.pow(bx,2) - Math.pow(by,2) - Math.pow(bz,2)))
+  var bl = len4(bx, by, bz, bw)
+  if(bl > 1e-6) {
+    bx /= bl
+    by /= bl
+    bz /= bl
+    bw /= bl
+  } else {
+    bx = by = bz = 0.0
+    bw = 1.0
+  }
+
+  var rotation = this.computedRotation
+  var ax = rotation[0]
+  var ay = rotation[1]
+  var az = rotation[2]
+  var aw = rotation[3]
+
+  var cx = ax*bw + aw*bx + ay*bz - az*by
+  var cy = ay*bw + aw*by + az*bx - ax*bz
+  var cz = az*bw + aw*bz + ax*by - ay*bx
+  var cw = aw*bw - ax*bx - ay*by - az*bz
+  
+  //Apply roll
+  if(dz) {
+    bx = fx
+    by = fy
+    bz = fz
+    var s = Math.sin(dz) / len3(bx, by, bz)
+    bx *= s
+    by *= s
+    bz *= s
+    bw = Math.cos(dx)
+    cx = cx*bw + cw*bx + cy*bz - cz*by
+    cy = cy*bw + cw*by + cz*bx - cx*bz
+    cz = cz*bw + cw*bz + cx*by - cy*bx
+    cw = cw*bw - cx*bx - cy*by - cz*bz
+  }
+
+  var cl = len4(cx, cy, cz, cw)
+  if(cl > 1e-6) {
+    cx /= cl
+    cy /= cl
+    cz /= cl
+    cw /= cl
+  } else {
+    cx = cy = cz = 0.0
+    cw = 1.0
+  }
+
+  this.rotation.set(t, cx, cy, cz, cw)
+}
+
+proto.lookAt = function(t, eye, center, up) {
+  this.recalcMatrix(t)
+
+  center = center || this.computedCenter
+  eye    = eye    || this.computedEye
+  up     = up     || this.computedUp
+
+  var mat = this.computedMatrix
+  lookAt(mat, eye, center, up)
+
+  var rotation = this.computedRotation
+  quatFromFrame(rotation,
+    mat[0], mat[1], mat[2],
+    mat[4], mat[5], mat[6],
+    mat[8], mat[9], mat[10])
+  normalize4(rotation, rotation)
+  this.rotation.set(t, rotation[0], rotation[1], rotation[2], rotation[3])
+
+  var fl = 0.0
+  for(var i=0; i<3; ++i) {
+    fl += Math.pow(center[i] - eye[i], 2)
+  }
+  this.radius.set(t, 0.5 * Math.log(Math.max(fl, 1e-6)))
+
+  this.center.set(t, center[0], center[1], center[2])
+}
+
+proto.translate = function(t, dx, dy, dz) {
+  this.center.move(t,
+    dx||0.0,
+    dy||0.0,
+    dz||0.0)
+}
+
+proto.setMatrix = function(t, matrix) {
+
+  var rotation = this.computedRotation
+  quatFromFrame(rotation,
+    matrix[0], matrix[1], matrix[2],
+    matrix[4], matrix[5], matrix[6],
+    matrix[8], matrix[9], matrix[10])
+  normalize4(rotation, rotation)
+  this.rotation.set(t, rotation[0], rotation[1], rotation[2], rotation[3])
+
+  var mat = this.computedMatrix
+  invert44(mat, matrix)
+  var w = mat[15]
+  if(Math.abs(w) > 1e-6) {
+    var cx = mat[12]/w
+    var cy = mat[13]/w
+    var cz = mat[14]/w
+
+    this.recalcMatrix(t)  
+    var r = Math.exp(this.computedRadius[0])
+    this.center.set(t, cx-mat[2]*r, cy-mat[6]*r, cz-mat[10]*r)
+    this.radius.idle(t)
+  } else {
+    this.center.idle(t)
+    this.radius.idle(t)
+  }
+}
+
+proto.setDistance = function(t, d) {
+  if(d > 0) {
+    this.radius.set(t, Math.log(d))
+  }
+}
+
+proto.setDistanceLimits = function(lo, hi) {
+  if(lo > 0) {
+    lo = Math.log(lo)
+  } else {
+    lo = -Infinity    
+  }
+  if(hi > 0) {
+    hi = Math.log(hi)
+  } else {
+    hi = Infinity
+  }
+  hi = Math.max(hi, lo)
+  this.radius.bounds[0][0] = lo
+  this.radius.bounds[1][0] = hi
+}
+
+proto.getDistanceLimits = function(out) {
+  var bounds = this.radius.bounds
+  if(out) {
+    out[0] = Math.exp(bounds[0][0])
+    out[1] = Math.exp(bounds[1][0])
+    return out
+  }
+  return [ Math.exp(bounds[0][0]), Math.exp(bounds[1][0]) ]
+}
+
+proto.toJSON = function() {
+  this.recalcMatrix(this.lastT())
+  return {
+    center:   this.computedCenter.slice(),
+    rotation: this.computedRotation.slice(),
+    distance: Math.log(this.computedRadius[0]),
+    zoomMin:  this.radius.bounds[0][0],
+    zoomMax:  this.radius.bounds[1][0]
+  }
+}
+
+proto.fromJSON = function(options) {
+  var t = this.lastT()
+  var c = options.center
+  if(c) {
+    this.center.set(t, c[0], c[1], c[2])
+  }
+  var r = options.rotation
+  if(r) {
+    this.rotation.set(t, r[0], r[1], r[2], r[3])
+  }
+  var d = options.distance
+  if(d && d > 0) {
+    this.radius.set(t, Math.log(d))
+  }
+  this.setDistanceLimits(options.zoomMin, options.zoomMax)
+}
+
+function createOrbitController(options) {
+  options = options || {}
+  var center   = options.center   || [0,0,0]
+  var rotation = options.rotation || [0,0,0,1]
+  var radius   = options.radius   || 1.0
+
+  center = [].slice.call(center, 0, 3)
+  rotation = [].slice.call(rotation, 0, 4)
+  normalize4(rotation, rotation)
+
+  var result = new OrbitCameraController(
+    rotation,
+    center,
+    Math.log(radius))
+
+  result.setDistanceLimits(options.zoomMin, options.zoomMax)
+
+  if('eye' in options || 'up' in options) {
+    result.lookAt(0, options.eye, options.center, options.up)
+  }
+
+  return result
+}
+
+/***/ }),
+
+/***/ "./node_modules/parse-unit/index.js":
+/*!******************************************!*\
+  !*** ./node_modules/parse-unit/index.js ***!
+  \******************************************/
+/***/ ((module) => {
+
+module.exports = function parseUnit(str, out) {
+    if (!out)
+        out = [ 0, '' ]
+
+    str = String(str)
+    var num = parseFloat(str, 10)
+    out[0] = num
+    out[1] = str.match(/[\d.\-\+]*\s*(.*)/)[1] || ''
+    return out
+}
+
+/***/ }),
+
+/***/ "./node_modules/quat-slerp/index.js":
+/*!******************************************!*\
+  !*** ./node_modules/quat-slerp/index.js ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__(/*! gl-quat/slerp */ "./node_modules/gl-quat/slerp.js")
+
+/***/ }),
+
+/***/ "./node_modules/right-now/browser.js":
+/*!*******************************************!*\
+  !*** ./node_modules/right-now/browser.js ***!
+  \*******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports =
+  __webpack_require__.g.performance &&
+  __webpack_require__.g.performance.now ? function now() {
+    return performance.now()
+  } : Date.now || function now() {
+    return +new Date
+  }
+
+
+/***/ }),
+
+/***/ "./node_modules/stats-js/build/stats.min.js":
+/*!**************************************************!*\
+  !*** ./node_modules/stats-js/build/stats.min.js ***!
+  \**************************************************/
+/***/ (function(module) {
+
+!function(e,t){ true?module.exports=t():0}(this,function(){"use strict";var c=function(){var n=0,l=document.createElement("div");function e(e){return l.appendChild(e.dom),e}function t(e){for(var t=0;t<l.children.length;t++)l.children[t].style.display=t===e?"block":"none";n=e}l.style.cssText="position:fixed;top:0;left:0;cursor:pointer;opacity:0.9;z-index:10000",l.addEventListener("click",function(e){e.preventDefault(),t(++n%l.children.length)},!1);var i=(performance||Date).now(),a=i,o=0,f=e(new c.Panel("FPS","#0ff","#002")),r=e(new c.Panel("MS","#0f0","#020"));if(self.performance&&self.performance.memory)var d=e(new c.Panel("MB","#f08","#201"));return t(0),{REVISION:16,dom:l,addPanel:e,showPanel:t,begin:function(){i=(performance||Date).now()},end:function(){o++;var e=(performance||Date).now();if(r.update(e-i,200),a+1e3<=e&&(f.update(1e3*o/(e-a),100),a=e,o=0,d)){var t=performance.memory;d.update(t.usedJSHeapSize/1048576,t.jsHeapSizeLimit/1048576)}return e},update:function(){i=this.end()},domElement:l,setMode:t}};return c.Panel=function(n,l,i){var a=1/0,o=0,f=Math.round,r=f(window.devicePixelRatio||1),d=80*r,e=48*r,c=3*r,p=2*r,u=3*r,s=15*r,m=74*r,h=30*r,y=document.createElement("canvas");y.width=d,y.height=e,y.style.cssText="width:80px;height:48px";var v=y.getContext("2d");return v.font="bold "+9*r+"px Helvetica,Arial,sans-serif",v.textBaseline="top",v.fillStyle=i,v.fillRect(0,0,d,e),v.fillStyle=l,v.fillText(n,c,p),v.fillRect(u,s,m,h),v.fillStyle=i,v.globalAlpha=.9,v.fillRect(u,s,m,h),{dom:y,update:function(e,t){a=Math.min(a,e),o=Math.max(o,e),v.fillStyle=i,v.globalAlpha=1,v.fillRect(0,0,d,s),v.fillStyle=l,v.fillText(f(e)+" "+n+" ("+f(a)+"-"+f(o)+")",c,p),v.drawImage(y,u+r,s,m-r,h,u,s,m-r,h),v.fillRect(u+m-r,s,r,h),v.fillStyle=i,v.globalAlpha=.9,v.fillRect(u+m-r,s,r,f((1-e/t)*h))}}},c});
+
+
+/***/ }),
+
+/***/ "./node_modules/to-px/browser.js":
+/*!***************************************!*\
+  !*** ./node_modules/to-px/browser.js ***!
+  \***************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var parseUnit = __webpack_require__(/*! parse-unit */ "./node_modules/parse-unit/index.js")
+
+module.exports = toPX
+
+var PIXELS_PER_INCH = getSizeBrutal('in', document.body) // 96
+
+
+function getPropertyInPX(element, prop) {
+  var parts = parseUnit(getComputedStyle(element).getPropertyValue(prop))
+  return parts[0] * toPX(parts[1], element)
+}
+
+//This brutal hack is needed
+function getSizeBrutal(unit, element) {
+  var testDIV = document.createElement('div')
+  testDIV.style['height'] = '128' + unit
+  element.appendChild(testDIV)
+  var size = getPropertyInPX(testDIV, 'height') / 128
+  element.removeChild(testDIV)
+  return size
+}
+
+function toPX(str, element) {
+  if (!str) return null
+
+  element = element || document.body
+  str = (str + '' || 'px').trim().toLowerCase()
+  if(element === window || element === document) {
+    element = document.body
+  }
+
+  switch(str) {
+    case '%':  //Ambiguous, not sure if we should use width or height
+      return element.clientHeight / 100.0
+    case 'ch':
+    case 'ex':
+      return getSizeBrutal(str, element)
+    case 'em':
+      return getPropertyInPX(element, 'font-size')
+    case 'rem':
+      return getPropertyInPX(document.body, 'font-size')
+    case 'vw':
+      return window.innerWidth/100
+    case 'vh':
+      return window.innerHeight/100
+    case 'vmin':
+      return Math.min(window.innerWidth, window.innerHeight) / 100
+    case 'vmax':
+      return Math.max(window.innerWidth, window.innerHeight) / 100
+    case 'in':
+      return PIXELS_PER_INCH
+    case 'cm':
+      return PIXELS_PER_INCH / 2.54
+    case 'mm':
+      return PIXELS_PER_INCH / 25.4
+    case 'pt':
+      return PIXELS_PER_INCH / 72
+    case 'pc':
+      return PIXELS_PER_INCH / 6
+    case 'px':
+      return 1
+  }
+
+  // detect number of units
+  var parts = parseUnit(str)
+  if (!isNaN(parts[0]) && parts[1]) {
+    var px = toPX(parts[1], element)
+    return typeof px === 'number' ? parts[0] * px : null
+  }
+
+  return null
+}
+
+
+/***/ }),
+
+/***/ "./src/Camera.ts":
+/*!***********************!*\
+  !*** ./src/Camera.ts ***!
+  \***********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! gl-matrix */ "./node_modules/gl-matrix/esm/mat4.js");
+/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gl-matrix */ "./node_modules/gl-matrix/esm/vec3.js");
+var CameraControls = __webpack_require__(/*! 3d-view-controls */ "./node_modules/3d-view-controls/camera.js");
+
+class Camera {
+    constructor(position, target) {
+        this.projectionMatrix = gl_matrix__WEBPACK_IMPORTED_MODULE_0__.create();
+        this.viewMatrix = gl_matrix__WEBPACK_IMPORTED_MODULE_0__.create();
+        this.fovy = 45;
+        this.aspectRatio = 1;
+        this.near = 0.1;
+        this.far = 1000;
+        this.position = gl_matrix__WEBPACK_IMPORTED_MODULE_1__.create();
+        this.direction = gl_matrix__WEBPACK_IMPORTED_MODULE_1__.create();
+        this.target = gl_matrix__WEBPACK_IMPORTED_MODULE_1__.create();
+        this.up = gl_matrix__WEBPACK_IMPORTED_MODULE_1__.create();
+        this.controls = CameraControls(document.getElementById('canvas'), {
+            eye: position,
+            center: target,
+        });
+        gl_matrix__WEBPACK_IMPORTED_MODULE_1__.add(this.target, this.position, this.direction);
+        gl_matrix__WEBPACK_IMPORTED_MODULE_0__.lookAt(this.viewMatrix, this.controls.eye, this.controls.center, this.controls.up);
+    }
+    setAspectRatio(aspectRatio) {
+        this.aspectRatio = aspectRatio;
+    }
+    updateProjectionMatrix() {
+        gl_matrix__WEBPACK_IMPORTED_MODULE_0__.perspective(this.projectionMatrix, this.fovy, this.aspectRatio, this.near, this.far);
+    }
+    update() {
+        this.controls.tick();
+        gl_matrix__WEBPACK_IMPORTED_MODULE_1__.add(this.target, this.position, this.direction);
+        gl_matrix__WEBPACK_IMPORTED_MODULE_0__.lookAt(this.viewMatrix, this.controls.eye, this.controls.center, this.controls.up);
+    }
+}
+;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Camera);
+
+
+/***/ }),
+
+/***/ "./src/geometry/Icosphere.ts":
+/*!***********************************!*\
+  !*** ./src/geometry/Icosphere.ts ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! gl-matrix */ "./node_modules/gl-matrix/esm/vec4.js");
+/* harmony import */ var _rendering_gl_Drawable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../rendering/gl/Drawable */ "./src/rendering/gl/Drawable.ts");
+/* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../globals */ "./src/globals.ts");
+
+
+
+class Icosphere extends _rendering_gl_Drawable__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    constructor(center, radius, subdivisions) {
+        super(); // Call the constructor of the super class. This is required.
+        this.radius = radius;
+        this.subdivisions = subdivisions;
+        this.center = gl_matrix__WEBPACK_IMPORTED_MODULE_2__.fromValues(center[0], center[1], center[2], 1);
+    }
+    create() {
+        const X = 0.525731112119133606;
+        const Z = 0.850650808352039932;
+        const N = 0;
+        let maxIndexCount = 20 * Math.pow(4, this.subdivisions);
+        let maxVertexCount = 10 * Math.pow(4, this.subdivisions) + 2;
+        // Create buffers to back geometry data
+        // Index data will ping pong back and forth between buffer0 and buffer1 during creation
+        // All data will be in buffer0 at the end
+        const buffer0 = new ArrayBuffer(maxIndexCount * 3 * Uint32Array.BYTES_PER_ELEMENT +
+            maxVertexCount * 4 * Float32Array.BYTES_PER_ELEMENT +
+            maxVertexCount * 4 * Float32Array.BYTES_PER_ELEMENT);
+        const buffer1 = new ArrayBuffer(maxIndexCount * 3 * Uint32Array.BYTES_PER_ELEMENT);
+        const buffers = [buffer0, buffer1];
+        let b = 0;
+        const indexByteOffset = 0;
+        const vertexByteOffset = maxIndexCount * 3 * Uint32Array.BYTES_PER_ELEMENT;
+        const normalByteOffset = vertexByteOffset;
+        const positionByteOffset = vertexByteOffset + maxVertexCount * 4 * Float32Array.BYTES_PER_ELEMENT;
+        // Create 3-uint buffer views into the backing buffer to represent triangles
+        // The C++ analogy to this would be something like:
+        // triangles[i] = reinterpret_cast<std::array<unsigned int, 3>*>(&buffer[offset]);
+        let triangles = new Array(20);
+        let nextTriangles = new Array();
+        for (let i = 0; i < 20; ++i) {
+            triangles[i] = new Uint32Array(buffers[b], indexByteOffset + i * 3 * Uint32Array.BYTES_PER_ELEMENT, 3);
+        }
+        // Create 3-float buffer views into the backing buffer to represent positions
+        let vertices = new Array(12);
+        for (let i = 0; i < 12; ++i) {
+            vertices[i] = new Float32Array(buffer0, vertexByteOffset + i * 4 * Float32Array.BYTES_PER_ELEMENT, 4);
+        }
+        // Initialize normals for a 20-sided icosahedron
+        vertices[0].set([-X, N, Z, 0]);
+        vertices[1].set([X, N, Z, 0]);
+        vertices[2].set([-X, N, -Z, 0]);
+        vertices[3].set([X, N, -Z, 0]);
+        vertices[4].set([N, Z, X, 0]);
+        vertices[5].set([N, Z, -X, 0]);
+        vertices[6].set([N, -Z, X, 0]);
+        vertices[7].set([N, -Z, -X, 0]);
+        vertices[8].set([Z, X, N, 0]);
+        vertices[9].set([-Z, X, N, 0]);
+        vertices[10].set([Z, -X, N, 0]);
+        vertices[11].set([-Z, -X, N, 0]);
+        // Initialize indices for a 20-sided icosahedron
+        triangles[0].set([0, 4, 1]);
+        triangles[1].set([0, 9, 4]);
+        triangles[2].set([9, 5, 4]);
+        triangles[3].set([4, 5, 8]);
+        triangles[4].set([4, 8, 1]);
+        triangles[5].set([8, 10, 1]);
+        triangles[6].set([8, 3, 10]);
+        triangles[7].set([5, 3, 8]);
+        triangles[8].set([5, 2, 3]);
+        triangles[9].set([2, 7, 3]);
+        triangles[10].set([7, 10, 3]);
+        triangles[11].set([7, 6, 10]);
+        triangles[12].set([7, 11, 6]);
+        triangles[13].set([11, 0, 6]);
+        triangles[14].set([0, 1, 6]);
+        triangles[15].set([6, 1, 10]);
+        triangles[16].set([9, 0, 11]);
+        triangles[17].set([9, 11, 2]);
+        triangles[18].set([9, 2, 5]);
+        triangles[19].set([7, 2, 11]);
+        // This loop subdivides the icosahedron
+        for (let s = 0; s < this.subdivisions; ++s) {
+            b = 1 - b;
+            nextTriangles.length = triangles.length * 4;
+            let triangleIdx = 0;
+            // edgeMap maps a pair of vertex indices to a vertex index at their midpoint
+            // The function `mid` will get that midpoint vertex if it has already been created
+            // or it will create the vertex and add it to the map
+            let edgeMap = new Map();
+            function mid(v0, v1) {
+                let key = [v0, v1].sort().join('_');
+                if (!edgeMap.has(key)) {
+                    let midpoint = new Float32Array(buffer0, vertexByteOffset + vertices.length * 4 * Float32Array.BYTES_PER_ELEMENT, 4);
+                    gl_matrix__WEBPACK_IMPORTED_MODULE_2__.add(midpoint, vertices[v0], vertices[v1]);
+                    gl_matrix__WEBPACK_IMPORTED_MODULE_2__.normalize(midpoint, midpoint);
+                    edgeMap.set(key, vertices.length);
+                    vertices.push(midpoint);
+                }
+                return edgeMap.get(key);
+            }
+            for (let t = 0; t < triangles.length; ++t) {
+                let v0 = triangles[t][0];
+                let v1 = triangles[t][1];
+                let v2 = triangles[t][2];
+                let v3 = mid(v0, v1); // Get or create a vertex between these two vertices
+                let v4 = mid(v1, v2);
+                let v5 = mid(v2, v0);
+                let t0 = nextTriangles[triangleIdx] = new Uint32Array(buffers[b], indexByteOffset + (triangleIdx++) * 3 * Uint32Array.BYTES_PER_ELEMENT, 3);
+                let t1 = nextTriangles[triangleIdx] = new Uint32Array(buffers[b], indexByteOffset + (triangleIdx++) * 3 * Uint32Array.BYTES_PER_ELEMENT, 3);
+                let t2 = nextTriangles[triangleIdx] = new Uint32Array(buffers[b], indexByteOffset + (triangleIdx++) * 3 * Uint32Array.BYTES_PER_ELEMENT, 3);
+                let t3 = nextTriangles[triangleIdx] = new Uint32Array(buffers[b], indexByteOffset + (triangleIdx++) * 3 * Uint32Array.BYTES_PER_ELEMENT, 3);
+                let triangleOffset = nextTriangles.length;
+                t0.set([v0, v3, v5]);
+                t1.set([v3, v4, v5]);
+                t2.set([v3, v1, v4]);
+                t3.set([v5, v4, v2]);
+            }
+            // swap buffers
+            let temp = triangles;
+            triangles = nextTriangles;
+            nextTriangles = temp;
+        }
+        if (b === 1) {
+            // if indices did not end up in buffer0, copy them there now
+            let temp0 = new Uint32Array(buffer0, 0, 3 * triangles.length);
+            let temp1 = new Uint32Array(buffer1, 0, 3 * triangles.length);
+            temp0.set(temp1);
+        }
+        // Populate one position for each normal
+        for (let i = 0; i < vertices.length; ++i) {
+            let pos = new Float32Array(buffer0, positionByteOffset + i * 4 * Float32Array.BYTES_PER_ELEMENT, 4);
+            gl_matrix__WEBPACK_IMPORTED_MODULE_2__.scaleAndAdd(pos, this.center, vertices[i], this.radius);
+        }
+        this.buffer = buffer0;
+        this.indices = new Uint32Array(this.buffer, indexByteOffset, triangles.length * 3);
+        this.normals = new Float32Array(this.buffer, normalByteOffset, vertices.length * 4);
+        this.positions = new Float32Array(this.buffer, positionByteOffset, vertices.length * 4);
+        this.generateIdx();
+        this.generatePos();
+        this.generateNor();
+        this.count = this.indices.length;
+        _globals__WEBPACK_IMPORTED_MODULE_1__.gl.bindBuffer(_globals__WEBPACK_IMPORTED_MODULE_1__.gl.ELEMENT_ARRAY_BUFFER, this.bufIdx);
+        _globals__WEBPACK_IMPORTED_MODULE_1__.gl.bufferData(_globals__WEBPACK_IMPORTED_MODULE_1__.gl.ELEMENT_ARRAY_BUFFER, this.indices, _globals__WEBPACK_IMPORTED_MODULE_1__.gl.STATIC_DRAW);
+        _globals__WEBPACK_IMPORTED_MODULE_1__.gl.bindBuffer(_globals__WEBPACK_IMPORTED_MODULE_1__.gl.ARRAY_BUFFER, this.bufNor);
+        _globals__WEBPACK_IMPORTED_MODULE_1__.gl.bufferData(_globals__WEBPACK_IMPORTED_MODULE_1__.gl.ARRAY_BUFFER, this.normals, _globals__WEBPACK_IMPORTED_MODULE_1__.gl.STATIC_DRAW);
+        _globals__WEBPACK_IMPORTED_MODULE_1__.gl.bindBuffer(_globals__WEBPACK_IMPORTED_MODULE_1__.gl.ARRAY_BUFFER, this.bufPos);
+        _globals__WEBPACK_IMPORTED_MODULE_1__.gl.bufferData(_globals__WEBPACK_IMPORTED_MODULE_1__.gl.ARRAY_BUFFER, this.positions, _globals__WEBPACK_IMPORTED_MODULE_1__.gl.STATIC_DRAW);
+        console.log(`Created icosphere with ${vertices.length} vertices`);
+    }
+}
+;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Icosphere);
+
+
+/***/ }),
+
+/***/ "./src/globals.ts":
+/*!************************!*\
+  !*** ./src/globals.ts ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "gl": () => (/* binding */ gl),
+/* harmony export */   "setGL": () => (/* binding */ setGL)
+/* harmony export */ });
+var gl;
+function setGL(_gl) {
+    gl = _gl;
+}
+
+
+/***/ }),
+
+/***/ "./src/rendering/gl/Drawable.ts":
+/*!**************************************!*\
+  !*** ./src/rendering/gl/Drawable.ts ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../globals */ "./src/globals.ts");
+
+class Drawable {
+    constructor() {
+        this.count = 0;
+        this.idxBound = false;
+        this.posBound = false;
+        this.norBound = false;
+    }
+    destory() {
+        _globals__WEBPACK_IMPORTED_MODULE_0__.gl.deleteBuffer(this.bufIdx);
+        _globals__WEBPACK_IMPORTED_MODULE_0__.gl.deleteBuffer(this.bufPos);
+        _globals__WEBPACK_IMPORTED_MODULE_0__.gl.deleteBuffer(this.bufNor);
+    }
+    generateIdx() {
+        this.idxBound = true;
+        this.bufIdx = _globals__WEBPACK_IMPORTED_MODULE_0__.gl.createBuffer();
+    }
+    generatePos() {
+        this.posBound = true;
+        this.bufPos = _globals__WEBPACK_IMPORTED_MODULE_0__.gl.createBuffer();
+    }
+    generateNor() {
+        this.norBound = true;
+        this.bufNor = _globals__WEBPACK_IMPORTED_MODULE_0__.gl.createBuffer();
+    }
+    bindIdx() {
+        if (this.idxBound) {
+            _globals__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer(_globals__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, this.bufIdx);
+        }
+        return this.idxBound;
+    }
+    bindPos() {
+        if (this.posBound) {
+            _globals__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer(_globals__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, this.bufPos);
+        }
+        return this.posBound;
+    }
+    bindNor() {
+        if (this.norBound) {
+            _globals__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer(_globals__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, this.bufNor);
+        }
+        return this.norBound;
+    }
+    elemCount() {
+        return this.count;
+    }
+    drawMode() {
+        return _globals__WEBPACK_IMPORTED_MODULE_0__.gl.TRIANGLES;
+    }
+}
+;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Drawable);
+
+
+/***/ }),
+
+/***/ "./src/rendering/gl/OpenGLRenderer.ts":
+/*!********************************************!*\
+  !*** ./src/rendering/gl/OpenGLRenderer.ts ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gl-matrix */ "./node_modules/gl-matrix/esm/mat4.js");
+/* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../globals */ "./src/globals.ts");
+
+
+// In this file, `gl` is accessible because it is imported above
+class OpenGLRenderer {
+    constructor(canvas) {
+        this.canvas = canvas;
+    }
+    setClearColor(r, g, b, a) {
+        _globals__WEBPACK_IMPORTED_MODULE_0__.gl.clearColor(r, g, b, a);
+    }
+    setSize(width, height) {
+        this.canvas.width = width;
+        this.canvas.height = height;
+    }
+    clear() {
+        _globals__WEBPACK_IMPORTED_MODULE_0__.gl.clear(_globals__WEBPACK_IMPORTED_MODULE_0__.gl.COLOR_BUFFER_BIT | _globals__WEBPACK_IMPORTED_MODULE_0__.gl.DEPTH_BUFFER_BIT);
+    }
+    render(camera, prog, drawables) {
+        let viewProj = gl_matrix__WEBPACK_IMPORTED_MODULE_1__.create();
+        gl_matrix__WEBPACK_IMPORTED_MODULE_1__.multiply(viewProj, camera.projectionMatrix, camera.viewMatrix);
+        prog.setViewProjMatrix(viewProj);
+        for (let drawable of drawables) {
+            prog.draw(drawable);
+        }
+    }
+}
+;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (OpenGLRenderer);
+
+
+/***/ }),
+
+/***/ "./src/rendering/gl/ShaderProgram.ts":
+/*!*******************************************!*\
+  !*** ./src/rendering/gl/ShaderProgram.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Shader": () => (/* binding */ Shader),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gl-matrix */ "./node_modules/gl-matrix/esm/mat4.js");
+/* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../globals */ "./src/globals.ts");
+
+
+var activeProgram = null;
+class Shader {
+    constructor(type, source) {
+        this.shader = _globals__WEBPACK_IMPORTED_MODULE_0__.gl.createShader(type);
+        _globals__WEBPACK_IMPORTED_MODULE_0__.gl.shaderSource(this.shader, source);
+        _globals__WEBPACK_IMPORTED_MODULE_0__.gl.compileShader(this.shader);
+        if (!_globals__WEBPACK_IMPORTED_MODULE_0__.gl.getShaderParameter(this.shader, _globals__WEBPACK_IMPORTED_MODULE_0__.gl.COMPILE_STATUS)) {
+            throw _globals__WEBPACK_IMPORTED_MODULE_0__.gl.getShaderInfoLog(this.shader);
+        }
+    }
+}
+;
+class ShaderProgram {
+    constructor(shaders) {
+        this.prog = _globals__WEBPACK_IMPORTED_MODULE_0__.gl.createProgram();
+        for (let shader of shaders) {
+            _globals__WEBPACK_IMPORTED_MODULE_0__.gl.attachShader(this.prog, shader.shader);
+        }
+        _globals__WEBPACK_IMPORTED_MODULE_0__.gl.linkProgram(this.prog);
+        if (!_globals__WEBPACK_IMPORTED_MODULE_0__.gl.getProgramParameter(this.prog, _globals__WEBPACK_IMPORTED_MODULE_0__.gl.LINK_STATUS)) {
+            throw _globals__WEBPACK_IMPORTED_MODULE_0__.gl.getProgramInfoLog(this.prog);
+        }
+        this.unifMap = new Map();
+        this.attrPos = _globals__WEBPACK_IMPORTED_MODULE_0__.gl.getAttribLocation(this.prog, "vs_Pos");
+        this.attrNor = _globals__WEBPACK_IMPORTED_MODULE_0__.gl.getAttribLocation(this.prog, "vs_Nor");
+        this.attrCol = _globals__WEBPACK_IMPORTED_MODULE_0__.gl.getAttribLocation(this.prog, "vs_Col");
+        this.unifModel = _globals__WEBPACK_IMPORTED_MODULE_0__.gl.getUniformLocation(this.prog, "u_Model");
+        this.unifModelInvTr = _globals__WEBPACK_IMPORTED_MODULE_0__.gl.getUniformLocation(this.prog, "u_ModelInvTr");
+        this.unifViewProj = _globals__WEBPACK_IMPORTED_MODULE_0__.gl.getUniformLocation(this.prog, "u_ViewProj");
+        this.unifColor = _globals__WEBPACK_IMPORTED_MODULE_0__.gl.getUniformLocation(this.prog, "u_Color");
+    }
+    addUnif(name) {
+        this.unifMap.set(name, _globals__WEBPACK_IMPORTED_MODULE_0__.gl.getUniformLocation(this.prog, name));
+    }
+    setUnifMat4(name, v) {
+        this.use();
+        if (this.unifMap.has(name)) {
+            let loc = this.unifMap.get(name);
+            if (loc != -1)
+                _globals__WEBPACK_IMPORTED_MODULE_0__.gl.uniformMatrix4fv(loc, false, v);
+        }
+    }
+    setUnifFloat(name, v) {
+        this.use();
+        if (this.unifMap.has(name)) {
+            let loc = this.unifMap.get(name);
+            if (loc != -1)
+                _globals__WEBPACK_IMPORTED_MODULE_0__.gl.uniform1f(loc, v);
+        }
+    }
+    setUnifVec4(name, v) {
+        this.use();
+        if (this.unifMap.has(name)) {
+            let loc = this.unifMap.get(name);
+            if (loc != -1)
+                _globals__WEBPACK_IMPORTED_MODULE_0__.gl.uniform4fv(loc, v);
+        }
+    }
+    setUnifVec3(name, v) {
+        this.use();
+        if (this.unifMap.has(name)) {
+            let loc = this.unifMap.get(name);
+            if (loc != -1)
+                _globals__WEBPACK_IMPORTED_MODULE_0__.gl.uniform3fv(loc, v);
+        }
+    }
+    setUnifVec2(name, v) {
+        this.use();
+        if (this.unifMap.has(name)) {
+            let loc = this.unifMap.get(name);
+            if (loc != -1)
+                _globals__WEBPACK_IMPORTED_MODULE_0__.gl.uniform2fv(loc, v);
+        }
+    }
+    use() {
+        if (activeProgram !== this.prog) {
+            _globals__WEBPACK_IMPORTED_MODULE_0__.gl.useProgram(this.prog);
+            activeProgram = this.prog;
+        }
+    }
+    setModelMatrix(model) {
+        this.use();
+        if (this.unifModel !== -1) {
+            _globals__WEBPACK_IMPORTED_MODULE_0__.gl.uniformMatrix4fv(this.unifModel, false, model);
+        }
+        if (this.unifModelInvTr !== -1) {
+            let modelinvtr = gl_matrix__WEBPACK_IMPORTED_MODULE_1__.create();
+            gl_matrix__WEBPACK_IMPORTED_MODULE_1__.transpose(modelinvtr, model);
+            gl_matrix__WEBPACK_IMPORTED_MODULE_1__.invert(modelinvtr, modelinvtr);
+            _globals__WEBPACK_IMPORTED_MODULE_0__.gl.uniformMatrix4fv(this.unifModelInvTr, false, modelinvtr);
+        }
+    }
+    setViewProjMatrix(vp) {
+        this.use();
+        if (this.unifViewProj !== -1) {
+            _globals__WEBPACK_IMPORTED_MODULE_0__.gl.uniformMatrix4fv(this.unifViewProj, false, vp);
+        }
+    }
+    setGeometryColor(color) {
+        this.use();
+        if (this.unifColor !== -1) {
+            _globals__WEBPACK_IMPORTED_MODULE_0__.gl.uniform4fv(this.unifColor, color);
+        }
+    }
+    draw(d) {
+        this.use();
+        if (this.attrPos != -1 && d.bindPos()) {
+            _globals__WEBPACK_IMPORTED_MODULE_0__.gl.enableVertexAttribArray(this.attrPos);
+            _globals__WEBPACK_IMPORTED_MODULE_0__.gl.vertexAttribPointer(this.attrPos, 4, _globals__WEBPACK_IMPORTED_MODULE_0__.gl.FLOAT, false, 0, 0);
+        }
+        if (this.attrNor != -1 && d.bindNor()) {
+            _globals__WEBPACK_IMPORTED_MODULE_0__.gl.enableVertexAttribArray(this.attrNor);
+            _globals__WEBPACK_IMPORTED_MODULE_0__.gl.vertexAttribPointer(this.attrNor, 4, _globals__WEBPACK_IMPORTED_MODULE_0__.gl.FLOAT, false, 0, 0);
+        }
+        d.bindIdx();
+        _globals__WEBPACK_IMPORTED_MODULE_0__.gl.drawElements(d.drawMode(), d.elemCount(), _globals__WEBPACK_IMPORTED_MODULE_0__.gl.UNSIGNED_INT, 0);
+        if (this.attrPos != -1)
+            _globals__WEBPACK_IMPORTED_MODULE_0__.gl.disableVertexAttribArray(this.attrPos);
+        if (this.attrNor != -1)
+            _globals__WEBPACK_IMPORTED_MODULE_0__.gl.disableVertexAttribArray(this.attrNor);
+    }
+}
+;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ShaderProgram);
+
+
+/***/ }),
+
+/***/ "./node_modules/turntable-camera-controller/turntable.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/turntable-camera-controller/turntable.js ***!
+  \***************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+module.exports = createTurntableController
+
+var filterVector = __webpack_require__(/*! filtered-vector */ "./node_modules/filtered-vector/fvec.js")
+var invert44     = __webpack_require__(/*! gl-mat4/invert */ "./node_modules/gl-mat4/invert.js")
+var rotateM      = __webpack_require__(/*! gl-mat4/rotate */ "./node_modules/gl-mat4/rotate.js")
+var cross        = __webpack_require__(/*! gl-vec3/cross */ "./node_modules/gl-vec3/cross.js")
+var normalize3   = __webpack_require__(/*! gl-vec3/normalize */ "./node_modules/gl-vec3/normalize.js")
+var dot3         = __webpack_require__(/*! gl-vec3/dot */ "./node_modules/gl-vec3/dot.js")
+
+function len3(x, y, z) {
+  return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2))
+}
+
+function clamp1(x) {
+  return Math.min(1.0, Math.max(-1.0, x))
+}
+
+function findOrthoPair(v) {
+  var vx = Math.abs(v[0])
+  var vy = Math.abs(v[1])
+  var vz = Math.abs(v[2])
+
+  var u = [0,0,0]
+  if(vx > Math.max(vy, vz)) {
+    u[2] = 1
+  } else if(vy > Math.max(vx, vz)) {
+    u[0] = 1
+  } else {
+    u[1] = 1
+  }
+
+  var vv = 0
+  var uv = 0
+  for(var i=0; i<3; ++i ) {
+    vv += v[i] * v[i]
+    uv += u[i] * v[i]
+  }
+  for(var i=0; i<3; ++i) {
+    u[i] -= (uv / vv) *  v[i]
+  }
+  normalize3(u, u)
+  return u
+}
+
+function TurntableController(zoomMin, zoomMax, center, up, right, radius, theta, phi) {
+  this.center = filterVector(center)
+  this.up     = filterVector(up)
+  this.right  = filterVector(right)
+  this.radius = filterVector([radius])
+  this.angle  = filterVector([theta, phi])
+  this.angle.bounds = [[-Infinity,-Math.PI/2], [Infinity,Math.PI/2]]
+  this.setDistanceLimits(zoomMin, zoomMax)
+
+  this.computedCenter = this.center.curve(0)
+  this.computedUp     = this.up.curve(0)
+  this.computedRight  = this.right.curve(0)
+  this.computedRadius = this.radius.curve(0)
+  this.computedAngle  = this.angle.curve(0)
+  this.computedToward = [0,0,0]
+  this.computedEye    = [0,0,0]
+  this.computedMatrix = new Array(16)
+  for(var i=0; i<16; ++i) {
+    this.computedMatrix[i] = 0.5
+  }
+
+  this.recalcMatrix(0)
+}
+
+var proto = TurntableController.prototype
+
+proto.setDistanceLimits = function(minDist, maxDist) {
+  if(minDist > 0) {
+    minDist = Math.log(minDist)
+  } else {
+    minDist = -Infinity
+  }
+  if(maxDist > 0) {
+    maxDist = Math.log(maxDist)
+  } else {
+    maxDist = Infinity
+  }
+  maxDist = Math.max(maxDist, minDist)
+  this.radius.bounds[0][0] = minDist
+  this.radius.bounds[1][0] = maxDist
+}
+
+proto.getDistanceLimits = function(out) {
+  var bounds = this.radius.bounds[0]
+  if(out) {
+    out[0] = Math.exp(bounds[0][0])
+    out[1] = Math.exp(bounds[1][0])
+    return out
+  }
+  return [ Math.exp(bounds[0][0]), Math.exp(bounds[1][0]) ]
+}
+
+proto.recalcMatrix = function(t) {
+  //Recompute curves
+  this.center.curve(t)
+  this.up.curve(t)
+  this.right.curve(t)
+  this.radius.curve(t)
+  this.angle.curve(t)
+
+  //Compute frame for camera matrix
+  var up     = this.computedUp
+  var right  = this.computedRight
+  var uu = 0.0
+  var ur = 0.0
+  for(var i=0; i<3; ++i) {
+    ur += up[i] * right[i]
+    uu += up[i] * up[i]
+  }
+  var ul = Math.sqrt(uu)
+  var rr = 0.0
+  for(var i=0; i<3; ++i) {
+    right[i] -= up[i] * ur / uu
+    rr       += right[i] * right[i]
+    up[i]    /= ul
+  }
+  var rl = Math.sqrt(rr)
+  for(var i=0; i<3; ++i) {
+    right[i] /= rl
+  }
+
+  //Compute toward vector
+  var toward = this.computedToward
+  cross(toward, up, right)
+  normalize3(toward, toward)
+
+  //Compute angular parameters
+  var radius = Math.exp(this.computedRadius[0])
+  var theta  = this.computedAngle[0]
+  var phi    = this.computedAngle[1]
+
+  var ctheta = Math.cos(theta)
+  var stheta = Math.sin(theta)
+  var cphi   = Math.cos(phi)
+  var sphi   = Math.sin(phi)
+
+  var center = this.computedCenter
+
+  var wx = ctheta * cphi 
+  var wy = stheta * cphi
+  var wz = sphi
+
+  var sx = -ctheta * sphi
+  var sy = -stheta * sphi
+  var sz = cphi
+
+  var eye = this.computedEye
+  var mat = this.computedMatrix
+  for(var i=0; i<3; ++i) {
+    var x      = wx * right[i] + wy * toward[i] + wz * up[i]
+    mat[4*i+1] = sx * right[i] + sy * toward[i] + sz * up[i]
+    mat[4*i+2] = x
+    mat[4*i+3] = 0.0
+  }
+
+  var ax = mat[1]
+  var ay = mat[5]
+  var az = mat[9]
+  var bx = mat[2]
+  var by = mat[6]
+  var bz = mat[10]
+  var cx = ay * bz - az * by
+  var cy = az * bx - ax * bz
+  var cz = ax * by - ay * bx
+  var cl = len3(cx, cy, cz)
+  cx /= cl
+  cy /= cl
+  cz /= cl
+  mat[0] = cx
+  mat[4] = cy
+  mat[8] = cz
+
+  for(var i=0; i<3; ++i) {
+    eye[i] = center[i] + mat[2+4*i]*radius
+  }
+
+  for(var i=0; i<3; ++i) {
+    var rr = 0.0
+    for(var j=0; j<3; ++j) {
+      rr += mat[i+4*j] * eye[j]
+    }
+    mat[12+i] = -rr
+  }
+  mat[15] = 1.0
+}
+
+proto.getMatrix = function(t, result) {
+  this.recalcMatrix(t)
+  var mat = this.computedMatrix
+  if(result) {
+    for(var i=0; i<16; ++i) {
+      result[i] = mat[i]
+    }
+    return result
+  }
+  return mat
+}
+
+var zAxis = [0,0,0]
+proto.rotate = function(t, dtheta, dphi, droll) {
+  this.angle.move(t, dtheta, dphi)
+  if(droll) {
+    this.recalcMatrix(t)
+
+    var mat = this.computedMatrix
+    zAxis[0] = mat[2]
+    zAxis[1] = mat[6]
+    zAxis[2] = mat[10]
+
+    var up     = this.computedUp
+    var right  = this.computedRight
+    var toward = this.computedToward
+
+    for(var i=0; i<3; ++i) {
+      mat[4*i]   = up[i]
+      mat[4*i+1] = right[i]
+      mat[4*i+2] = toward[i]
+    }
+    rotateM(mat, mat, droll, zAxis)
+    for(var i=0; i<3; ++i) {
+      up[i] =    mat[4*i]
+      right[i] = mat[4*i+1]
+    }
+
+    this.up.set(t, up[0], up[1], up[2])
+    this.right.set(t, right[0], right[1], right[2])
+  }
+}
+
+proto.pan = function(t, dx, dy, dz) {
+  dx = dx || 0.0
+  dy = dy || 0.0
+  dz = dz || 0.0
+
+  this.recalcMatrix(t)
+  var mat = this.computedMatrix
+
+  var dist = Math.exp(this.computedRadius[0])
+
+  var ux = mat[1]
+  var uy = mat[5]
+  var uz = mat[9]
+  var ul = len3(ux, uy, uz)
+  ux /= ul
+  uy /= ul
+  uz /= ul
+
+  var rx = mat[0]
+  var ry = mat[4]
+  var rz = mat[8]
+  var ru = rx * ux + ry * uy + rz * uz
+  rx -= ux * ru
+  ry -= uy * ru
+  rz -= uz * ru
+  var rl = len3(rx, ry, rz)
+  rx /= rl
+  ry /= rl
+  rz /= rl
+
+  var vx = rx * dx + ux * dy
+  var vy = ry * dx + uy * dy
+  var vz = rz * dx + uz * dy
+  this.center.move(t, vx, vy, vz)
+
+  //Update z-component of radius
+  var radius = Math.exp(this.computedRadius[0])
+  radius = Math.max(1e-4, radius + dz)
+  this.radius.set(t, Math.log(radius))
+}
+
+proto.translate = function(t, dx, dy, dz) {
+  this.center.move(t,
+    dx||0.0,
+    dy||0.0,
+    dz||0.0)
+}
+
+//Recenters the coordinate axes
+proto.setMatrix = function(t, mat, axes, noSnap) {
+  
+  //Get the axes for tare
+  var ushift = 1
+  if(typeof axes === 'number') {
+    ushift = (axes)|0
+  } 
+  if(ushift < 0 || ushift > 3) {
+    ushift = 1
+  }
+  var vshift = (ushift + 2) % 3
+  var fshift = (ushift + 1) % 3
+
+  //Recompute state for new t value
+  if(!mat) { 
+    this.recalcMatrix(t)
+    mat = this.computedMatrix
+  }
+
+  //Get right and up vectors
+  var ux = mat[ushift]
+  var uy = mat[ushift+4]
+  var uz = mat[ushift+8]
+  if(!noSnap) {
+    var ul = len3(ux, uy, uz)
+    ux /= ul
+    uy /= ul
+    uz /= ul
+  } else {
+    var ax = Math.abs(ux)
+    var ay = Math.abs(uy)
+    var az = Math.abs(uz)
+    var am = Math.max(ax,ay,az)
+    if(ax === am) {
+      ux = (ux < 0) ? -1 : 1
+      uy = uz = 0
+    } else if(az === am) {
+      uz = (uz < 0) ? -1 : 1
+      ux = uy = 0
+    } else {
+      uy = (uy < 0) ? -1 : 1
+      ux = uz = 0
+    }
+  }
+
+  var rx = mat[vshift]
+  var ry = mat[vshift+4]
+  var rz = mat[vshift+8]
+  var ru = rx * ux + ry * uy + rz * uz
+  rx -= ux * ru
+  ry -= uy * ru
+  rz -= uz * ru
+  var rl = len3(rx, ry, rz)
+  rx /= rl
+  ry /= rl
+  rz /= rl
+  
+  var fx = uy * rz - uz * ry
+  var fy = uz * rx - ux * rz
+  var fz = ux * ry - uy * rx
+  var fl = len3(fx, fy, fz)
+  fx /= fl
+  fy /= fl
+  fz /= fl
+
+  this.center.jump(t, ex, ey, ez)
+  this.radius.idle(t)
+  this.up.jump(t, ux, uy, uz)
+  this.right.jump(t, rx, ry, rz)
+
+  var phi, theta
+  if(ushift === 2) {
+    var cx = mat[1]
+    var cy = mat[5]
+    var cz = mat[9]
+    var cr = cx * rx + cy * ry + cz * rz
+    var cf = cx * fx + cy * fy + cz * fz
+    if(tu < 0) {
+      phi = -Math.PI/2
+    } else {
+      phi = Math.PI/2
+    }
+    theta = Math.atan2(cf, cr)
+  } else {
+    var tx = mat[2]
+    var ty = mat[6]
+    var tz = mat[10]
+    var tu = tx * ux + ty * uy + tz * uz
+    var tr = tx * rx + ty * ry + tz * rz
+    var tf = tx * fx + ty * fy + tz * fz
+
+    phi = Math.asin(clamp1(tu))
+    theta = Math.atan2(tf, tr)
+  }
+
+  this.angle.jump(t, theta, phi)
+
+  this.recalcMatrix(t)
+  var dx = mat[2]
+  var dy = mat[6]
+  var dz = mat[10]
+
+  var imat = this.computedMatrix
+  invert44(imat, mat)
+  var w  = imat[15]
+  var ex = imat[12] / w
+  var ey = imat[13] / w
+  var ez = imat[14] / w
+
+  var gs = Math.exp(this.computedRadius[0])
+  this.center.jump(t, ex-dx*gs, ey-dy*gs, ez-dz*gs)
+}
+
+proto.lastT = function() {
+  return Math.max(
+    this.center.lastT(),
+    this.up.lastT(),
+    this.right.lastT(),
+    this.radius.lastT(),
+    this.angle.lastT())
+}
+
+proto.idle = function(t) {
+  this.center.idle(t)
+  this.up.idle(t)
+  this.right.idle(t)
+  this.radius.idle(t)
+  this.angle.idle(t)
+}
+
+proto.flush = function(t) {
+  this.center.flush(t)
+  this.up.flush(t)
+  this.right.flush(t)
+  this.radius.flush(t)
+  this.angle.flush(t)
+}
+
+proto.setDistance = function(t, d) {
+  if(d > 0) {
+    this.radius.set(t, Math.log(d))
+  }
+}
+
+proto.lookAt = function(t, eye, center, up) {
+  this.recalcMatrix(t)
+
+  eye    = eye    || this.computedEye
+  center = center || this.computedCenter
+  up     = up     || this.computedUp
+
+  var ux = up[0]
+  var uy = up[1]
+  var uz = up[2]
+  var ul = len3(ux, uy, uz)
+  if(ul < 1e-6) {
+    return
+  }
+  ux /= ul
+  uy /= ul
+  uz /= ul
+
+  var tx = eye[0] - center[0]
+  var ty = eye[1] - center[1]
+  var tz = eye[2] - center[2]
+  var tl = len3(tx, ty, tz)
+  if(tl < 1e-6) {
+    return
+  }
+  tx /= tl
+  ty /= tl
+  tz /= tl
+
+  var right = this.computedRight
+  var rx = right[0]
+  var ry = right[1]
+  var rz = right[2]
+  var ru = ux*rx + uy*ry + uz*rz
+  rx -= ru * ux
+  ry -= ru * uy
+  rz -= ru * uz
+  var rl = len3(rx, ry, rz)
+
+  if(rl < 0.01) {
+    rx = uy * tz - uz * ty
+    ry = uz * tx - ux * tz
+    rz = ux * ty - uy * tx
+    rl = len3(rx, ry, rz)
+    if(rl < 1e-6) {
+      return
+    }
+  }
+  rx /= rl
+  ry /= rl
+  rz /= rl
+
+  this.up.set(t, ux, uy, uz)
+  this.right.set(t, rx, ry, rz)
+  this.center.set(t, center[0], center[1], center[2])
+  this.radius.set(t, Math.log(tl))
+
+  var fx = uy * rz - uz * ry
+  var fy = uz * rx - ux * rz
+  var fz = ux * ry - uy * rx
+  var fl = len3(fx, fy, fz)
+  fx /= fl
+  fy /= fl
+  fz /= fl
+
+  var tu = ux*tx + uy*ty + uz*tz
+  var tr = rx*tx + ry*ty + rz*tz
+  var tf = fx*tx + fy*ty + fz*tz
+
+  var phi   = Math.asin(clamp1(tu))
+  var theta = Math.atan2(tf, tr)
+
+  var angleState = this.angle._state
+  var lastTheta  = angleState[angleState.length-1]
+  var lastPhi    = angleState[angleState.length-2]
+  lastTheta      = lastTheta % (2.0 * Math.PI)
+  var dp = Math.abs(lastTheta + 2.0 * Math.PI - theta)
+  var d0 = Math.abs(lastTheta - theta)
+  var dn = Math.abs(lastTheta - 2.0 * Math.PI - theta)
+  if(dp < d0) {
+    lastTheta += 2.0 * Math.PI
+  }
+  if(dn < d0) {
+    lastTheta -= 2.0 * Math.PI
+  }
+
+  this.angle.jump(this.angle.lastT(), lastTheta, lastPhi)
+  this.angle.set(t, theta, phi)
+}
+
+function createTurntableController(options) {
+  options = options || {}
+
+  var center = options.center || [0,0,0]
+  var up     = options.up     || [0,1,0]
+  var right  = options.right  || findOrthoPair(up)
+  var radius = options.radius || 1.0
+  var theta  = options.theta  || 0.0
+  var phi    = options.phi    || 0.0
+
+  center = [].slice.call(center, 0, 3)
+
+  up = [].slice.call(up, 0, 3)
+  normalize3(up, up)
+
+  right = [].slice.call(right, 0, 3)
+  normalize3(right, right)
+
+  if('eye' in options) {
+    var eye = options.eye
+    var toward = [
+      eye[0]-center[0],
+      eye[1]-center[1],
+      eye[2]-center[2]
+    ]
+    cross(right, toward, up)
+    if(len3(right[0], right[1], right[2]) < 1e-6) {
+      right = findOrthoPair(up)
+    } else {
+      normalize3(right, right)
+    }
+
+    radius = len3(toward[0], toward[1], toward[2])
+
+    var ut = dot3(up, toward) / radius
+    var rt = dot3(right, toward) / radius
+    phi    = Math.acos(ut)
+    theta  = Math.acos(rt)
+  }
+
+  //Use logarithmic coordinates for radius
+  radius = Math.log(radius)
+
+  //Return the controller
+  return new TurntableController(
+    options.zoomMin,
+    options.zoomMax,
+    center,
+    up,
+    right,
+    radius,
+    theta,
+    phi)
+}
+
+/***/ }),
+
+/***/ "./src/shaders/lambert-frag.glsl":
+/*!***************************************!*\
+  !*** ./src/shaders/lambert-frag.glsl ***!
+  \***************************************/
+/***/ ((module) => {
+
+module.exports = "#version 300 es\n\nprecision highp float;\n\nuniform vec4 u_Color;\nuniform vec4 u_Color2;\nuniform mat4 u_Model;\n\nin vec4 fs_Nor;\nin vec4 fs_LightVec;\nin vec4 fs_Col;\nin vec4 fs_Pos;\nin float fs_Bump;\nout vec4 out_Col;\n\nvec3 random3(vec3 p) {\n return fract(\n    sin(\n        vec3(\n            dot(p.xy, vec2(127.1, 311.7)),\n            dot(p.yz, vec2(269.5, 183.3)),\n            dot(p.zx, vec2(20.1, 123.3))\n            )\n        ) * 43758.5453\n );\n}\n\nfloat WorleyNoise(vec3 uv) {\n    uv *= 3.f;\n    vec3 uvInt = floor(uv);\n    vec3 uvFract = fract(uv);\n    float minDist = 100.f;\n    for(int z = -1; z <= 1; ++z){\n        for(int y = -1; y <= 1; ++y) {\n            for(int x = -1; x <= 1; ++x) {\n                vec3 neighbor = vec3(float(x), float(y), float(z));\n                vec3 point = random3(uvInt + neighbor);\n                vec3 diff = neighbor + point - uvFract;\n                float dist = length(diff);\n                minDist = min(minDist, dist);\n            }\n        } \n    }\n    return minDist;\n}\n\nfloat fbm3d(vec3 xyz) {\n    float f;\n   \tf  = 0.5f * WorleyNoise(xyz);\n\tf += 0.25f * WorleyNoise(xyz);\n\tf += 0.1250 * WorleyNoise(xyz);\n\tf += 0.0625 * WorleyNoise(xyz);\n\tf = 0.5 + 0.5 * f;\n\treturn f;\n}\n\nvoid main()\n{\n    vec4 diffuseColor = u_Color;\n\n    float diffuseTerm = clamp(dot(fs_Nor,fs_LightVec), 0.f, 1.f);\n\n    float ambientTerm = 0.2f;\n\n    float lightIntensity = diffuseTerm + ambientTerm;\n\n    vec4 center = -u_Model[3];\n\n    float u = clamp(0.8 * (fs_Bump - 0.1) - fbm3d(fs_Nor.xyz), 0.f, 1.f);\n    vec3 color = mix(diffuseColor.rgb, u_Color2.xyz, u);\n    color = floor(color * 4.f) / 3.f;\n    out_Col = vec4(color, 1.f);\n}\n"
+
+/***/ }),
+
+/***/ "./src/shaders/lambert-vert.glsl":
+/*!***************************************!*\
+  !*** ./src/shaders/lambert-vert.glsl ***!
+  \***************************************/
+/***/ ((module) => {
+
+module.exports = "#version 300 es\n\nuniform mat4 u_Model;\n\nuniform mat4 u_ModelInvTr;\n\nuniform mat4 u_ViewProj;\nuniform float u_Time;\n\nuniform float u_lowAmp;\nuniform float u_highAmp;\n\nin vec4 vs_Pos;\nin vec4 vs_Nor;\nin vec4 vs_Col;\n\nout vec4 fs_Nor;\nout vec4 fs_LightVec;\nout vec4 fs_Col;\nout vec4 fs_Pos;\nout float fs_Bump;\n\nconst vec4 lightPos = vec4(4.5, 5.2, 2.8, 1);\n\nfloat hash(float p) {\n    p = fract(p * 0.011); p *= p + 1.f; p *= p + p; return fract(p); \n}\n\nfloat snoise(vec3 x) {\n    const vec3 step = vec3(110, 241, 171);\n    vec3 i = floor(x);\n    vec3 f = fract(x);\n    float n = dot(i, step);\n    vec3 u = f * f * (3. - 2. * f);\n    return mix(mix(mix(hash(n + dot(step, vec3(0, 0, 0))), \n                       hash(n + dot(step, vec3(1, 0, 0))), u.x),\n                   mix(hash(n + dot(step, vec3(0, 1, 0))), \n                       hash(n + dot(step, vec3(1, 1, 0))), u.x), u.y),\n                   mix(mix(hash(n + dot(step, vec3(0, 0, 1))), \n                           hash(n + dot(step, vec3(1, 0, 1))), u.x),\n                   mix(hash(n + dot(step, vec3(0, 1, 1))), \n                       hash(n + dot(step, vec3(1, 1, 1))), u.x), u.y), u.z);\n}\n\nfloat fbm3d(vec3 x) {\n    x *= 5.f;\n\tfloat v = 0.0;\n\tfloat a = 0.3;\n\tvec3 shift = vec3(100);\n\tfor (int i = 0; i < 10; ++i) {\n\t\tv += a * snoise(x);\n\t\tx = x * 3.0 + shift;\n\t\ta *= 0.3;\n\t}\n\treturn v;\n}\n\nvec3 random3(vec3 p) {\n return fract(\n    sin(\n        vec3(\n            dot(p.xy, vec2(127.1, 311.7)),\n            dot(p.yz, vec2(269.5, 183.3)),\n            dot(p.zx, vec2(20.1, 123.3))\n            )\n        ) * 43758.5453\n );\n}\n\nvoid main()\n{\n    fs_Col = vs_Col;\n\n    mat3 invTranspose = mat3(u_ModelInvTr);\n    fs_Nor = vec4(invTranspose * vec3(vs_Nor), 0);\n\n    vec4 fs_Pos = vs_Pos;\n\n    fs_Bump = random3(fs_Nor.xyz + vec3(0, u_Time, 0)).x * u_highAmp + \n\t\t5.f * fbm3d(fs_Nor.xyz + vec3(0, u_Time * 0.75, 0)) * u_lowAmp;\n\n    fs_Pos += fs_Nor * 0.3 * fs_Bump;\n\n    vec4 modelposition = u_Model * fs_Pos;\n    fs_Pos = modelposition;\n\n    fs_LightVec = lightPos - modelposition;\n    gl_Position = u_ViewProj * modelposition;\n}\n"
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	(() => {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+/*!*********************!*\
+  !*** ./src/main.ts ***!
+  \*********************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! gl-matrix */ "./node_modules/gl-matrix/esm/vec3.js");
+/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! gl-matrix */ "./node_modules/gl-matrix/esm/vec4.js");
+/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! gl-matrix */ "./node_modules/gl-matrix/esm/mat4.js");
+/* harmony import */ var dat_gui__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dat.gui */ "./node_modules/dat.gui/build/dat.gui.module.js");
+/* harmony import */ var _geometry_Icosphere__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./geometry/Icosphere */ "./src/geometry/Icosphere.ts");
+/* harmony import */ var _rendering_gl_OpenGLRenderer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./rendering/gl/OpenGLRenderer */ "./src/rendering/gl/OpenGLRenderer.ts");
+/* harmony import */ var _Camera__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Camera */ "./src/Camera.ts");
+/* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./globals */ "./src/globals.ts");
+/* harmony import */ var _rendering_gl_ShaderProgram__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./rendering/gl/ShaderProgram */ "./src/rendering/gl/ShaderProgram.ts");
+
+const Stats = __webpack_require__(/*! stats-js */ "./node_modules/stats-js/build/stats.min.js");
+
+
+
+
+
+
+// Define an object with application parameters and button callbacks
+// This will be referred to by dat.GUI's functions that add GUI elements.
+const controls = {
+    tesselations: 5,
+    'Load Scene': loadScene,
+    primaryColor: [219, 85, 21, 1],
+    secondaryColor: [0, 0, 0, 1],
+    highAmp: 0.5,
+    lowAmp: 1.0,
+};
+let icosphere;
+let prevTesselations = 5;
+let color;
+let color2;
+function loadScene() {
+    icosphere = new _geometry_Icosphere__WEBPACK_IMPORTED_MODULE_1__["default"](gl_matrix__WEBPACK_IMPORTED_MODULE_6__.fromValues(0, 0, 0), 1, controls.tesselations);
+    icosphere.create();
+}
+function loadGUI() {
+    const gui = new dat_gui__WEBPACK_IMPORTED_MODULE_0__.GUI();
+    gui.add(controls, 'tesselations', 0, 8).step(1);
+    color = gl_matrix__WEBPACK_IMPORTED_MODULE_7__.fromValues(0.86, 0.33, 0.08, 1);
+    gui.addColor(controls, "primaryColor").name("primary color").onChange((value) => {
+        color = gl_matrix__WEBPACK_IMPORTED_MODULE_7__.fromValues(value[0] / 255.0, value[1] / 255.0, value[2] / 255.0, 1);
+    });
+    color2 = gl_matrix__WEBPACK_IMPORTED_MODULE_7__.fromValues(0, 0, 0, 1);
+    gui.addColor(controls, "secondaryColor").name("secondary color").onChange((value) => {
+        color2 = gl_matrix__WEBPACK_IMPORTED_MODULE_7__.fromValues(value[0] / 255.0, value[1] / 255.0, value[2] / 255.0, 1);
+    });
+    gui.add(controls, "highAmp", 0.0, 1.0).name("high amp");
+    gui.add(controls, "lowAmp", 0.0, 1.0).name("low amp");
+    var resetSliders = function (name, val) {
+        for (var i = 0; i < gui.__controllers.length; i++) {
+            if (gui.__controllers[i].property == name) {
+                gui.__controllers[i].setValue(val);
+            }
+        }
+    };
+    var obj = {
+        reset: function () {
+            controls.tesselations = 5;
+            color = gl_matrix__WEBPACK_IMPORTED_MODULE_7__.fromValues(219 / 255., 85 / 255., 21 / 255., 1);
+            color2 = gl_matrix__WEBPACK_IMPORTED_MODULE_7__.fromValues(0, 0, 0, 1);
+            controls.highAmp = 0.5;
+            controls.lowAmp = 1.0;
+            resetSliders("tesselations", 5);
+            resetSliders("primaryColor", [219, 85, 21, 1]);
+            resetSliders("secondaryColor", [0, 0, 0, 1]);
+            resetSliders("highAmp", .5);
+            resetSliders("lowAmp", 1.0);
+        }
+    };
+    gui.add(obj, "reset").name("reset");
+}
+function main() {
+    // Initial display for framerate
+    const stats = Stats();
+    stats.setMode(0);
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0px';
+    stats.domElement.style.top = '0px';
+    document.body.appendChild(stats.domElement);
+    // get canvas and webgl context
+    const canvas = document.getElementById('canvas');
+    const gl = canvas.getContext('webgl2');
+    if (!gl) {
+        alert('WebGL 2 not supported!');
+    }
+    // `setGL` is a function imported above which sets the value of `gl` in the `globals.ts` module.
+    // Later, we can import `gl` from `globals.ts` to access it
+    (0,_globals__WEBPACK_IMPORTED_MODULE_4__.setGL)(gl);
+    // Initial call to load scene
+    loadScene();
+    loadGUI();
+    const camera = new _Camera__WEBPACK_IMPORTED_MODULE_3__["default"](gl_matrix__WEBPACK_IMPORTED_MODULE_6__.fromValues(0, 0, 5), gl_matrix__WEBPACK_IMPORTED_MODULE_6__.fromValues(0, 0, 0));
+    const renderer = new _rendering_gl_OpenGLRenderer__WEBPACK_IMPORTED_MODULE_2__["default"](canvas);
+    renderer.setClearColor(0.2, 0.2, 0.2, 1);
+    gl.enable(gl.DEPTH_TEST);
+    const lambert = new _rendering_gl_ShaderProgram__WEBPACK_IMPORTED_MODULE_5__["default"]([
+        new _rendering_gl_ShaderProgram__WEBPACK_IMPORTED_MODULE_5__.Shader(gl.VERTEX_SHADER, __webpack_require__(/*! ./shaders/lambert-vert.glsl */ "./src/shaders/lambert-vert.glsl")),
+        new _rendering_gl_ShaderProgram__WEBPACK_IMPORTED_MODULE_5__.Shader(gl.FRAGMENT_SHADER, __webpack_require__(/*! ./shaders/lambert-frag.glsl */ "./src/shaders/lambert-frag.glsl")),
+    ]);
+    lambert.addUnif("u_Time");
+    lambert.addUnif("u_Color2");
+    lambert.addUnif("u_lowAmp");
+    lambert.addUnif("u_highAmp");
+    // This function will be called every frame
+    function tick() {
+        camera.update();
+        stats.begin();
+        gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+        renderer.clear();
+        //update inputs
+        if (controls.tesselations != prevTesselations) {
+            prevTesselations = controls.tesselations;
+            icosphere = new _geometry_Icosphere__WEBPACK_IMPORTED_MODULE_1__["default"](gl_matrix__WEBPACK_IMPORTED_MODULE_6__.fromValues(0, 0, 0), 1, prevTesselations);
+            icosphere.create();
+        }
+        lambert.setGeometryColor(color);
+        let time = Date.now() % 2000000 / 1000.0;
+        lambert.setUnifFloat("u_Time", time);
+        lambert.setUnifVec4("u_Color2", color2);
+        lambert.setUnifFloat("u_highAmp", controls.highAmp);
+        lambert.setUnifFloat("u_lowAmp", controls.lowAmp);
+        let model = gl_matrix__WEBPACK_IMPORTED_MODULE_8__.create();
+        gl_matrix__WEBPACK_IMPORTED_MODULE_8__.identity(model);
+        lambert.setModelMatrix(model);
+        gl.depthMask(true);
+        renderer.render(camera, lambert, [
+            icosphere,
+        ]);
+        stats.end();
+        // Tell the browser to call `tick` again whenever it renders a new frame
+        requestAnimationFrame(tick);
+    }
+    window.addEventListener('resize', function () {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.setAspectRatio(window.innerWidth / window.innerHeight);
+        camera.updateProjectionMatrix();
+    }, false);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.setAspectRatio(window.innerWidth / window.innerHeight);
+    camera.updateProjectionMatrix();
+    // Start the render loop
+    tick();
+}
+main();
+
+})();
+
+/******/ })()
+;
 //# sourceMappingURL=bundle.js.map
