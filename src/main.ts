@@ -2,6 +2,7 @@ import {vec3, vec4,mat4} from 'gl-matrix';
 const Stats = require('stats-js');
 import * as DAT from 'dat.gui';
 import Icosphere from './geometry/Icosphere';
+import Square from './geometry/Square'
 import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
@@ -19,6 +20,7 @@ const controls = {
 };
 
 let icosphere: Icosphere;
+let square: Square;
 let prevTesselations: number = 5;
 let color: vec4;
 let color2: vec4;
@@ -26,6 +28,9 @@ let color2: vec4;
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
   icosphere.create();
+
+  square = new Square(vec3.fromValues(0, 0, 0));
+  square.create();
 }
 
 function loadGUI(){
@@ -106,6 +111,16 @@ function main() {
   lambert.addUnif("u_lowAmp");
   lambert.addUnif("u_highAmp");
 
+  const background = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/background-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/background-frag.glsl')),
+  ]);
+
+  background.addUnif("u_Time");
+  background.addUnif("u_Color2");
+  background.addUnif("u_lowAmp");
+  background.addUnif("u_highAmp");
+
 
   // This function will be called every frame
   function tick() {
@@ -113,7 +128,6 @@ function main() {
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
-    //update inputs
     if(controls.tesselations != prevTesselations)
     {
       prevTesselations = controls.tesselations;
@@ -122,10 +136,14 @@ function main() {
     }
     lambert.setGeometryColor(color);
     let time = Date.now()%2000000/1000.0;
-    lambert.setUnifFloat("u_Time",time);
-    lambert.setUnifVec4("u_Color2",color2);
-    lambert.setUnifFloat("u_highAmp",controls.highAmp);
-    lambert.setUnifFloat("u_lowAmp",controls.lowAmp);
+    lambert.setUnifFloat("u_Time", time);
+    lambert.setUnifVec4("u_Color2", color2);
+    lambert.setUnifFloat("u_highAmp", controls.highAmp);
+    lambert.setUnifFloat("u_lowAmp", controls.lowAmp);
+
+    background.setGeometryColor(color);
+    background.setUnifVec4("u_Color2", color2);
+    background.setUnifFloat("u_Time", time);
 
     let model = mat4.create();
     mat4.identity(model);
@@ -137,6 +155,10 @@ function main() {
     renderer.render(camera, lambert, [
       icosphere,
     ]);
+
+    renderer.render(camera, background, [
+      square,
+    ]);
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame
@@ -147,11 +169,13 @@ function main() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.setAspectRatio(window.innerWidth / window.innerHeight);
     camera.updateProjectionMatrix();
+    background.setDimensions(window.innerWidth, window.innerHeight);
   }, false);
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.setAspectRatio(window.innerWidth / window.innerHeight);
   camera.updateProjectionMatrix();
+  background.setDimensions(window.innerWidth, window.innerHeight);
 
   // Start the render loop
   tick();

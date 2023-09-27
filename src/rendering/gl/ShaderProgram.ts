@@ -29,6 +29,7 @@ class ShaderProgram {
   unifModelInvTr: WebGLUniformLocation;
   unifViewProj: WebGLUniformLocation;
   unifColor: WebGLUniformLocation;
+  unifDimensions: WebGLUniformLocation;
 
   unifMap: Map<string,WebGLUniformLocation>;
 
@@ -50,6 +51,7 @@ class ShaderProgram {
     this.unifModelInvTr = gl.getUniformLocation(this.prog, "u_ModelInvTr");
     this.unifViewProj   = gl.getUniformLocation(this.prog, "u_ViewProj");
     this.unifColor      = gl.getUniformLocation(this.prog, "u_Color");
+    this.unifDimensions   = gl.getUniformLocation(this.prog, "u_Dimensions");
   }
 
   addUnif(name:string){
@@ -61,6 +63,13 @@ class ShaderProgram {
     if(this.unifMap.has(name)){
       let loc = this.unifMap.get(name);
       if(loc!=-1)gl.uniformMatrix4fv(loc, false, v);
+    }
+  }
+
+  setDimensions(width: number, height: number) {
+    this.use();
+    if(this.unifDimensions !== -1) {
+      gl.uniform2f(this.unifDimensions, width, height);
     }
   }
 
