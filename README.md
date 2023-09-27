@@ -1,6 +1,7 @@
 # [Project 1: Noise](https://github.com/CIS-566-Fall-2022/hw01-fireball-base): Amy Liu
 
-[Live Deployment](https://mialana.github.io/hw01-fireball/)
+[Live Deployment](https://mialana.github.io/hw01-fireball/) (I am currently unable to
+get my live deployment to work, so a recording of my fireball can be found in src/imgs)
 
 ## Objective
 
