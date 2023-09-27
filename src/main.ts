@@ -13,7 +13,7 @@ const controls = {
   tesselations: 5,
   'Load Scene': loadScene, // A function pointer, essentially
   primaryColor:[219, 85, 21,1],
-  secondaryColor:[30, 61, 105,1],
+  secondaryColor:[0, 0, 0,1],
   highAmp: 0.5,
   lowAmp: 1.0,
 };
@@ -35,7 +35,7 @@ function loadGUI(){
     gui.addColor(controls,"primaryColor").name("primary color").onChange((value)=>{
       color = vec4.fromValues(value[0]/255.0,value[1]/255.0,value[2]/255.0,1);
     });
-    color2 = vec4.fromValues(30/255.,61/255.,105/255.,1);
+    color2 = vec4.fromValues(0,0,0,1);
     gui.addColor(controls,"secondaryColor").name("secondary color").onChange((value)=>{
       color2 = vec4.fromValues(value[0]/255.0,value[1]/255.0,value[2]/255.0,1);
     });
@@ -54,12 +54,12 @@ function loadGUI(){
       reset: function() {
         controls.tesselations = 5;
         color = vec4.fromValues(219/255., 85/255., 21/255.,1);
-        color2 = vec4.fromValues(30/255., 61/255., 105/255.,1);
+        color2 = vec4.fromValues(0, 0, 0,1);
         controls.highAmp = 0.5;
         controls.lowAmp = 1.0;
         resetSliders("tesselations",5);
         resetSliders("primaryColor",[219, 85, 21,1]);
-        resetSliders("secondaryColor",[30, 61, 105,1]);
+        resetSliders("secondaryColor",[0, 0, 0,1]);
         resetSliders("highAmp",.5);
         resetSliders("lowAmp",1.0);
       }
@@ -101,7 +101,7 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
 
-  lambert.addUnif("u_time");
+  lambert.addUnif("u_Time");
   lambert.addUnif("u_Color2");
   lambert.addUnif("u_lowAmp");
   lambert.addUnif("u_highAmp");
@@ -122,7 +122,7 @@ function main() {
     }
     lambert.setGeometryColor(color);
     let time = Date.now()%2000000/1000.0;
-    lambert.setUnifFloat("u_time",time);
+    lambert.setUnifFloat("u_Time",time);
     lambert.setUnifVec4("u_Color2",color2);
     lambert.setUnifFloat("u_highAmp",controls.highAmp);
     lambert.setUnifFloat("u_lowAmp",controls.lowAmp);

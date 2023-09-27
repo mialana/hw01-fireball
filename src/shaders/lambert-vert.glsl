@@ -5,7 +5,7 @@ uniform mat4 u_Model;
 uniform mat4 u_ModelInvTr;
 
 uniform mat4 u_ViewProj;
-uniform float u_time;
+uniform float u_Time;
 
 uniform float u_lowAmp;
 uniform float u_highAmp;
@@ -22,49 +22,50 @@ out float fs_Bump;
 
 const vec4 lightPos = vec4(4.5, 5.2, 2.8, 1);
 
-float hash(float p) { p = fract(p * 0.011); p *= p + 1.f; p *= p + p; return fract(p); }
+float hash(float p) {
+    p = fract(p * 0.011); p *= p + 1.f; p *= p + p; return fract(p); 
+}
 
 float snoise(vec3 x) {
     const vec3 step = vec3(110, 241, 171);
     vec3 i = floor(x);
     vec3 f = fract(x);
     float n = dot(i, step);
-    vec3 u = f * f * (3.5 - 1.5 * f);
-    return mix(mix(mix( hash(n + dot(step, vec3(0, 0, 0))), hash(n + dot(step, vec3(1, 0, 0))), u.x),
-                   mix( hash(n + dot(step, vec3(0, 1, 0))), hash(n + dot(step, vec3(1, 1, 0))), u.x), u.y),
-               mix(mix( hash(n + dot(step, vec3(0, 0, 1))), hash(n + dot(step, vec3(1, 0, 1))), u.x),
-                   mix( hash(n + dot(step, vec3(0, 1, 1))), hash(n + dot(step, vec3(1, 1, 1))), u.x), u.y), u.z);
+    vec3 u = f * f * (3. - 2. * f);
+    return mix(mix(mix(hash(n + dot(step, vec3(0, 0, 0))), 
+                       hash(n + dot(step, vec3(1, 0, 0))), u.x),
+                   mix(hash(n + dot(step, vec3(0, 1, 0))), 
+                       hash(n + dot(step, vec3(1, 1, 0))), u.x), u.y),
+                   mix(mix(hash(n + dot(step, vec3(0, 0, 1))), 
+                           hash(n + dot(step, vec3(1, 0, 1))), u.x),
+                   mix(hash(n + dot(step, vec3(0, 1, 1))), 
+                       hash(n + dot(step, vec3(1, 1, 1))), u.x), u.y), u.z);
 }
 
-float fbm3d(vec3 x){
+float fbm3d(vec3 x) {
     x *= 5.f;
 	float v = 0.0;
 	float a = 0.3;
 	vec3 shift = vec3(100);
 	for (int i = 0; i < 10; ++i) {
 		v += a * snoise(x);
-		x = x * 2.0 + shift;
+		x = x * 3.0 + shift;
 		a *= 0.3;
 	}
 	return v;
 }
 
-vec3 random3( vec3 p ) {
+vec3 random3(vec3 p) {
  return fract(
     sin(
         vec3(
             dot(p.xy, vec2(127.1, 311.7)),
-            dot(p.yz, vec2(269.5,183.3)),
-            dot(p.zx, vec2(20.1 ,123.3))
+            dot(p.yz, vec2(269.5, 183.3)),
+            dot(p.zx, vec2(20.1, 123.3))
             )
-        )* 43758.5453
+        ) * 43758.5453
  );
 }
-
-float square_wave(float x,float freq){
-	return float(abs(int(floor(x*freq))%4));
-}
-
 
 void main()
 {
@@ -75,9 +76,10 @@ void main()
 
     vec4 fs_Pos = vs_Pos;
 
-    fs_Bump = random3(fs_Nor.xyz + vec3(0,u_time,0)).x * u_highAmp + 
-		4.f * fbm3d(fs_Nor.xyz + vec3(0, u_time, 0)) * u_lowAmp;
-    fs_Pos += fs_Nor * 0.1 * fs_Bump;
+    fs_Bump = random3(fs_Nor.xyz + vec3(0, u_Time, 0)).x * u_highAmp + 
+		5.f * fbm3d(fs_Nor.xyz + vec3(0, u_Time * 0.75, 0)) * u_lowAmp;
+
+    fs_Pos += fs_Nor * 0.3 * fs_Bump;
 
     vec4 modelposition = u_Model * fs_Pos;
     fs_Pos = modelposition;
